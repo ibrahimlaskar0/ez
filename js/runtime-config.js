@@ -1,14 +1,14 @@
 // Runtime API base - automatically detect environment
-// Use localhost for local development, Render backend for production
+// Use localhost for local development, Vercel backend for production
 if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
   // Local development
-  window.ESPL_API_BASE = 'http://localhost:5000';
-} else if (window.location.hostname.includes('netlify')) {
-  // Production on Netlify - point to Render backend
-  window.ESPL_API_BASE = 'https://esplendidez-backend.onrender.com'; // Update this URL after deploying
+  window.ESPL_API_BASE = 'http://localhost:5001';
+} else if (window.location.hostname.includes('github.io') || window.location.hostname.includes('esplendidez.tech')) {
+  // Production on GitHub Pages - point to Vercel backend
+  window.ESPL_API_BASE = 'https://ez-two-amber.vercel.app';
 } else {
-  // Fallback
-  window.ESPL_API_BASE = 'http://localhost:5000';
+  // Fallback - Vercel backend
+  window.ESPL_API_BASE = 'https://ez-two-amber.vercel.app';
 }
 
 console.log('🌐 API Base URL:', window.ESPL_API_BASE);
