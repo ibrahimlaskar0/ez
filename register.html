@@ -48,7 +48,7 @@
                 </div>
                 </div>
 
-                <button type="button" id="mobile-menu-btn" class="md:hidden" aria-label="Open menu">
+                <button type="button" id="mobile-menu-btn" class="md:hidden" aria-label="Open menu" onclick="event.preventDefault(); event.stopPropagation(); if(window.toggleMobileMenu) window.toggleMobileMenu();">
                     <i data-feather="menu" class="text-gray-600"></i>
                 </button>
             </div>
