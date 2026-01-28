@@ -163,6 +163,8 @@
           // Attach payment screenshot if provided
           const ssInput = document.getElementById('payment-screenshot');
           const ssFile = ssInput && ssInput.files && ssInput.files[0];
+
+          // console.log(ssFile)
           if (ssFile) {
             fd.append('paymentScreenshot', ssFile);
           }
