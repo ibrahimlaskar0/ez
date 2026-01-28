@@ -43,14 +43,15 @@
                             <a href="about.html" class="text-gray-600 hover:text-indigo-600 font-medium transition">About</a>
                         </div>
                         <!-- Theme toggle button -->
-                        <button id="theme-toggle" class="theme-btn p-2 rounded-md" aria-label="Toggle theme" title="Toggle day/night" onclick="if(window.toggleTheme) window.toggleTheme(); else console.log('toggleTheme not available');">
+                        <!-- Useless piece of code -->
+                        <!-- <button id="theme-toggle" class="theme-btn p-2 rounded-md" aria-label="Toggle theme" title="Toggle day/night" onclick="if(window.toggleTheme) window.toggleTheme(); else console.log('toggleTheme not available');">
                             <i data-feather="moon" class="w-5 h-5"></i>
-                        </button>
+                        </button> -->
                     </div>
                     
                     <!-- Mobile Menu Button -->
-                    <button type="button" id="mobile-menu-btn" class="md:hidden" aria-label="Open menu" onclick="event.preventDefault(); event.stopPropagation(); if(window.toggleMobileMenu) window.toggleMobileMenu();">
-                        <i data-feather="menu" class="text-white drop-shadow-lg"></i>
+                  <button type="button" id="mobile-menu-btn" class="md:hidden" aria-label="Open menu" onclick="event.preventDefault(); event.stopPropagation(); if(window.toggleMobileMenu) window.toggleMobileMenu();">
+                        <i data-feather="menu" class="text-gray-600"></i>
                     </button>
                 </div>
             </div>
@@ -59,7 +60,7 @@
             <div id="mobile-menu" class="md:hidden hidden bg-white/95 backdrop-blur-md border-t">
                 <div class="px-6 py-4 space-y-4">
                     <a href="index.html" class="block text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors">Home</a>
-                    <a href="events.html" class="block text-indigo-600 font-medium py-2">Events</a>
+                    <a href="events.html" class="block text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors">Events</a>
                     <a href="gallery.html" class="block text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors">Gallery</a>
                     <a href="about.html" class="block text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors">About</a>
                     <div class="pt-4 border-t border-gray-200">
