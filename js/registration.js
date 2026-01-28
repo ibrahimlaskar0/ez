@@ -602,6 +602,19 @@ if(form){
             tx.onerror = () => reject(tx.error);
         });
 
+        // Save to sessionStorage as backup (works better on mobile)
+        try {
+            sessionStorage.setItem('pendingPaymentId', regId);
+            sessionStorage.setItem('pendingPaymentEmail', email);
+            sessionStorage.setItem('pendingPaymentEvent', eventName);
+            sessionStorage.setItem('pendingRegData', JSON.stringify(pendingRecord.data));
+            console.log('Saved registration to sessionStorage as backup');
+        } catch (e) {
+            console.warn('sessionStorage backup failed:', e);
+        }
+
+        // Try IndexedDB for file storage
+        let idbSuccess = false;
         try {
             const db = await idbOpen();
             await idbPut(db, pendingRecord);
@@ -615,20 +628,18 @@ if(form){
                 req.onerror = () => reject(req.error);
             });
             
-            if (!verification) {
-                throw new Error('Failed to verify saved registration');
+            if (verification) {
+                console.log('Verified IndexedDB save:', verification);
+                idbSuccess = true;
             }
-            console.log('Verified IndexedDB save:', verification);
         } catch (e) {
-            console.error('Failed to save pending registration:', e);
-            alert('Could not save your registration locally. Please try again.');
-            return;
+            console.error('IndexedDB save failed (using sessionStorage backup):', e);
         }
 
-        // Store payment session data for secure linking
-        sessionStorage.setItem('pendingPaymentId', regId);
-        sessionStorage.setItem('pendingPaymentEmail', email);
-        sessionStorage.setItem('pendingPaymentEvent', eventName);
+        // If IndexedDB failed but we have sessionStorage, continue anyway
+        if (!idbSuccess) {
+            console.warn('IndexedDB unavailable - file will need to be re-uploaded on payment page');
+        }
 
         // Redirect to payment with unique registration ID
         const paymentUrl = `payment.html?regId=${regId}&email=${encodeURIComponent(email)}&event=${encodeURIComponent(eventName)}`;

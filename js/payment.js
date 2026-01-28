@@ -58,6 +58,9 @@
 
     // Load pending record for summary display
     let pending = null;
+    let fileNeedsReupload = false;
+    
+    // Try IndexedDB first
     try {
       const db = await idbOpen();
       console.log('IndexedDB opened successfully');
@@ -73,17 +76,52 @@
       
       pending = regId ? await idbGet(db, regId) : null;
       console.log('Pending record from IndexedDB:', pending);
-      
-      if (!pending) {
-        console.error('No pending record found for regId:', regId);
-        console.error('Available IDs in IndexedDB:', allRecords.map(r => r.id));
-        
-        // Show detailed error to user
-        alert(`Registration data not found.\n\nLooking for: ${regId}\nAvailable records: ${allRecords.length}\n\nThis might be a browser storage issue. Please try:\n1. Registering again\n2. Using a different browser\n3. Ensuring cookies/storage are enabled`);
-      }
     } catch (e) {
-      console.error('Could not open IndexedDB:', e);
-      alert(`IndexedDB Error: ${e.message}\n\nYour browser might not support local storage or it may be disabled. Please enable storage and try again.`);
+      console.warn('IndexedDB unavailable:', e);
+    }
+    
+    // Fallback to sessionStorage if IndexedDB didn't have the data
+    if (!pending) {
+      console.log('Trying sessionStorage fallback...');
+      try {
+        const storedRegId = sessionStorage.getItem('pendingPaymentId');
+        const storedData = sessionStorage.getItem('pendingRegData');
+        
+        if (storedData && (storedRegId === regId || !regId)) {
+          const data = JSON.parse(storedData);
+          pending = {
+            id: storedRegId,
+            data: data,
+            collegeIdFile: null // File not available from sessionStorage
+          };
+          fileNeedsReupload = true;
+          console.log('Loaded registration from sessionStorage (file will need re-upload):', pending);
+          
+          // Update regId if it was missing
+          if (!regId) regId = storedRegId;
+        }
+      } catch (e) {
+        console.warn('sessionStorage fallback failed:', e);
+      }
+    }
+      
+    if (!pending) {
+      console.error('No pending record found for regId:', regId);
+      // Show detailed error to user
+      alert(`No saved registration found. Please register again.\n\nThis can happen if:\n1. You're using private/incognito browsing\n2. Browser storage is disabled\n3. You navigated here directly\n\nClick OK to go to the registration page.`);
+      window.location.href = 'register.html';
+      return;
+    }
+
+    // Show College ID re-upload field if file is not available
+    if (fileNeedsReupload || !pending.collegeIdFile) {
+      const reuploadSection = document.getElementById('college-id-reupload');
+      const reuploadInput = document.getElementById('college-id-reupload-input');
+      if (reuploadSection) {
+        reuploadSection.classList.remove('hidden');
+        if (reuploadInput) reuploadInput.required = true;
+      }
+      console.log('College ID re-upload required (file not available from storage)');
     }
 
     // Optional: show summary
@@ -149,14 +187,21 @@
           }
           fd.append('utrNumber', utr);
 
-          // Attach college ID proof file
-          const file = pending.collegeIdFile;
-          if(file){
-            const filename = file.name || 'college-id-proof';
-            const attach = (file instanceof File) ? file : new File([file], filename, { type: file.type || 'application/octet-stream' });
+          // Attach college ID proof file (from IndexedDB or re-upload)
+          let collegeIdFile = pending.collegeIdFile;
+          
+          // Check if re-upload input has a file
+          const reuploadInput = document.getElementById('college-id-reupload-input');
+          if (reuploadInput && reuploadInput.files && reuploadInput.files[0]) {
+            collegeIdFile = reuploadInput.files[0];
+          }
+          
+          if(collegeIdFile){
+            const filename = collegeIdFile.name || 'college-id-proof';
+            const attach = (collegeIdFile instanceof File) ? collegeIdFile : new File([collegeIdFile], filename, { type: collegeIdFile.type || 'application/octet-stream' });
             fd.append('collegeIdProof', attach);
           } else {
-            alert('Saved college ID file missing. Please re-upload from registration page.');
+            alert('College ID file is required. Please upload your college ID proof.');
             return;
           }
 
