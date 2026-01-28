@@ -1,0 +1,2365 @@
+/**
+ * Esplendidez 2026 - Main Stylesheet
+ * Comprehensive styling for the tennis tournament website
+ * Features responsive design, dark/light themes, and modern UI components
+ * Author: Tennis Tournament Management System
+ * Version: 2.0
+ */
+
+/* =================================
+   FONT IMPORTS
+   ================================= */
+/* Google Fonts - Poppins for body text, Orbitron for headings */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* =================================
+   CSS CUSTOM PROPERTIES (VARIABLES)
+   ================================= */
+/* Light theme variables - Default color scheme */
+:root {
+    /* Brand colors */
+    --primary: #6366f1;        /* Indigo primary brand color */
+    --secondary: #f59e0b;      /* Amber secondary accent color */
+    
+    /* Typography */
+    --body-font: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    --hero-font: "Orbitron", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    
+    /* Light theme color palette */
+    --bg: #ffffff;             /* Main background color */
+    --text: #1f2937;           /* Primary text color */
+    --muted: #4b5563;          /* Secondary/muted text color */
+    --card-bg: #ffffff;        /* Card background color */
+    --nav-bg: rgba(255,255,255,0.95);  /* Navigation background */
+    --nav-text: #1f2937;       /* Navigation text color */
+    --btn-bg: #ffffff;         /* Button background */
+    --btn-text: #4f46e5;       /* Button text color */
+    --hero-overlay: rgba(0,0,0,0.18);  /* Hero section overlay */
+    --hero-text: #ffffff;      /* Hero section text */
+    --footer-bg: #111827;      /* Footer background */
+}
+
+/* Dark theme color overrides */
+html.dark {
+    /* Keep same fonts */
+    --body-font: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    --hero-font: "Orbitron", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    
+    /* Dark theme color palette */
+    --bg: #0f172a;             /* Dark background */
+    --text: #f1f5f9;           /* Light text on dark background */
+    --muted: #94a3b8;          /* Muted text for dark theme */
+    --card-bg: #1e293b;        /* Dark card background */
+    --nav-bg: rgba(15,23,42,0.90);     /* Dark navigation background */
+    --nav-text: #f1f5f9;       /* Light navigation text */
+    --btn-bg: #1e293b;         /* Dark button background */
+    --btn-text: #fbbf24;       /* Gold button text for contrast */
+    --hero-overlay: rgba(0,0,0,0.36);  /* Stronger overlay for dark theme */
+    --hero-text: #ffffff;      /* Keep hero text white */
+    --footer-bg: #020617;      /* Very dark footer */
+}
+
+/* =================================
+   BASE STYLES & TYPOGRAPHY
+   ================================= */
+/* Global body styling with theme support */
+body {
+    font-family: var(--body-font);     /* Use Poppins font family */
+    scroll-behavior: smooth;           /* Smooth scrolling for anchors */
+    margin: 0;                        /* Reset default margins */
+    background: var(--bg) !important; /* Theme-aware background */
+    color: var(--text) !important;    /* Theme-aware text color */
+}
+
+/* Hero section title styling */
+.hero-title {
+    font-family: var(--hero-font);     /* Use Orbitron for futuristic look */
+    color: var(--hero-text) !important;
+    font-weight: 900;                  /* Ultra-bold weight */
+    letter-spacing: 0.02em;            /* Slight letter spacing */
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Strong shadow for readability */
+}
+
+/* =================================
+   HERO SECTION STYLING
+   ================================= */
+/* Hero section text enhancements */
+#home p {
+    color: #ffffff !important;         /* Force white text on hero */
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); /* Shadow for contrast */
+}
+
+/* Special styling for highlighted hero text */
+#home .text-indigo-400 {
+    color: rgb(167, 139, 250) !important;      /* Light purple color */
+    text-shadow: 0 0 15px rgba(167, 139, 250, 0.5); /* Glowing effect */
+}
+
+/* =================================
+   NAVIGATION STYLING
+   ================================= */
+/* Main site navigation bar */
+.site-nav {
+    height: 64px;                      /* Fixed height for mobile */
+    background: var(--nav-bg) !important; /* Theme-aware background */
+}
+
+/* Make Esplendidez logo circular everywhere */
+img[alt="Esplendidez Logo"] {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 9999px !important;
+    object-fit: cover !important;
+    display: inline-block;
+}
+@media (min-width: 768px) {
+    .site-nav { height: 72px; }
+}
+.site-nav a {
+    color: var(--nav-text) !important;
+}
+/* =================================
+   SIMPLIFIED THEME TOGGLE STYLING
+   ================================= */
+/* Base theme toggle - simple black icon */
+.theme-btn {
+    background: none !important;
+    border: none !important;
+    padding: 0.5rem !important;
+    cursor: pointer !important;
+    transition: opacity 0.2s ease !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.theme-btn:hover {
+    opacity: 0.7 !important;
+}
+
+.theme-btn i {
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+    color: #000000 !important;
+}
+
+/* Dark theme - keep black icon */
+html.dark .theme-btn i {
+    color: #000000 !important;
+}
+
+/* Home page - keep white icon due to different background */
+body.home-page .theme-btn i {
+    color: #ffffff !important;
+}
+
+/* Page offset for fixed navbar */
+body {
+    padding-top: 64px;
+}
+@media (min-width: 768px) {
+    body { padding-top: 72px; }
+}
+
+/* Remove padding on home page for transparent nav */
+body.home-page {
+    padding-top: 0;
+}
+
+/* Transparent navigation for home page */
+body.home-page .site-nav {
+    background: transparent !important;
+    backdrop-filter: none !important;
+}
+
+body.home-page .site-nav a {
+    color: white !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Home page theme button uses unified styling */
+
+/* Mobile menu button styling */
+#mobile-menu-btn {
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    border: 1px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    z-index: 51;
+}
+
+#mobile-menu-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    transform: scale(1.05);
+}
+
+#mobile-menu-btn:active {
+    transform: scale(0.95);
+}
+
+/* Home page mobile menu button styling */
+body.home-page #mobile-menu-btn {
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+body.home-page #mobile-menu-btn:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Mobile menu button icons */
+#mobile-menu-btn i {
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+    stroke-width: 2.5 !important;
+}
+
+/* Non-home pages mobile menu button */
+body:not(.home-page) #mobile-menu-btn {
+    background: rgba(75, 85, 99, 0.1);
+    border: 1px solid rgba(75, 85, 99, 0.2);
+}
+
+body:not(.home-page) #mobile-menu-btn:hover {
+    background: rgba(75, 85, 99, 0.2);
+    border-color: rgba(75, 85, 99, 0.3);
+}
+
+/* Dark theme mobile menu button */
+html.dark #mobile-menu-btn {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+html.dark #mobile-menu-btn:hover {
+    background: rgba(255, 255, 255, 0.25) !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4) !important;
+    transform: scale(1.05);
+}
+
+html.dark #mobile-menu-btn i {
+    color: white !important;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5)) !important;
+}
+
+/* Dark theme non-home pages mobile menu button */
+html.dark body:not(.home-page) #mobile-menu-btn {
+    background: rgba(255, 255, 255, 0.12) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+}
+
+html.dark body:not(.home-page) #mobile-menu-btn:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.35) !important;
+}
+
+/* Admin filters */
+#admin-filter, #admin-status-filter { background: #ffffff; color: #111827; border-color: rgba(0,0,0,0.1); }
+#admin-filter::placeholder { color: #6b7280; }
+html.dark #admin-filter, html.dark #admin-status-filter { background: #1f2937 !important; color: #f1f5f9 !important; border-color: rgba(255,255,255,0.2) !important; }
+html.dark #admin-filter::placeholder { color: #94a3b8 !important; }
+
+/* Mobile menu container styling */
+#mobile-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border-radius: 0 0 1rem 1rem;
+    z-index: 50;
+}
+
+/* Dark mode mobile menu container */
+html.dark #mobile-menu {
+    background: rgba(15, 23, 42, 0.95) !important;
+    backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4) !important;
+}
+
+html.dark #mobile-menu a {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+html.dark #mobile-menu a:hover {
+    color: white !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+html.dark #mobile-menu button {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+html.dark #mobile-menu button:hover {
+    color: white !important;
+}
+
+/* Mobile menu animation */
+#mobile-menu.hidden {
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+}
+
+#mobile-menu:not(.hidden) {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    transition: all 0.3s ease;
+}
+
+/* Responsive mobile menu button - Show only on mobile */
+@media (max-width: 767px) {
+    #mobile-menu-btn {
+        display: flex !important;
+    }
+}
+
+/* Hide mobile menu button on desktop */
+@media (min-width: 768px) {
+    #mobile-menu-btn {
+        display: none !important;
+    }
+}
+
+/* Hide video controls completely on all devices */
+video::-webkit-media-controls {
+    display: none !important;
+}
+
+video::-webkit-media-controls-overlay-play-button {
+    display: none !important;
+}
+
+video::-webkit-media-controls-start-playback-button {
+    display: none !important;
+}
+
+video {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+#hero-bg-video {
+    pointer-events: none !important;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
+/* Text readability improvements */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text) !important;
+    font-weight: 600;
+}
+
+p {
+    color: var(--text) !important;
+    line-height: 1.6;
+}
+
+.text-muted {
+    color: var(--muted) !important;
+}
+
+/* Ensure good contrast on gradient backgrounds */
+.gradient-bg h1,
+.gradient-bg h2,
+.gradient-bg h3,
+.gradient-bg h4,
+.gradient-bg h5,
+.gradient-bg h6,
+.gradient-bg p {
+    color: #ffffff !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+
+/* Previous Year Highlights smooth carousel */
+.prev-highlights-track { 
+  padding: 1rem 0;
+  /* Animation now controlled by JavaScript */
+}
+
+
+/* Previous carousel image styling */
+.prev-highlights-track .prev-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.prev-highlights-track .prev-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+.prev-highlights-track .prev-card img {
+  transition: filter 0.3s ease;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+.prev-highlights-track .prev-card:hover img {
+  filter: brightness(1.05) saturate(1.1);
+}
+
+/* Home page specific overrides */
+body.home-page {
+    background-color: var(--bg) !important;
+}
+
+
+/* Stats section on home page only */
+.home-page .bg-white {
+    background-color: var(--bg) !important;
+    color: var(--text) !important;
+}
+
+.home-page .text-gray-600 {
+    color: var(--muted) !important;
+}
+
+.home-page .text-gray-700,
+.home-page .text-gray-500 {
+    color: var(--text) !important;
+}
+
+html.dark .home-page .bg-white {
+    background-color: var(--bg) !important;
+    color: var(--text) !important;
+}
+
+html.dark .home-page .text-gray-600,
+html.dark .home-page .text-gray-700,
+html.dark .home-page .text-gray-500 {
+    color: var(--text) !important;
+}
+
+/* Stats section specific fixes */
+.text-indigo-600,
+.text-green-600,
+.text-purple-600,
+.text-red-600 {
+    font-weight: bold;
+}
+
+html.dark .text-indigo-600 { color: #818cf8 !important; }
+html.dark .text-green-600 { color: #4ade80 !important; }
+html.dark .text-purple-600 { color: #c084fc !important; }
+html.dark .text-red-600 { color: #f87171 !important; }
+
+/* Events section adaptive background */
+.events-bg {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+    color: white;
+    position: relative;
+}
+
+.events-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('data:image/svg+xml,<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd"><g fill="%23ffffff" fill-opacity="0.05"><circle cx="30" cy="30" r="4"/><circle cx="0" cy="30" r="4"/><circle cx="60" cy="30" r="4"/><circle cx="30" cy="0" r="4"/><circle cx="30" cy="60" r="4"/></g></svg>');
+    pointer-events: none;
+}
+
+html.dark .events-bg {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+    color: #f1f5f9;
+}
+
+/* Events section text colors */
+.events-bg h2,
+.events-bg h3 {
+    color: white !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.events-bg p {
+    color: rgba(255, 255, 255, 0.9) !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+html.dark .events-bg h2,
+html.dark .events-bg h3 {
+    color: #f1f5f9 !important;
+}
+
+html.dark .events-bg p {
+    color: #f1f5f9 !important;
+}
+
+/* Category navigation buttons for light mode */
+.events-bg .category-nav-btn {
+    background: rgba(255, 255, 255, 0.15) !important;
+    backdrop-filter: blur(10px) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.events-bg .category-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #6366f1 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.events-bg .category-nav-btn.active {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #6366f1 !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark mode category navigation */
+html.dark .events-bg .category-nav-btn {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
+}
+
+html.dark .events-bg .category-nav-btn:hover {
+    background: white !important;
+    color: #1f2937 !important;
+}
+
+html.dark .events-bg .category-nav-btn.active {
+    background: white !important;
+    color: #1f2937 !important;
+}
+
+/* Contact icons interactive effects */
+.contact-item {
+    cursor: pointer;
+}
+
+.contact-item:hover {
+    transform: translateY(-5px);
+}
+
+.contact-item a {
+    text-decoration: none;
+    border-radius: 12px;
+    padding: 1rem;
+    transition: all 0.3s ease;
+}
+
+.contact-item a:hover {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+}
+
+/* Add pulse animation on hover */
+.contact-item:hover .w-16 {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+
+/* Ensure Get In Touch section stays visible */
+.bg-gray-900 {
+    background-color: #111827 !important;
+    color: #ffffff !important;
+}
+
+.bg-gray-900 h2,
+.bg-gray-900 h3,
+.bg-gray-900 h4,
+.bg-gray-900 p {
+    color: #ffffff !important;
+}
+
+.bg-gray-900 .text-gray-300 {
+    color: #d1d5db !important;
+}
+
+.bg-gray-900 .text-gray-300:hover {
+    color: #ffffff !important;
+}
+
+/* Get In Touch theming for day/night across pages */
+.get-in-touch {
+    background-color: var(--bg) !important;
+    color: var(--text) !important;
+}
+.get-in-touch h2,
+.get-in-touch h3,
+.get-in-touch h4,
+.get-in-touch p {
+    color: var(--text) !important;
+}
+.get-in-touch .text-gray-300 {
+    color: var(--muted) !important;
+}
+
+/* Dark theme keeps dark background */
+html.dark .get-in-touch {
+    background-color: #111827 !important;
+    color: #ffffff !important;
+}
+html.dark .get-in-touch .text-gray-300 {
+    color: #d1d5db !important;
+}
+
+/* Ensure Feather icons look consistent in Get In Touch across pages */
+.get-in-touch svg {
+    stroke: currentColor !important;
+    fill: none !important;
+    stroke-width: 2 !important;
+    width: 1.5rem; /* 24px same as w-6 */
+    height: 1.5rem; /* 24px same as h-6 */
+}
+
+@media (min-width: 640px) { /* sm */
+    .get-in-touch svg { width: 1.75rem; height: 1.75rem; }
+}
+@media (min-width: 768px) { /* md */
+    .get-in-touch svg { width: 2rem; height: 2rem; }
+}
+
+/* Force white icons inside colored contact circles */
+.get-in-touch .contact-item svg {
+    stroke: #ffffff !important;
+    color: #ffffff !important;
+}
+
+/* Footer adaptive styling */
+.site-footer {
+    background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 50%, #9ca3af 100%) !important;
+    color: #1f2937 !important;
+}
+
+html.dark .site-footer {
+    background: var(--footer-bg) !important;
+    color: var(--muted) !important;
+}
+
+/* Footer text colors for light mode */
+.site-footer h3,
+.site-footer h4 {
+    color: #1f2937 !important;
+}
+
+.site-footer p,
+.site-footer li {
+    color: #4b5563 !important;
+}
+
+.site-footer a {
+    color: #4b5563 !important;
+    text-decoration: none;
+}
+
+.site-footer a:hover {
+    color: #6366f1 !important;
+}
+
+/* Footer text colors for dark mode */
+html.dark .site-footer {
+    background: var(--footer-bg) !important;
+    color: var(--muted) !important;
+}
+
+html.dark .site-footer h3,
+html.dark .site-footer h4 {
+    color: #ffffff !important;
+}
+
+html.dark .site-footer p,
+html.dark .site-footer li {
+    color: #9ca3af !important;
+}
+
+html.dark .site-footer a {
+    color: #9ca3af !important;
+}
+
+html.dark .site-footer a:hover {
+    color: #ffffff !important;
+}
+
+/* Footer border for light mode */
+.site-footer .border-gray-700 {
+    border-color: #d1d5db !important;
+}
+
+html.dark .site-footer .border-gray-700 {
+    border-color: #374151 !important;
+}
+
+/* Copyright text */
+.site-footer .text-gray-400 {
+    color: #6b7280 !important;
+}
+
+html.dark .site-footer .text-gray-400 {
+    color: #9ca3af !important;
+}
+
+/* Gallery page adaptive styling */
+.gallery-page {
+    background-color: var(--bg) !important;
+}
+
+
+
+/* Gallery page main sections */
+.gallery-page .bg-white {
+    background-color: var(--card-bg) !important;
+    color: var(--text) !important;
+}
+
+.gallery-page h1,
+.gallery-page h2,
+.gallery-page h3 {
+    color: var(--text) !important;
+}
+
+.gallery-page p,
+.gallery-page .text-gray-600 {
+    color: var(--muted) !important;
+}
+
+.gallery-page .text-gray-500 {
+    color: var(--muted) !important;
+}
+
+/* Gallery cards text */
+.gallery-page .bg-white h3 {
+    color: var(--text) !important;
+}
+
+.gallery-page .bg-white p {
+    color: var(--muted) !important;
+}
+
+/* Dark mode gallery styling */
+html.dark .gallery-page {
+    background-color: var(--bg) !important;
+}
+
+html.dark .gallery-page .bg-white {
+    background-color: var(--card-bg) !important;
+    color: var(--text) !important;
+}
+
+html.dark .gallery-page h1,
+html.dark .gallery-page h2,
+html.dark .gallery-page h3 {
+    color: var(--text) !important;
+}
+
+html.dark .gallery-page p,
+html.dark .gallery-page .text-gray-600,
+html.dark .gallery-page .text-gray-500 {
+    color: var(--muted) !important;
+}
+
+/* About page adaptive styling */
+.about-page {
+    background-color: var(--bg) !important;
+}
+
+
+/* About page main sections */
+.about-page .bg-white {
+    background-color: var(--card-bg) !important;
+    color: var(--text) !important;
+}
+
+.about-page h1,
+.about-page h2,
+.about-page h3,
+.about-page h4 {
+    color: var(--text) !important;
+}
+
+.about-page p,
+.about-page .text-gray-600 {
+    color: var(--muted) !important;
+}
+
+/* About page contact cards */
+.about-page .bg-white h3,
+.about-page .bg-white h4 {
+    color: var(--text) !important;
+}
+
+.about-page .bg-white p {
+    color: var(--muted) !important;
+}
+
+/* About page links */
+.about-page a {
+    color: #6366f1 !important;
+}
+
+.about-page a:hover {
+    color: #4f46e5 !important;
+}
+
+/* Dark mode about styling */
+html.dark .about-page {
+    background-color: var(--bg) !important;
+}
+
+html.dark .about-page .bg-white {
+    background-color: var(--card-bg) !important;
+    color: var(--text) !important;
+}
+
+html.dark .about-page h1,
+html.dark .about-page h2,
+html.dark .about-page h3,
+html.dark .about-page h4 {
+    color: var(--text) !important;
+}
+
+html.dark .about-page p,
+html.dark .about-page .text-gray-600 {
+    color: var(--muted) !important;
+}
+
+html.dark .about-page a {
+    color: #818cf8 !important;
+}
+
+html.dark .about-page a:hover {
+    color: #a5b4fc !important;
+}
+
+/* Admin page adaptive styling */
+.admin-page {
+    background-color: var(--bg) !important;
+}
+
+
+/* Admin tables: ensure readable hover state */
+.admin-page table tbody tr:hover {
+    background-color: rgba(99, 102, 241, 0.06) !important; /* indigo-500 tint */
+}
+
+html.dark .admin-page table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+.admin-page table tbody tr:hover td,
+.admin-page table tbody tr:hover th,
+.admin-page table tbody tr:hover a,
+.admin-page table tbody tr:hover span,
+.admin-page table tbody tr:hover p {
+    color: var(--text) !important;
+}
+
+/* Keep status badge colors on hover */
+.admin-page table tbody tr:hover .bg-green-100,
+.admin-page table tbody tr:hover .bg-yellow-100 {
+    filter: none !important;
+}
+
+/* Admin page main sections */
+.admin-page .bg-white {
+    background-color: var(--card-bg) !important;
+    color: var(--text) !important;
+}
+
+.admin-page h1,
+.admin-page h2,
+.admin-page h3,
+.admin-page h4 {
+    color: var(--text) !important;
+}
+
+.admin-page p,
+.admin-page .text-gray-600,
+.admin-page .text-gray-700,
+.admin-page .text-gray-500 {
+    color: var(--muted) !important;
+}
+
+/* Admin tables */
+.admin-page table {
+    background-color: var(--card-bg) !important;
+    color: var(--text) !important;
+}
+
+.admin-page th {
+    background-color: var(--bg) !important;
+    color: var(--muted) !important;
+}
+
+.admin-page td {
+    color: var(--text) !important;
+    border-color: var(--muted) !important;
+}
+
+/* Dark mode admin styling */
+html.dark .admin-page {
+    background-color: var(--bg) !important;
+}
+
+html.dark .admin-page .bg-white {
+    background-color: var(--card-bg) !important;
+    color: var(--text) !important;
+}
+
+html.dark .admin-page h1,
+html.dark .admin-page h2,
+html.dark .admin-page h3,
+html.dark .admin-page h4 {
+    color: var(--text) !important;
+}
+
+html.dark .admin-page p,
+html.dark .admin-page .text-gray-600,
+html.dark .admin-page .text-gray-700,
+html.dark .admin-page .text-gray-500 {
+    color: var(--muted) !important;
+}
+
+html.dark .admin-page table {
+    background-color: var(--card-bg) !important;
+}
+
+html.dark .admin-page th {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    color: var(--muted) !important;
+}
+
+html.dark .admin-page td {
+    color: var(--text) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* More specific admin page styling */
+.admin-page .bg-gray-50 {
+    background-color: var(--bg) !important;
+}
+
+.admin-page .bg-gray-100 {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.admin-page .text-gray-500 {
+    color: var(--muted) !important;
+}
+
+.admin-page .text-gray-400 {
+    color: var(--muted) !important;
+}
+
+.admin-page .border-gray-200 {
+    border-color: var(--muted) !important;
+}
+
+.admin-page .border-gray-700 {
+    border-color: var(--muted) !important;
+}
+
+.admin-page .divide-gray-200 > :not([hidden]) ~ :not([hidden]) {
+    border-color: var(--muted) !important;
+}
+
+/* Dark mode admin comprehensive styling */
+html.dark .admin-page .bg-gray-50 {
+    background-color: var(--bg) !important;
+}
+
+html.dark .admin-page .bg-gray-100 {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+html.dark .admin-page .text-gray-500,
+html.dark .admin-page .text-gray-400 {
+    color: var(--muted) !important;
+}
+
+html.dark .admin-page .border-gray-200,
+html.dark .admin-page .border-gray-700 {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+html.dark .admin-page .divide-gray-200 > :not([hidden]) ~ :not([hidden]) {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Admin page specific elements */
+.admin-page .text-indigo-600 {
+    color: #6366f1 !important;
+}
+
+.admin-page .text-yellow-600 {
+    color: #d97706 !important;
+}
+
+.admin-page .text-green-600 {
+    color: #16a34a !important;
+}
+
+html.dark .admin-page .text-indigo-600 {
+    color: #818cf8 !important;
+}
+
+html.dark .admin-page .text-yellow-600 {
+    color: #fbbf24 !important;
+}
+
+html.dark .admin-page .text-green-600 {
+    color: #4ade80 !important;
+}
+
+/* Registration page adaptive styling */
+.register-page {
+    background-color: var(--bg) !important;
+}
+
+/* Day mode registration page improvements */
+.register-page .bg-gradient-to-br {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%) !important;
+}
+
+.register-page .bg-white\/10 {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.register-page .bg-white\/5 {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.register-page .text-white {
+    color: #1f2937 !important;
+}
+
+.register-page .text-gray-200 {
+    color: #4b5563 !important;
+}
+
+.register-page .text-gray-300 {
+    color: #6b7280 !important;
+}
+
+.register-page .placeholder-gray-300::placeholder {
+    color: #9ca3af !important;
+}
+
+.register-page input {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid #d1d5db !important;
+    color: #1f2937 !important;
+}
+
+.register-page input:focus {
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1) !important;
+}
+
+/* Dark mode registration page */
+html.dark .register-page .bg-gradient-to-br {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%) !important;
+}
+
+html.dark .register-page .bg-white\/10 {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+html.dark .register-page .bg-white\/5 {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+html.dark .register-page .text-white {
+    color: #ffffff !important;
+}
+
+html.dark .register-page .text-gray-200 {
+    color: #e5e7eb !important;
+}
+
+html.dark .register-page .text-gray-300 {
+    color: #d1d5db !important;
+}
+
+html.dark .register-page input {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+}
+
+html.dark .register-page .placeholder-gray-300::placeholder {
+    color: #9ca3af !important;
+}
+
+/* Events page adaptive styling */
+.events-page {
+    background-color: var(--bg) !important;
+}
+
+
+/* Day mode events page improvements */
+.events-page .events-bg {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%) !important;
+}
+
+.events-page .events-bg::before {
+    background: none !important;
+}
+
+.events-page .events-bg .bg-black\/20 {
+    background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.events-page .text-white {
+    color: #1f2937 !important;
+}
+
+.events-page .text-gray-200 {
+    color: #4b5563 !important;
+}
+
+.events-page .text-gray-300 {
+    color: #6b7280 !important;
+}
+
+/* Day mode category navigation buttons */
+.events-page .category-nav-btn {
+    background: rgba(99, 102, 241, 0.1) !important;
+    border-color: #6366f1 !important;
+    color: #1f2937 !important;
+}
+
+.events-page .category-nav-btn:hover {
+    background: #6366f1 !important;
+    color: white !important;
+}
+
+.events-page .category-nav-btn.active {
+    background: #6366f1 !important;
+    color: white !important;
+}
+
+/* Day mode search bar */
+.events-page #event-search {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-color: #6366f1 !important;
+    color: #1f2937 !important;
+}
+
+.events-page #event-search::placeholder {
+    color: #6b7280 !important;
+}
+
+/* Day mode event category section headers */
+.events-page .event-category-section h3 {
+    color: #1f2937 !important;
+}
+
+.events-page .event-category-section p {
+    color: #1f2937 !important;
+}
+
+/* Day mode event category icons */
+.events-page .text-blue-400 {
+    color: #3b82f6 !important;
+}
+
+.events-page .text-purple-400 {
+    color: #8b5cf6 !important;
+}
+
+.events-page .text-green-400 {
+    color: #10b981 !important;
+}
+
+.events-page .text-orange-400 {
+    color: #f59e0b !important;
+}
+
+.events-page .text-yellow-400 {
+    color: #fbbf24 !important;
+}
+
+/* Dark mode events page - preserve existing dark theme */
+html.dark .events-page .events-bg {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%) !important;
+}
+
+html.dark .events-page .text-white {
+    color: #ffffff !important;
+}
+
+html.dark .events-page .text-gray-200 {
+    color: #e5e7eb !important;
+}
+
+html.dark .events-page .text-gray-300 {
+    color: #d1d5db !important;
+}
+
+html.dark .events-page .category-nav-btn {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
+}
+
+html.dark .events-page .category-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #6366f1 !important;
+}
+
+html.dark .events-page .category-nav-btn.active {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #6366f1 !important;
+}
+
+html.dark .events-page #event-search {
+    background: rgba(2, 6, 23, 0.65) !important; /* darker glass for contrast */
+    border-color: rgba(255, 255, 255, 0.45) !important;
+    color: #ffffff !important;
+    caret-color: #ffffff !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 0 0 2px rgba(255,255,255,0.08) !important;
+}
+
+html.dark .events-page #event-search::placeholder {
+    color: #cbd5e1 !important;
+    opacity: 0.95 !important;
+}
+
+/* Events page - Previous Year Highlights theming */
+.events-page #prev-highlights h2 { color: var(--text) !important; }
+.events-page #prev-highlights p { color: var(--muted) !important; }
+
+/* Event card title/desc when title is below image */
+.events-page .event-card .event-title-below { color: #1f2937 !important; text-shadow: none; }
+html.dark .events-page .event-card .event-title-below { color: #ffffff !important; text-shadow: 0 2px 6px rgba(0,0,0,0.6); }
+.events-page .event-card .event-desc { color: #4b5563 !important; }
+html.dark .events-page .event-card .event-desc { color: #e5e7eb !important; }
+
+/* Ensure all event card text is visible */
+.events-page .event-card .text-gray-300,
+.events-page .event-card .text-gray-200 { color: #374151 !important; }
+html.dark .events-page .event-card .text-gray-300,
+html.dark .events-page .event-card .text-gray-200 { color: #e5e7eb !important; }
+
+/* Event card title overlay for readability (both themes) */
+.events-page .event-title-overlay {
+    /* Light theme: darker translucent glass for contrast over bright images */
+    background: linear-gradient(to top, rgba(17, 24, 39, 0.72), rgba(17, 24, 39, 0.38)) !important; /* slate-900 */
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.35) !important;
+    backdrop-filter: blur(10px) saturate(140%) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(140%) !important;
+}
+html.dark .events-page .event-title-overlay {
+    /* darker gradient glass for readability on dark images */
+    background: linear-gradient(to top, rgba(2, 6, 23, 0.82), rgba(2, 6, 23, 0.5)) !important;
+    border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+.events-page .event-title-text {
+    color: #ffffff !important;
+    text-shadow: 0 3px 10px rgba(0,0,0,0.95), 0 0 14px rgba(0,0,0,0.65) !important;
+    letter-spacing: 0.2px;
+    font-weight: 800 !important;
+}
+
+html.dark .events-page .event-title-text {
+    text-shadow: 0 4px 12px rgba(0,0,0,1), 0 0 18px rgba(0,0,0,0.8) !important;
+}
+
+.events-page #prev-highlights .prev-card {
+    background-color: var(--card-bg) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+html.dark .events-page #prev-highlights h2 { color: #f1f5f9 !important; }
+html.dark .events-page #prev-highlights p { color: #e5e7eb !important; opacity: 0.9 !important; }
+
+html.dark .events-page #prev-highlights .prev-card {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.events-page #prev-highlights .prev-title { color: var(--text) !important; }
+.events-page #prev-highlights .prev-caption { color: var(--muted) !important; }
+
+html.dark .events-page #prev-highlights .prev-title { color: #ffffff !important; }
+html.dark .events-page #prev-highlights .prev-caption { color: #e5e7eb !important; opacity: 0.85 !important; }
+
+/* Carousel controls and dots */
+.events-page #prev-highlights .carousel-btn {
+    background: rgba(0, 0, 0, 0.06) !important;
+    border: 1px solid rgba(0, 0, 0, 0.12) !important;
+    color: #374151 !important;
+}
+html.dark .events-page #prev-highlights .carousel-btn {
+    background: rgba(255, 255, 255, 0.18) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
+}
+
+.events-page #prev-carousel-dots { min-height: 18px; }
+
+.events-page #prev-highlights .dot {
+    width: 10px !important; height: 10px !important;
+    border-radius: 9999px !important;
+    background: rgba(0, 0, 0, 0.35) !important;
+    border: 1px solid rgba(0, 0, 0, 0.5) !important;
+    display: inline-block !important;
+    cursor: pointer !important;
+    transition: transform 200ms ease, background 200ms ease, border-color 200ms ease !important;
+}
+.events-page #prev-highlights .dot.active {
+    background: rgba(0, 0, 0, 0.8) !important;
+    border-color: rgba(0, 0, 0, 0.8) !important;
+    transform: scale(1.15) !important;
+}
+html.dark .events-page #prev-highlights .dot {
+    background: rgba(255, 255, 255, 0.55) !important;
+    border: 1px solid rgba(255, 255, 255, 0.7) !important;
+}
+html.dark .events-page #prev-highlights .dot.active {
+    background: #ffffff !important;
+    border-color: #ffffff !important;
+}
+
+/* Smooth carousel track transition */
+.events-page #prev-carousel-track {
+    transition: transform 700ms cubic-bezier(0.22, 0.61, 0.36, 1) !important;
+    will-change: transform;
+}
+
+/* Success page adaptive styling */
+.success-page {
+    background-color: var(--bg) !important;
+}
+
+/* Success page main sections */
+.success-page .bg-white {
+    background-color: var(--card-bg) !important;
+    color: var(--text) !important;
+}
+
+.success-page h1,
+.success-page h2,
+.success-page h3,
+.success-page h4 {
+    color: var(--text) !important;
+}
+
+.success-page p,
+.success-page .text-gray-600,
+.success-page .text-gray-700,
+.success-page .text-gray-800 {
+    color: var(--text) !important;
+}
+
+.success-page .text-gray-500 {
+    color: var(--muted) !important;
+}
+
+.success-page .text-gray-400 {
+    color: var(--muted) !important;
+}
+
+/* Success page gradient background */
+.success-page .bg-gradient-to-br {
+    background: linear-gradient(to bottom right, var(--bg), var(--card-bg)) !important;
+}
+
+/* Success page cards */
+.success-page .bg-white {
+    background-color: var(--card-bg) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.success-page .bg-gray-100 {
+    background-color: var(--card-bg) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.success-page .bg-yellow-50 {
+    background-color: rgba(245, 158, 11, 0.1) !important;
+    border-color: rgba(245, 158, 11, 0.3) !important;
+}
+
+.success-page .text-yellow-800 {
+    color: #fbbf24 !important;
+}
+
+/* Dark mode success styling */
+html.dark .success-page {
+    background-color: var(--bg) !important;
+}
+
+html.dark .success-page .bg-white {
+    background-color: var(--card-bg) !important;
+    color: var(--text) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+html.dark .success-page h1,
+html.dark .success-page h2,
+html.dark .success-page h3,
+html.dark .success-page h4 {
+    color: var(--text) !important;
+}
+
+html.dark .success-page p,
+html.dark .success-page .text-gray-600,
+html.dark .success-page .text-gray-700,
+html.dark .success-page .text-gray-800 {
+    color: var(--text) !important;
+}
+
+html.dark .success-page .text-gray-500,
+html.dark .success-page .text-gray-400 {
+    color: var(--muted) !important;
+}
+
+html.dark .success-page .bg-gray-100 {
+    background-color: var(--card-bg) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+html.dark .success-page .bg-yellow-50 {
+    background-color: rgba(245, 158, 11, 0.15) !important;
+    border-color: rgba(245, 158, 11, 0.4) !important;
+}
+
+html.dark .success-page .text-yellow-800 {
+    color: #fbbf24 !important;
+}
+
+/* Success page border colors */
+html.dark .success-page .border-b {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+html.dark .success-page .border-yellow-200 {
+    border-color: rgba(245, 158, 11, 0.4) !important;
+}
+
+/* Success page gradient background for dark mode */
+html.dark .success-page .bg-gradient-to-br {
+    background: linear-gradient(to bottom right, var(--bg), var(--card-bg)) !important;
+}
+
+/* Success main section background */
+.success-main-section {
+    background: linear-gradient(to bottom right, #f0fdf4, #eff6ff) !important;
+}
+
+html.dark .success-main-section {
+    background: linear-gradient(to bottom right, var(--bg), var(--card-bg)) !important;
+}
+
+/* Success page icon and color fixes */
+.success-page .text-green-600 {
+    color: #16a34a !important;
+}
+
+html.dark .success-page .text-green-600 {
+    color: #4ade80 !important;
+}
+
+.success-page .text-indigo-600 {
+    color: #4f46e5 !important;
+}
+
+html.dark .success-page .text-indigo-600 {
+    color: #818cf8 !important;
+}
+
+.success-page .text-blue-600 {
+    color: #2563eb !important;
+}
+
+html.dark .success-page .text-blue-600 {
+    color: #60a5fa !important;
+}
+
+/* Success page background colors */
+.success-page .bg-green-100 {
+    background-color: rgba(34, 197, 94, 0.1) !important;
+}
+
+html.dark .success-page .bg-green-100 {
+    background-color: rgba(34, 197, 94, 0.2) !important;
+}
+
+.success-page .bg-indigo-600 {
+    background-color: #4f46e5 !important;
+}
+
+html.dark .success-page .bg-indigo-600 {
+    background-color: #6366f1 !important;
+}
+
+/* Better button contrast */
+html.dark .success-page .border-indigo-600 {
+    border-color: #818cf8 !important;
+}
+
+html.dark .success-page .text-indigo-600.hover\:text-white:hover {
+    color: #ffffff !important;
+}
+
+/* Copy button styling */
+.success-page .copy-reg-btn {
+    background-color: rgba(99, 102, 241, 0.1) !important;
+    color: #4338ca !important;
+    border-color: rgba(99, 102, 241, 0.3) !important;
+}
+
+.success-page .copy-reg-btn:hover {
+    background-color: rgba(99, 102, 241, 0.2) !important;
+    border-color: rgba(99, 102, 241, 0.5) !important;
+}
+
+html.dark .success-page .copy-reg-btn {
+    background-color: rgba(129, 140, 248, 0.15) !important;
+    color: #a5b4fc !important;
+    border-color: rgba(129, 140, 248, 0.3) !important;
+}
+
+html.dark .success-page .copy-reg-btn:hover {
+    background-color: rgba(129, 140, 248, 0.25) !important;
+    border-color: rgba(129, 140, 248, 0.5) !important;
+    color: #c7d2fe !important;
+}
+
+/* Legacy support for old button classes */
+.success-page .bg-gray-200 {
+    background-color: rgba(156, 163, 175, 0.2) !important;
+    color: var(--text) !important;
+}
+
+.success-page .text-gray-700 {
+    color: var(--text) !important;
+}
+
+html.dark .success-page .bg-gray-200 {
+    background-color: rgba(75, 85, 99, 0.3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+html.dark .success-page .bg-gray-200:hover {
+    background-color: rgba(75, 85, 99, 0.5) !important;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+html.dark .success-page .text-gray-700 {
+    color: var(--text) !important;
+}
+
+/* Theme toggle button uses unified styling (see line ~122) */
+
+/* Mobile menu button for success page */
+.success-page #mobile-menu-btn {
+    background-color: rgba(99, 102, 241, 0.1) !important;
+    border: 1px solid rgba(99, 102, 241, 0.3) !important;
+    color: #4338ca !important;
+}
+
+.success-page #mobile-menu-btn:hover {
+    background-color: rgba(99, 102, 241, 0.2) !important;
+    border-color: rgba(99, 102, 241, 0.5) !important;
+}
+
+html.dark .success-page #mobile-menu-btn {
+    background-color: rgba(129, 140, 248, 0.15) !important;
+    border: 1px solid rgba(129, 140, 248, 0.3) !important;
+    color: #a5b4fc !important;
+}
+
+html.dark .success-page #mobile-menu-btn:hover {
+    background-color: rgba(129, 140, 248, 0.25) !important;
+    border-color: rgba(129, 140, 248, 0.5) !important;
+}
+
+
+html.dark .admin-page .text-green-600 {
+    color: #4ade80 !important;
+}
+
+/* Admin login password input visibility in dark mode */
+#admin-login input[type="password"],
+#admin-login input {
+    background-color: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    color: #1f2937 !important;
+    caret-color: #1f2937 !important;
+}
+
+html.dark #admin-login input[type="password"],
+html.dark #admin-login input {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    color: #1f2937 !important;
+    caret-color: #1f2937 !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+html.dark #admin-login input[type="password"]:focus,
+html.dark #admin-login input:focus {
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1) !important;
+    background-color: #ffffff !important;
+}
+
+/* Admin login modal styling for dark mode */
+html.dark #admin-login .bg-white {
+    background-color: rgba(30, 41, 59, 0.95) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(10px) !important;
+}
+
+html.dark #admin-login h3,
+html.dark #admin-login p {
+    color: #f1f5f9 !important;
+}
+
+html.dark #admin-login .text-gray-600 {
+    color: #cbd5e1 !important;
+}
+
+/* All pages now use unified theme button styling (see line ~122) */
+
+/* Mobile menu button styling for admin, gallery, and about pages */
+.admin-page #mobile-menu-btn,
+.gallery-page #mobile-menu-btn,
+.about-page #mobile-menu-btn {
+    background-color: rgba(99, 102, 241, 0.1) !important;
+    border: 1px solid rgba(99, 102, 241, 0.3) !important;
+    color: #4338ca !important;
+}
+
+.admin-page #mobile-menu-btn:hover,
+.gallery-page #mobile-menu-btn:hover,
+.about-page #mobile-menu-btn:hover {
+    background-color: rgba(99, 102, 241, 0.2) !important;
+    border-color: rgba(99, 102, 241, 0.5) !important;
+}
+
+html.dark .admin-page #mobile-menu-btn,
+html.dark .gallery-page #mobile-menu-btn,
+html.dark .about-page #mobile-menu-btn {
+    background-color: rgba(129, 140, 248, 0.15) !important;
+    border: 1px solid rgba(129, 140, 248, 0.3) !important;
+    color: #a5b4fc !important;
+}
+
+html.dark .admin-page #mobile-menu-btn:hover,
+html.dark .gallery-page #mobile-menu-btn:hover,
+html.dark .about-page #mobile-menu-btn:hover {
+    background-color: rgba(129, 140, 248, 0.25) !important;
+    border-color: rgba(129, 140, 248, 0.5) !important;
+}
+
+/* Admin page event section headers */
+.admin-page .bg-blue-50 {
+    background-color: rgba(59, 130, 246, 0.1) !important;
+}
+
+.admin-page .text-blue-900 {
+    color: #1e40af !important;
+}
+
+.admin-page .bg-purple-50 {
+    background-color: rgba(147, 51, 234, 0.1) !important;
+}
+
+.admin-page .text-purple-900 {
+    color: #581c87 !important;
+}
+
+.admin-page .bg-green-50 {
+    background-color: rgba(34, 197, 94, 0.1) !important;
+}
+
+.admin-page .text-green-900 {
+    color: #14532d !important;
+}
+
+.admin-page .bg-orange-50 {
+    background-color: rgba(249, 115, 22, 0.1) !important;
+}
+
+.admin-page .text-orange-900 {
+    color: #9a3412 !important;
+}
+
+.admin-page .bg-yellow-50 {
+    background-color: rgba(245, 158, 11, 0.1) !important;
+}
+
+.admin-page .text-yellow-900 {
+    color: #92400e !important;
+}
+
+/* Dark mode event section headers */
+html.dark .admin-page .bg-blue-50 {
+    background-color: rgba(59, 130, 246, 0.2) !important;
+}
+
+html.dark .admin-page .text-blue-900 {
+    color: #93c5fd !important;
+}
+
+html.dark .admin-page .bg-purple-50 {
+    background-color: rgba(147, 51, 234, 0.2) !important;
+}
+
+html.dark .admin-page .text-purple-900 {
+    color: #c4b5fd !important;
+}
+
+html.dark .admin-page .bg-green-50 {
+    background-color: rgba(34, 197, 94, 0.2) !important;
+}
+
+html.dark .admin-page .text-green-900 {
+    color: #86efac !important;
+}
+
+html.dark .admin-page .bg-orange-50 {
+    background-color: rgba(249, 115, 22, 0.2) !important;
+}
+
+html.dark .admin-page .text-orange-900 {
+    color: #fdba74 !important;
+}
+
+html.dark .admin-page .bg-yellow-50 {
+    background-color: rgba(245, 158, 11, 0.2) !important;
+}
+
+html.dark .admin-page .text-yellow-900 {
+    color: #fde68a !important;
+}
+
+/* Payment page adaptive styling */
+.payment-page {
+    background-color: var(--bg) !important;
+}
+
+.payment-page .bg-white {
+    background-color: var(--card-bg) !important;
+    color: var(--text) !important;
+}
+
+.payment-page h1,
+.payment-page h2,
+.payment-page h3,
+.payment-page h4 {
+    color: var(--text) !important;
+}
+
+.payment-page p,
+.payment-page .text-gray-600,
+.payment-page .text-gray-700,
+.payment-page .text-gray-500 {
+    color: var(--muted) !important;
+}
+
+.payment-page .border-gray-300 {
+    border-color: var(--muted) !important;
+}
+
+html.dark .payment-page {
+    background-color: var(--bg) !important;
+}
+
+html.dark .payment-page .bg-white {
+    background-color: var(--card-bg) !important;
+    color: var(--text) !important;
+}
+
+html.dark .payment-page h1,
+html.dark .payment-page h2,
+html.dark .payment-page h3,
+html.dark .payment-page h4 {
+    color: var(--text) !important;
+}
+
+html.dark .payment-page p,
+html.dark .payment-page .text-gray-600,
+html.dark .payment-page .text-gray-700,
+html.dark .payment-page .text-gray-500 {
+    color: var(--muted) !important;
+}
+
+html.dark .payment-page .border-gray-300 {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Night mode: improve UTR input visibility */
+html.dark .payment-page input#utr-id {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+    border-color: rgba(255, 255, 255, 0.35) !important;
+    color: #ffffff !important;
+    caret-color: #ffffff !important;
+}
+
+html.dark .payment-page input#utr-id::placeholder {
+    color: rgba(255, 255, 255, 0.65) !important;
+}
+
+html.dark .payment-page input#utr-id:focus {
+    border-color: #818cf8 !important; /* indigo-400 */
+    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.30) !important;
+}
+
+/* Ensure label has good contrast in night mode */
+html.dark .payment-page label[for="utr-id"],
+html.dark .payment-page label {
+    color: #e5e7eb !important;
+}
+
+/* Night mode: improve UPI section visibility */
+html.dark .payment-page .upi-qr {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+html.dark .payment-page .upi-details {
+    /* override tailwind gradient */
+    background-image: none !important;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.18), rgba(168, 85, 247, 0.18)) !important;
+    border: 1px solid rgba(129, 140, 248, 0.45) !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+}
+
+html.dark .payment-page .upi-details p {
+    color: #e5e7eb !important;
+}
+
+/* Make the small label text brighter inside UPI details */
+html.dark .payment-page .upi-details .text-gray-600 {
+    color: #e5e7eb !important;
+    opacity: 0.95 !important;
+}
+
+html.dark .payment-page .upi-text {
+    color: #ffffff !important;
+}
+
+html.dark .payment-page .copy-upi-btn {
+    color: #c7d2fe !important;
+}
+
+html.dark .payment-page .copy-upi-btn:hover {
+    color: #ffffff !important;
+}
+
+/* Dark mode: make Important Payment Information card readable */
+html.dark .payment-page .payment-info-card {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5) !important;
+}
+
+html.dark .payment-page .payment-info-card .payment-info-title,
+html.dark .payment-page .payment-info-card .text-blue-900 {
+    color: #e5e7eb !important;
+}
+
+html.dark .payment-page .payment-info-card .payment-info-list,
+html.dark .payment-page .payment-info-card .text-blue-800 {
+    color: #cbd5e1 !important;
+}
+
+html.dark .payment-page .payment-info-card .bi-info-circle-fill {
+    color: #60a5fa !important; /* blue-400 */
+}
+
+/* Event cards */
+.event-card {
+    background: var(--card-bg) !important;
+    color: var(--text) !important;
+    transition: all 0.3s ease;
+    border-left: 4px solid var(--primary);
+}
+.event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15);
+}
+
+html.dark .event-card:hover {
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3);
+}
+
+/* Gradient backgrounds */
+.gradient-bg {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: #fff !important;
+}
+
+/* Fix: ensure CTA buttons in Events page can change text color on hover in dark mode */
+html.dark .events-page .gradient-bg a {
+    color: #ffffff !important;
+    border-color: #ffffff !important;
+}
+html.dark .events-page .gradient-bg a:hover {
+    color: #111827 !important; /* gray-900 */
+}
+
+
+/* Button styles */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 9999px;
+    font-weight: 700;
+    transition: transform .18s ease, box-shadow .18s ease, background .18s ease, color .18s ease;
+    will-change: transform;
+}
+
+.btn-solid {
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    border: 2px solid transparent;
+    box-shadow: 0 8px 20px rgba(2,6,23,0.06);
+}
+.btn-solid:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 28px 50px rgba(2,6,23,0.12);
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--hero-text);
+    border: 2px solid rgba(255,255,255,0.14);
+}
+.btn-outline:hover {
+    background: var(--btn-bg);
+    color: var(--btn-text);
+    transform: translateY(-6px);
+    box-shadow: 0 28px 50px rgba(2,6,23,0.12);
+}
+
+.btn-ghost {
+    background: rgba(255,255,255,0.06);
+    color: var(--hero-text);
+    border: 1px solid rgba(255,255,255,0.06);
+    padding: 0.75rem 1.25rem;
+}
+.btn-ghost:hover {
+    background: rgba(255,255,255,0.14);
+    color: var(--hero-text);
+    transform: translateY(-6px);
+    box-shadow: 0 18px 36px rgba(2,6,23,0.08);
+}
+
+/* Admin page specific button styling */
+.admin-page .btn-ghost {
+    background: rgba(99, 102, 241, 0.1) !important;
+    color: #4f46e5 !important;
+    border: 1px solid rgba(99, 102, 241, 0.2) !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease !important;
+}
+
+.admin-page .btn-ghost:hover {
+    background: #4f46e5 !important;
+    color: white !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3) !important;
+}
+
+.admin-page .btn-solid {
+    background: #4f46e5 !important;
+    color: white !important;
+    border: 1px solid #4f46e5 !important;
+    font-weight: 600 !important;
+}
+
+.admin-page .btn-solid:hover {
+    background: #4338ca !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4) !important;
+}
+
+/* Dark mode admin buttons */
+html.dark .admin-page .btn-ghost {
+    background: rgba(129, 140, 248, 0.15) !important;
+    color: #a5b4fc !important;
+    border: 1px solid rgba(129, 140, 248, 0.3) !important;
+}
+
+/* Dark mode: status badge visibility in admin tables */
+html.dark .admin-page .bg-green-100 {
+    background-color: rgba(34, 197, 94, 0.18) !important; /* green-500 tint */
+    border: 1px solid rgba(34, 197, 94, 0.35) !important;
+}
+html.dark .admin-page .text-green-800 { color: #86efac !important; }
+
+html.dark .admin-page .bg-yellow-100 {
+    background-color: rgba(245, 158, 11, 0.2) !important; /* amber-500 tint */
+    border: 1px solid rgba(245, 158, 11, 0.4) !important;
+}
+html.dark .admin-page .text-yellow-800 { color: #fde68a !important; }
+
+html.dark .admin-page .btn-ghost:hover {
+    background: #6366f1 !important;
+    color: white !important;
+}
+
+html.dark .admin-page .btn-solid {
+    background: #6366f1 !important;
+    color: white !important;
+    border: 1px solid #6366f1 !important;
+}
+
+html.dark .admin-page .btn-solid:hover {
+    background: #4f46e5 !important;
+}
+
+/* Responsive grids */
+.grid-3 {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(1, 1fr);
+}
+@media (min-width: 768px) {
+    .grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1024px) {
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+}
+
+.grid-4 {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(1, 1fr);
+}
+@media (min-width: 768px) {
+    .grid-4 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1024px) {
+    .grid-4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* Utility classes */
+.muted { color: var(--muted); }
+.badge { font-size: .85rem; color: inherit; }
+
+/* Hide scrollbar for carousel */
+#video-carousel {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+#video-carousel::-webkit-scrollbar {
+    display: none;
+}
+
+/* Lock scroll */
+html.no-scroll, body.no-scroll {
+    height: 100%;
+    overflow: hidden !important;
+    touch-action: none !important;
+}
+
+/* Enhanced countdown styling for maximum visibility */
+.countdown-title {
+    color: white !important;
+    text-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.8),
+        0 0 10px rgba(255, 255, 255, 0.8) !important;
+    font-weight: 700 !important;
+}
+
+/* Individual countdown numbers styling */
+#days-display, #hours-display, #minutes-display, #seconds-display {
+    color: white !important;
+    text-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.9),
+        0 0 15px rgba(255, 255, 255, 0.8),
+        0 0 25px rgba(147, 51, 234, 0.4) !important;
+    transition: all 0.3s ease;
+}
+
+.countdown-seconds {
+    color: #fbbf24 !important;
+    text-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.9),
+        0 0 15px rgba(251, 191, 36, 0.8),
+        0 0 25px rgba(245, 158, 11, 0.6) !important;
+}
+
+/* Countdown container enhancement */
+.bg-black\/60 {
+    background-color: rgba(0, 0, 0, 0.85) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 2px solid rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 
+        0 0 40px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Home page countdown visibility in all themes */
+body.home-page .countdown-title,
+body.home-page #days-display,
+body.home-page #hours-display,
+body.home-page #minutes-display,
+body.home-page #seconds-display {
+    color: white !important;
+    text-shadow: 
+        0 2px 8px rgba(0, 0, 0, 1),
+        0 0 20px rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Ensure visibility in both light and dark modes */
+html.dark body.home-page .countdown-title,
+html.dark body.home-page #days-display,
+html.dark body.home-page #hours-display,
+html.dark body.home-page #minutes-display,
+html.dark body.home-page #seconds-display {
+    color: white !important;
+    text-shadow: 
+        0 2px 8px rgba(0, 0, 0, 1),
+        0 0 20px rgba(255, 255, 255, 1) !important;
+}
+
+/* Enhance drop shadows in dark mode for better depth */
+html.dark .shadow-lg { box-shadow: 0 10px 25px rgba(0,0,0,0.6) !important; }
+html.dark .shadow-xl { box-shadow: 0 14px 35px rgba(0,0,0,0.65) !important; }
+html.dark .shadow-2xl { box-shadow: 0 20px 45px rgba(0,0,0,0.7) !important; }
+html.dark .hover\:shadow-2xl:hover { box-shadow: 0 22px 50px rgba(0,0,0,0.75) !important; }
+
+/* Strengthen drop-shadow utility on dark backgrounds */
+html.dark .drop-shadow-lg { filter: drop-shadow(0 6px 12px rgba(0,0,0,0.6)) drop-shadow(0 0 10px rgba(255,255,255,0.12)) !important; }
+
+/* Mobile-responsive floating social buttons */
+.floating-social {
+    position: fixed;
+    left: 1rem;
+    bottom: 1rem;
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .floating-social {
+        left: 0.75rem;
+        bottom: 0.75rem;
+        gap: 0.5rem;
+    }
+    
+    .floating-social a,
+    .floating-social button {
+        width: 2.5rem !important;
+        height: 2.5rem !important;
+        font-size: 0.875rem;
+    }
+    
+    .floating-social i {
+        width: 1.25rem !important;
+        height: 1.25rem !important;
+    }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 480px) {
+    .floating-social {
+        left: 0.5rem;
+        bottom: 0.5rem;
+        gap: 0.75rem;
+    }
+    
+    .floating-social a,
+    .floating-social button {
+        width: 2.25rem !important;
+        height: 2.25rem !important;
+    }
+    
+    .floating-social i {
+        width: 1rem !important;
+        height: 1rem !important;
+    }
+}
+
+/* Floating buttons dynamic behavior */
+.floating-social.collapsed {
+    transform: translateX(-60%);
+}
+
+/* Ensure floating social icons are white in all themes */
+.floating-social i,
+.floating-social svg {
+    color: #ffffff !important;
+    stroke: #ffffff !important;
+    fill: none !important;
+    stroke-width: 2 !important;
+}
+
+.floating-social.collapsed:hover {
+    transform: translateX(0);
+}
+
+/* Scroll-to-top dynamic visibility */
+.scroll-to-top {
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.8);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+}
+
+/* Mobile keyboard adaptation */
+@media (max-width: 768px) {
+    body.keyboard-open .floating-social {
+        transform: translateY(-150px);
+    }
+}
+
+/* Landscape mobile adjustments */
+@media (max-width: 896px) and (orientation: landscape) {
+    .floating-social {
+        left: 0.5rem;
+        bottom: 0.5rem;
+        gap: 0.5rem;
+    }
+    
+    .floating-social a,
+    .floating-social button {
+        width: 2rem !important;
+        height: 2rem !important;
+    }
+    
+    .floating-social i {
+        width: 1rem !important;
+        height: 1rem !important;
+    }
+}
+
+/* Global responsive typography improvements */
+@media (max-width: 640px) {
+    .hero-title {
+        font-size: 2.25rem !important; /* text-4xl equivalent */
+        line-height: 1.1 !important;
+    }
+    
+    /* Ensure all pages have proper mobile spacing */
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    /* Mobile-specific button improvements */
+    .btn, button[class*="btn"], a[class*="btn"] {
+        min-height: 44px; /* WCAG touch target minimum */
+        padding-left: 1rem;
+        padding-right: 1rem;
+        font-size: 0.875rem;
+    }
+}
+
+/* Extra small mobile improvements */
+@media (max-width: 480px) {
+    .hero-title {
+        font-size: 1.875rem !important; /* text-3xl equivalent */
+    }
+    
+    /* Tighter spacing on very small screens */
+    .container {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+    
+    /* Form inputs on mobile */
+    input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea {
+        font-size: 16px !important; /* Prevents zoom on iOS */
+        padding: 0.75rem;
+        -webkit-appearance: none;
+        -moz-appearance: textfield;
+        appearance: none;
+    }
+    
+    /* Ensure number inputs work properly on mobile */
+    input[type="number"] {
+        -webkit-appearance: none;
+        -moz-appearance: textfield;
+        appearance: none;
+        background-color: transparent !important;
+        border: none !important;
+        outline: none !important;
+        width: 100% !important;
+    }
+    
+    /* Remove number input spinners on mobile */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+}
+
+/* Tablet specific improvements */
+@media (min-width: 641px) and (max-width: 1024px) {
+    .hero-title {
+        font-size: 4rem; /* text-6xl equivalent */
+    }
+    
+    /* Better spacing for tablets */
+    .container {
+        max-width: 100%;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+}
+
+/* Text scaling improvements */
+@media (max-width: 768px) {
+    h1 { font-size: 1.875rem; line-height: 1.2; }
+    h2 { font-size: 1.5rem; line-height: 1.3; }
+    h3 { font-size: 1.25rem; line-height: 1.4; }
+    p { font-size: 0.875rem; line-height: 1.5; }
+    
+    /* Card improvements for mobile */
+    .bg-white, .card {
+        border-radius: 1rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .hero-title, h1, h2 {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}

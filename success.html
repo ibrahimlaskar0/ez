@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful - Esplendidez 2026</title>
+    <link rel="icon" type="image/x-icon" href="assets/logo.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { darkMode: 'class', theme: { extend: {} } }</script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/runtime-config.js"></script>
+    <script src="js/api.js"></script>
+</head>
+<body class="bg-gray-50 success-page">
+    <!-- Navigation -->
+    <nav class="site-nav fixed top-0 left-0 w-full bg-white/90 backdrop-blur-md z-50 shadow-sm" role="navigation" aria-label="Main navigation">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <img src="assets/logo.jpg" alt="Esplendidez Logo" class="h-10 w-auto mr-2">
+                    <a href="index.html" class="text-xl font-bold text-gray-800">Esplendidez</a>
+                </div>
+                <div class="hidden md:flex items-center space-x-4">
+                    <div class="flex space-x-8">
+                        <a href="index.html" class="text-gray-600 hover:text-indigo-600 font-medium transition">Home</a>
+                        <a href="events.html" class="text-gray-600 hover:text-indigo-600 font-medium transition">Events</a>
+                        <a href="gallery.html" class="text-gray-600 hover:text-indigo-600 font-medium transition">Gallery</a>
+                        <a href="about.html" class="text-gray-600 hover:text-indigo-600 font-medium transition">About</a>
+                    </div>
+
+                    <!-- Theme toggle button -->
+                    <button id="theme-toggle" class="theme-btn p-2 rounded-md" aria-label="Toggle theme" title="Toggle day/night" onclick="if(window.toggleTheme) window.toggleTheme(); else console.log('toggleTheme not available');">
+                        <i data-feather="moon" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <button id="mobile-menu-btn" class="md:hidden" aria-label="Open menu" onclick="if(window.toggleMobileMenu) window.toggleMobileMenu(); else console.log('toggleMobileMenu not available');">
+                    <i data-feather="menu" class="text-gray-600"></i>
+                </button>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="md:hidden hidden bg-white/95 backdrop-blur-md border-t">
+                <div class="px-6 py-4 space-y-4">
+                    <a href="index.html" class="block text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors">Home</a>
+                    <a href="events.html" class="block text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors">Events</a>
+                    <a href="gallery.html" class="block text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors">Gallery</a>
+                    <a href="about.html" class="block text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors">About</a>
+                    <div class="pt-4 border-t border-gray-200">
+                        <button id="mobile-theme-toggle" class="flex items-center space-x-3 text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors" onclick="if(window.toggleTheme) window.toggleTheme(); else console.log('toggleTheme not available');">
+                            <i data-feather="moon" class="w-5 h-5"></i>
+                            <span>Toggle Theme</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Success Section -->
+    <section class="py-20 min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center success-main-section">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto text-center">
+                
+                <!-- Success Icon -->
+                <div class="inline-flex items-center justify-center w-24 h-24 bg-green-100 rounded-full mb-8 animate-bounce">
+                    <i class="bi bi-check-circle-fill text-5xl text-green-600"></i>
+                </div>
+
+                <!-- Success Message -->
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
+                    🎉 Payment Successful!
+                </h1>
+                
+                <p class="text-xl md:text-2xl text-gray-600 mb-12">
+                    Your registration has been submitted successfully
+                </p>
+
+                <!-- Registration Details Card -->
+                <div class="bg-white rounded-2xl shadow-xl p-8 mb-8 text-left max-w-2xl mx-auto">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Registration Details</h2>
+                    
+                    <div class="space-y-4">
+                        <div class="flex justify-between border-b pb-2">
+                            <span class="font-semibold text-gray-600">Registration ID:</span>
+                            <span class="font-mono text-indigo-600" id="success-reg-id">Loading...</span>
+                        </div>
+                        <div class="flex justify-between border-b pb-2">
+                            <span class="font-semibold text-gray-600">Event:</span>
+                            <span class="text-gray-800" id="success-event">Loading...</span>
+                        </div>
+                        <div class="flex justify-between border-b pb-2">
+                            <span class="font-semibold text-gray-600">Name:</span>
+                            <span class="text-gray-800" id="success-name">Loading...</span>
+                        </div>
+                        <div class="flex justify-between border-b pb-2">
+                            <span class="font-semibold text-gray-600">Fee:</span>
+                            <span class="font-semibold text-green-600" id="success-fee">Loading...</span>
+                        </div>
+                        <div class="flex justify-between border-b pb-2">
+                            <span class="font-semibold text-gray-600">Roll Number:</span>
+                            <span class="text-gray-800" id="success-roll">Loading...</span>
+                        </div>
+                        <div class="flex justify-between border-b pb-2">
+                            <span class="font-semibold text-gray-600">ID Proof:</span>
+                            <span class="text-gray-800 text-sm" id="success-id-proof">Loading...</span>
+                        </div>
+                        <div class="flex justify-between border-b pb-2">
+                            <span class="font-semibold text-gray-600">UTR ID:</span>
+                            <span class="font-mono text-gray-800" id="success-utr">Loading...</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-semibold text-gray-600">Submitted:</span>
+                            <span class="text-gray-800" id="success-timestamp">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Important Notice -->
+                <div class="bg-yellow-50 border border-yellow-200 rounded-2xl p-6 mb-8 text-left max-w-2xl mx-auto">
+                    <h3 class="font-bold text-yellow-800 mb-4 flex items-center">
+                        <i class="bi bi-exclamation-triangle-fill mr-2"></i>
+                        Important Notice
+                    </h3>
+                    <ul class="text-yellow-800 space-y-2">
+                        <li>• Payment verification may take up to <strong>24 hours</strong></li>
+                        <li>• You will receive a confirmation email once verified</li>
+                        <li>• Please keep your <strong>Registration ID</strong> for future reference</li>
+                        <li>• Contact us if you don't hear back within 24 hours</li>
+                    </ul>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="bg-gray-100 rounded-2xl p-6 mb-8 max-w-2xl mx-auto">
+                    <h3 class="font-bold text-gray-800 mb-4">Need Help?</h3>
+                    <div class="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-6 text-gray-600">
+                        <div class="flex items-center">
+                            <i class="bi bi-envelope-fill mr-2 text-blue-600"></i>
+                            <a href="mailto:esplendidez26@gmail.com" class="hover:text-blue-600 transition">esplendidez26@gmail.com</a>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="bi bi-telephone-fill mr-2 text-green-600"></i>
+                            <a href="tel:6900922920" class="hover:text-green-600 transition">6900922920</a>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="bi bi-telephone-fill mr-2 text-green-600"></i>
+                            <a href="tel:6900922920" class="hover:text-green-600 transition">9707217541</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mt-4">
+                    <a href="index.html" class="bg-transparent border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-600 hover:text-white px-8 py-4 text-lg rounded-full font-bold transition-all duration-300 transform hover:scale-110 hover:shadow-xl flex items-center space-x-3 justify-center">
+                        <i data-feather="home" class="w-6 h-6"></i>
+                        <span>Go to Home</span>
+                    </a>
+                    <a href="events.html" class="bg-transparent border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-600 hover:text-white px-8 py-4 text-lg rounded-full font-bold transition-all duration-300 transform hover:scale-110 hover:shadow-xl flex items-center space-x-3 justify-center">
+                        <i data-feather="calendar" class="w-6 h-6"></i>
+                        <span>Register More Events</span>
+                    </a>
+                </div>
+
+                <!-- Copy Registration ID Button -->
+                <div class="mt-8">
+                    <button onclick="copyRegistrationId()" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-700 border border-indigo-300 px-6 py-3 rounded-lg font-medium transition-all duration-300 flex items-center space-x-2 mx-auto hover:scale-105 copy-reg-btn">
+                        <i class="bi bi-clipboard" id="copy-icon"></i>
+                        <span id="copy-text">Copy Registration ID</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16 site-footer">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <!-- Logo & Description -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="assets/logo.jpg" alt="Esplendidez Logo" class="h-10 w-auto">
+                        <h3 class="text-2xl font-bold">Esplendidez 2026</h3>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        The premier tech fest of Regional Institute of Science and Technology. Join us for innovation, competition, and cultural celebration.
+                    </p>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition">Home</a></li>
+                        <li><a href="events.html" class="text-gray-400 hover:text-white transition">Events</a></li>
+                        <li><a href="register.html" class="text-gray-400 hover:text-white transition">Register</a></li>
+                        <li><a href="about.html" class="text-gray-400 hover:text-white transition">About</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="mailto:esplendidez26@gmail.com" class="flex items-center text-gray-400 hover:text-white transition-colors duration-300 group">
+                                <i data-feather="mail" class="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300"></i> 
+                                esplendidez26@gmail.com
+                            </a>
+                        </li>
+                        <li>
+                            <a href="tel:6900922920" class="flex items-center text-gray-400 hover:text-white transition-colors duration-300 group">
+                                <i data-feather="phone" class="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300"></i> 
+                                6900922920
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.instagram.com/esplendidez_26" target="_blank" class="flex items-center text-gray-400 hover:text-white transition-colors duration-300 group">
+                                <i data-feather="instagram" class="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300"></i> 
+                                @esplendidez_26
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 pt-8 text-center">
+<p class="text-gray-400">© 2026 Esplendidez Tech Fest • Regional Institute of Science and Technology (RIST). All rights reserved.</p>
+                <p class="text-gray-500 text-sm mt-2">Developed with ❤️ by <span class="text-indigo-400 font-semibold">Afsar</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script>
+        // Success page logic only (theme/menu handled by main.js)
+        document.addEventListener('DOMContentLoaded', function() {
+            loadRegistrationDetails();
+            
+            // Initialize Feather Icons
+            if (typeof feather !== 'undefined') {
+                feather.replace();
+            }
+        });
+
+        // Load registration details from URL parameters or latest registration
+        async function loadRegistrationDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const regId = urlParams.get('registrationId') || urlParams.get('regId');
+            
+            if (regId) {
+                try {
+                    // Fetch from backend API via proxied base
+                    const result = await ApiService.makeRequest(`/registration/${regId}`);
+                    if (result && result.success && result.data) {
+                        displayRegistrationDetails(result.data);
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Failed to fetch registration:', error);
+                }
+                
+                // Fallback to localStorage
+                const userRegistrations = JSON.parse(localStorage.getItem('myRegistrations')) || [];
+                const userReg = userRegistrations.find(reg => reg.id === regId);
+                
+                if (userReg) {
+                    displayRegistrationDetails(userReg);
+                } else {
+                    // Fallback to category-specific registrations
+                    const categoryKeys = [
+                        'registrations_technical',
+                        'registrations_cultural', 
+                        'registrations_sports',
+                        'registrations_e_sports',
+                        'registrations_competitions'
+                    ];
+                    
+                    let registration = null;
+                    for (const categoryKey of categoryKeys) {
+                        const registrations = JSON.parse(localStorage.getItem(categoryKey)) || [];
+                        const found = registrations.find(reg => reg.id === regId);
+                        if (found) {
+                            registration = found;
+                            break;
+                        }
+                    }
+                    
+                    if (registration) {
+                        displayRegistrationDetails(registration);
+                    }
+                }
+            } else {
+                // Show latest user registration if no ID provided
+                const userRegistrations = JSON.parse(localStorage.getItem('myRegistrations')) || [];
+                if (userRegistrations.length > 0) {
+                    displayRegistrationDetails(userRegistrations[userRegistrations.length - 1]);
+                }
+            }
+        }
+        
+        function displayRegistrationDetails(reg) {
+            // Support both frontend format and backend format
+            document.getElementById('success-reg-id').textContent = reg.registration_id || reg.registrationId || reg.id || 'N/A';
+            document.getElementById('success-event').textContent = reg.event_name || reg.eventName || reg.event || 'N/A';
+            document.getElementById('success-name').textContent = reg.participant_name || reg.participantName || reg.name || 'N/A';
+            document.getElementById('success-fee').textContent = reg.event_fee ? `₹${reg.event_fee}` : (reg.eventFee ? `₹${reg.eventFee}` : (reg.fee || 'N/A'));
+            document.getElementById('success-roll').textContent = reg.participant_roll || reg.participantRoll || reg.rollNumber || 'N/A';
+            document.getElementById('success-id-proof').textContent = reg.college_id_original_name || reg.collegeIdOriginalName || reg.idProofName || 'N/A';
+            document.getElementById('success-utr').textContent = reg.utr_number || reg.utrNumber || reg.utr || 'N/A';
+            document.getElementById('success-timestamp').textContent = reg.submitted_at || reg.submittedAt || reg.timestamp ? 
+                new Date(reg.submitted_at || reg.submittedAt || reg.timestamp).toLocaleString() : 'N/A';
+        }
+
+        function copyRegistrationId() {
+            const regId = document.getElementById('success-reg-id').textContent;
+            if (regId && regId !== 'N/A') {
+                navigator.clipboard.writeText(regId).then(() => {
+                    const copyIcon = document.getElementById('copy-icon');
+                    const copyText = document.getElementById('copy-text');
+                    
+                    copyIcon.className = 'bi bi-check';
+                    copyText.textContent = 'Copied!';
+                    
+                    setTimeout(() => {
+                        copyIcon.className = 'bi bi-clipboard';
+                        copyText.textContent = 'Copy Registration ID';
+                    }, 2000);
+                }).catch(err => {
+                    alert('Failed to copy: ' + regId);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

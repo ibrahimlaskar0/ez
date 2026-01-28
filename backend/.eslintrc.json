@@ -1,0 +1,41 @@
+{
+  "env": {
+    "es2021": true,
+    "node": true,
+    "commonjs": true,
+    "jest": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:n/recommended",
+    "plugin:import/recommended",
+    "prettier"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2021
+  },
+  "rules": {
+    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+    "no-console": "off",
+    "n/no-process-exit": "off",
+    "no-useless-catch": "off",
+    "import/order": [
+      "warn",
+      {
+        "groups": [["builtin", "external"], ["internal", "parent", "sibling", "index"]],
+        "alphabetize": { "order": "asc", "caseInsensitive": true },
+        "newlines-between": "always"
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["tests/**/*.js", "**/*.test.js", "**/*.spec.js"],
+      "env": { "jest": true, "node": true },
+      "rules": {
+        "n/no-unpublished-import": "off",
+        "n/no-unpublished-require": "off"
+      }
+    }
+  ]
+}

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Esplendidez 2026</title>
+    <meta name="description" content="Register for Esplendidez 2026 events at RIST. Team and individual registrations supported.">
+    <meta name="keywords" content="register, Esplendidez, RIST, events">
+    <meta property="og:title" content="Register - Esplendidez 2026">
+    <meta property="og:description" content="Register for events and join the fest.">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="register.html">
+    <link rel="icon" type="image/x-icon" href="assets/logo.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { darkMode: 'class', theme: { extend: {} } }</script>
+    <script src="https://unpkg.com/feather-icons" defer></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/runtime-config.js"></script>
+    <script src="js/api.js"></script>
+</head>
+<body class="bg-gray-50 register-page">
+    <!-- Navigation -->
+    <nav class="site-nav fixed top-0 left-0 w-full bg-white/90 backdrop-blur-md z-50 shadow-sm" role="navigation" aria-label="Main navigation">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center">
+                <!-- Left: Logo and Name -->
+                <div class="flex items-center space-x-2">
+                    <img src="assets/logo.jpg" alt="Esplendidez Logo" class="h-10 w-auto mr-2">
+                    <a href="index.html" class="text-xl font-bold text-gray-800">Esplendidez</a>
+                </div>
+                
+                <!-- Spacer to push content to the right -->
+                <div class="flex-grow"></div>
+                
+                <!-- Right: Navigation + Theme Toggle (Desktop) -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <div class="flex space-x-8">
+                        <a href="index.html" class="text-gray-600 hover:text-indigo-600 font-medium transition">Home</a>
+                        <a href="events.html" class="text-gray-600 hover:text-indigo-600 font-medium transition">Events</a>
+                        <a href="gallery.html" class="text-gray-600 hover:text-indigo-600 font-medium transition">Gallery</a>
+                        <a href="about.html" class="text-gray-600 hover:text-indigo-600 font-medium transition">About</a>
+                    </div>
+                    <!-- Theme toggle button -->
+                    <button id="theme-toggle" class="theme-btn p-2 rounded-md" aria-label="Toggle theme" title="Toggle day/night" onclick="if(window.toggleTheme) window.toggleTheme(); else console.log('toggleTheme not available');">
+                        <i data-feather="moon" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                </div>
+
+                <button id="mobile-menu-btn" class="md:hidden" aria-label="Open menu" onclick="if(window.toggleMobileMenu) window.toggleMobileMenu(); else console.log('toggleMobileMenu not available');">
+                    <i data-feather="menu" class="text-gray-600"></i>
+                </button>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="md:hidden hidden bg-white/95 backdrop-blur-md border-t">
+                <div class="px-6 py-4 space-y-4">
+                    <a href="index.html" class="block text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors">Home</a>
+                    <a href="events.html" class="block text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors">Events</a>
+                    <a href="gallery.html" class="block text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors">Gallery</a>
+                    <a href="about.html" class="block text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors">About</a>
+                    <div class="pt-4 border-t border-gray-200">
+                        <button id="mobile-theme-toggle" class="flex items-center space-x-3 text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors" onclick="if(window.toggleTheme) window.toggleTheme(); else console.log('toggleTheme not available');">
+                            <i data-feather="moon" class="w-5 h-5"></i>
+                            <span>Toggle Theme</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Registration Form Section -->
+    <section class="py-20 bg-gradient-to-br from-gray-900 via-purple-900 to-indigo-900 relative min-h-screen">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 bg-black/20"></div>
+        
+        <div class="container mx-auto px-4 sm:px-6 relative z-10">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-8 md:mb-12">
+                    <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 text-white leading-tight">Event Registration</h1>
+                    <p class="text-base sm:text-lg md:text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed px-4">
+                        Join Esplendidez 2026 and showcase your talents in your chosen event
+                    </p>
+                </div>
+
+                <div class="bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl border border-white/20 p-4 sm:p-6 md:p-8">
+                    <!-- Event Info Card -->
+                    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-6 mb-8">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="bi bi-calendar-event text-3xl text-white"></i>
+                            </div>
+                            <h2 class="text-2xl font-bold text-white mb-2">Registration Details</h2>
+                            <p class="text-white/80">Complete the form below to secure your spot</p>
+                        </div>
+                    </div>
+
+                    <!-- Registration Rules Section -->
+                    <div class="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 mb-8">
+                        <h3 class="text-xl font-semibold text-white mb-6 flex items-center">
+                            <i class="bi bi-journal-check text-yellow-400 mr-3"></i>
+                            📝 Rules for Registration
+                        </h3>
+                        <div class="space-y-3 text-gray-200 text-sm leading-relaxed">
+                            <div class="flex items-start space-x-3">
+                                <i class="bi bi-check-circle-fill text-green-400 mt-0.5 flex-shrink-0"></i>
+                                <p>Participants can register individually or as a team, depending on the event guidelines.</p>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="bi bi-check-circle-fill text-green-400 mt-0.5 flex-shrink-0"></i>
+                                <p>All registration details must be accurate and verifiable.</p>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="bi bi-check-circle-fill text-green-400 mt-0.5 flex-shrink-0"></i>
+                                <p><strong>A valid College ID card is mandatory for verification.</strong> Registrations without a valid ID will be rejected.</p>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="bi bi-check-circle-fill text-green-400 mt-0.5 flex-shrink-0"></i>
+                                <p>The event fee must be paid during registration; unpaid entries will not be considered.</p>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="bi bi-check-circle-fill text-green-400 mt-0.5 flex-shrink-0"></i>
+                                <p>A confirmation email or message will be sent after successful registration and payment.</p>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="bi bi-exclamation-triangle-fill text-red-400 mt-0.5 flex-shrink-0"></i>
+                                <p><strong>Registration fees are non-refundable under any circumstances.</strong></p>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="bi bi-check-circle-fill text-green-400 mt-0.5 flex-shrink-0"></i>
+                                <p>Participants must maintain discipline and follow all event and campus rules during Esplendidez 2026.</p>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="bi bi-info-circle-fill text-blue-400 mt-0.5 flex-shrink-0"></i>
+                                <p>The organizing committee reserves the right to modify or cancel any registration in case of rule violations or incomplete entries.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form id="registration-form" class="space-y-8">
+                        <!-- Event Selection -->
+                        <div class="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+                            <h3 class="text-xl font-semibold text-white mb-6 flex items-center">
+                                <i class="bi bi-star-fill text-yellow-400 mr-3"></i>
+                                Event Information
+                            </h3>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-200 mb-2">Selected Event</label>
+                                    <select id="event-selector" class="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white focus:ring-2 focus:ring-purple-400 focus:border-transparent">
+                                        <option value="" class="bg-gray-800 text-white">Choose an event...</option>
+                                    </select>
+                                    <input type="text" id="event-name" class="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white placeholder-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-transparent hidden" readonly>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-200 mb-2">Event Fee</label>
+                                    <input type="text" id="event-fee" class="w-full px-4 py-3 bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg text-white placeholder-gray-300" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Personal Information -->
+                        <div class="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+                            <h3 class="text-xl font-semibold text-white mb-6 flex items-center">
+                                <i class="bi bi-person-circle text-blue-400 mr-3"></i>
+                                Personal Information
+                            </h3>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-200 mb-2">
+                                        <i class="bi bi-person-fill mr-2"></i>Full Name *
+                                    </label>
+                                    <input type="text" id="participant-name" class="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white placeholder-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-transparent" placeholder="Enter your full name" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-200 mb-2">
+                                        <i class="bi bi-envelope-fill mr-2"></i>Email Address *
+                                    </label>
+                                    <input type="email" id="participant-email" class="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white placeholder-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-transparent" placeholder="Enter your email address" required>
+                                </div>
+                            </div>
+
+                            <div class="grid md:grid-cols-2 gap-6 mt-6">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-200 mb-2">
+                                        <i class="bi bi-telephone-fill mr-2"></i>Phone Number *
+                                    </label>
+                                    <input type="tel" id="participant-phone" maxlength="10" pattern="[6-9][0-9]{9}" class="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white placeholder-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-transparent" placeholder="Enter 10-digit phone number" required>
+                                    <p class="text-xs text-gray-300 mt-1">Enter 10 digits starting with 6, 7, 8, or 9</p>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-200 mb-2">
+                                        <i class="bi bi-building mr-2"></i>College/Institution *
+                                    </label>
+                                    <input type="text" id="participant-college" class="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white placeholder-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-transparent" placeholder="Enter your college/institution name" required>
+                                </div>
+                            </div>
+
+                            <div class="grid md:grid-cols-2 gap-6 mt-6">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-200 mb-2">
+                                        <i class="bi bi-card-text mr-2"></i>College Roll Number *
+                                    </label>
+                                    <input type="text" id="participant-roll" class="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white placeholder-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-transparent" placeholder="Enter your college roll number" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-200 mb-2">
+                                        <i class="bi bi-file-earmark-image mr-2"></i>College ID Proof *
+                                    </label>
+                                    <input type="file" id="college-id-proof" accept="image/*,.pdf" class="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-purple-50 file:text-purple-600 hover:file:bg-purple-100 focus:ring-2 focus:ring-purple-400 focus:border-transparent" required>
+                                    <p class="text-xs text-gray-300 mt-1">Upload clear photo of your college ID card (JPG, PNG, or PDF)</p>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Team Information -->
+                        <div class="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+                            <h3 class="text-xl font-semibold text-white mb-6 flex items-center">
+                                <i class="bi bi-people-fill text-green-400 mr-3"></i>
+                                Team Information
+                            </h3>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-200 mb-2">
+                                    <i class="bi bi-hash mr-2"></i>Team Size (if applicable)
+                                </label>
+                                <input type="number" id="participant-team" min="1" max="20" step="1" inputmode="numeric" pattern="[1-9][0-9]?" class="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white placeholder-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-transparent" placeholder="Enter team size (1 for individual)">
+                                <p class="text-sm text-gray-300 mt-2 flex items-center">
+                                    <i class="bi bi-info-circle mr-2"></i>
+                                    Leave blank if participating individually
+                                </p>
+                            </div>
+
+                            <!-- Team Meta (shown when team size > 1) -->
+                            <div id="team-meta-section" class="mt-6 hidden">
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-200 mb-2">
+                                            <i class="bi bi-flag mr-2"></i>Team Name
+                                        </label>
+                                        <input type="text" id="team-name" class="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white placeholder-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-transparent" placeholder="Enter team name">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-200 mb-2">
+                                            <i class="bi bi-person-badge mr-2"></i>Team Captain (optional)
+                                        </label>
+                                        <input type="text" id="team-captain" class="w-full px-4 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white placeholder-gray-300 focus:ring-2 focus:ring-purple-400 focus:border-transparent" placeholder="Enter captain name (optional)">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Team Members (shown when team size > 1) -->
+                            <div id="team-members-section" class="mt-6 hidden">
+                                <label class="block text-sm font-semibold text-gray-200 mb-2">
+                                    <i class="bi bi-people mr-2"></i>Team Members (excluding you)
+                                </label>
+                                <p class="text-sm text-gray-300 mb-3">
+                                    Add each teammate's name and email. Number of fields will match team size - 1.
+                                </p>
+                                <div id="team-members-container" class="space-y-3"></div>
+                            </div>
+                        </div>
+
+                        <!-- Terms and Conditions Acceptance -->
+                        <div class="bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10 mt-8">
+                            <div class="flex items-start space-x-4">
+                                <input type="checkbox" id="terms-acceptance" class="w-5 h-5 mt-1 text-purple-600 bg-white/10 border-white/20 rounded focus:ring-purple-500 focus:ring-2" required>
+                                <div class="flex-1">
+                                    <label for="terms-acceptance" class="text-white font-medium cursor-pointer">
+                                        I accept the registration rules and terms *
+                                    </label>
+                                    <p class="text-sm text-gray-300 mt-2">
+                                        By checking this box, I confirm that I have read and agree to all the registration rules mentioned above. I understand that:
+                                    </p>
+                                    <ul class="text-xs text-gray-400 mt-2 space-y-1 ml-4">
+                                        <li>• My college ID card is mandatory for verification</li>
+                                        <li>• Registration fees are non-refundable</li>
+                                        <li>• All provided information must be accurate</li>
+                                        <li>• I will follow all event and campus rules</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center pt-6">
+                            <button type="button" onclick="window.location.href='events.html'" class="bg-transparent border-2 border-white/60 text-white hover:bg-white/10 px-8 py-3 text-lg rounded-full font-bold transition-all duration-300 transform hover:scale-105 flex items-center space-x-3">
+                                <i data-feather="arrow-left" class="w-5 h-5"></i>
+                                <span>Back to Events</span>
+                            </button>
+                            <button type="submit" id="submit-btn" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-12 py-4 text-lg rounded-full font-bold transition-all duration-300 transform hover:scale-110 hover:shadow-2xl flex items-center space-x-3 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none" disabled>
+                                <i data-feather="credit-card" class="w-6 h-6"></i>
+                                <span>Proceed to Payment</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16 site-footer relative z-10">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <!-- Logo & Description -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="assets/logo.jpg" alt="Esplendidez Logo" class="h-10 w-auto">
+                        <h3 class="text-2xl font-bold text-white">Esplendidez 2026</h3>
+                    </div>
+                    <p class="text-gray-300 mb-4">
+                        The premier tech fest of Regional Institute of Science and Technology. Join us for innovation, competition, and cultural celebration.
+                    </p>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-white">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-300 hover:text-white transition">Home</a></li>
+                        <li><a href="events.html" class="text-gray-300 hover:text-white transition">Events</a></li>
+                        <li><a href="register.html" class="text-gray-300 hover:text-white transition">Register</a></li>
+                        <li><a href="about.html" class="text-gray-300 hover:text-white transition">About</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4 text-white">Contact</h4>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="mailto:esplendidez26@gmail.com" class="flex items-center text-gray-300 hover:text-white transition-colors duration-300 group">
+                                <i data-feather="mail" class="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300"></i> 
+                                esplendidez26@gmail.com
+                            </a>
+                        </li>
+                        <li>
+                            <a href="tel:6900922920" class="flex items-center text-gray-300 hover:text-white transition-colors duration-300 group">
+                                <i data-feather="phone" class="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300"></i> 
+                                6900922920
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.instagram.com/esplendidez_26" target="_blank" class="flex items-center text-gray-300 hover:text-white transition-colors duration-300 group">
+                                <i data-feather="instagram" class="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300"></i> 
+                                @esplendidez_26
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-600 pt-8 text-center">
+<p class="text-gray-300">© 2026 Esplendidez Tech Fest • Regional Institute of Science and Technology (RIST). All rights reserved.</p>
+                <p class="text-gray-400 text-sm mt-2">Developed with ❤️ by <span class="text-indigo-400 font-semibold">Afsar</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Social Media -->
+    <div class="floating-social" id="floating-social">
+        <a href="https://www.instagram.com/esplendidez_26" target="_blank" class="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl">
+            <i data-feather="instagram" class="w-6 h-6"></i>
+        </a>
+        <a href="mailto:esplendidez26@gmail.com" class="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl">
+            <i data-feather="mail" class="w-6 h-6"></i>
+        </a>
+        <a href="tel:6900922920" class="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center text-white hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl">
+            <i data-feather="phone" class="w-6 h-6"></i>
+        </a>
+        <button id="scroll-to-top" class="scroll-to-top w-12 h-12 bg-gradient-to-r from-gray-700 to-gray-900 rounded-full flex items-center justify-center text-white hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl" title="Scroll to top">
+            <i data-feather="arrow-up" class="w-6 h-6"></i>
+        </button>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/registration.js"></script>
+    <script src="js/registration-form.js"></script>
+    <script>
+        // Phone number input sanitization
+        document.addEventListener('DOMContentLoaded', function() {
+            const phoneInput = document.getElementById('participant-phone');
+            if (phoneInput) {
+                phoneInput.addEventListener('input', function(e) {
+                    // Remove all non-digit characters
+                    let value = this.value.replace(/\D/g, '');
+                    // Limit to 10 digits
+                    if (value.length > 10) {
+                        value = value.substring(0, 10);
+                    }
+                    this.value = value;
+                });
+            }
+        });
+    </script>
+</body>
+</html>

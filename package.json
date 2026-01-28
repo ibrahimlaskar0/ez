@@ -1,0 +1,33 @@
+{
+  "name": "my-website",
+  "version": "1.0.0",
+  "description": "A simple website",
+  "main": "server.js",
+  "scripts": {
+    "frontend": "http-server -p 3000 -c-1",
+    "backend": "npm --prefix backend run dev",
+    "dev": "concurrently -n frontend,backend -c blue,magenta \"npm run frontend\" \"npm run backend\"",
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "website",
+    "html",
+    "css"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.0.1",
+    "http-server": "^14.1.1",
+    "live-server": "^1.2.0"
+  },
+  "overrides": {
+    "braces": "^3.0.3",
+    "micromatch": "^4.0.8",
+    "readdirp": "^3.6.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5"
+  }
+}

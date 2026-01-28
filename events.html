@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esplendidez Tech Fest - Events</title>
+    <meta name="description" content="Browse all Esplendidez 2026 events: technical, cultural, sports, e-sports, competitions. Register now!">
+    <meta name="keywords" content="Esplendidez events, RIST events, tech fest events, register">
+    <meta property="og:title" content="Esplendidez 2026 - Events">
+    <meta property="og:description" content="Discover exciting competitions, cultural programs, and technical challenges.">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="events.html">
+    <link rel="icon" type="image/x-icon" href="assets/logo.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { darkMode: 'class', theme: { extend: {} } }</script>
+    <script src="https://unpkg.com/feather-icons" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.globe.min.js" defer></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-50 events-page">
+    <!-- Navigation -->
+    <nav class="site-nav fixed top-0 left-0 w-full bg-white/90 backdrop-blur-md z-50 shadow-sm" role="navigation" aria-label="Main navigation">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center">
+                <!-- Left: Logo and Name -->
+                <div class="flex items-center space-x-2">
+                    <img src="assets/logo.jpg" alt="Esplendidez Logo" class="h-10 w-auto mr-2">
+                    <a href="index.html" class="text-xl font-bold text-gray-800">Esplendidez</a>
+                </div>
+                
+                <!-- Spacer to push content to the right -->
+                <div class="flex-grow"></div>
+                
+                <!-- Right: Navigation + Theme Toggle (Desktop) + Mobile Button -->
+                <div class="flex items-center">
+                    <!-- Desktop Navigation -->
+                    <div class="hidden md:flex items-center space-x-4">
+                        <div class="flex space-x-8">
+                            <a href="index.html" class="text-gray-600 hover:text-indigo-600 font-medium transition">Home</a>
+                            <a href="events.html" class="text-gray-600 hover:text-indigo-600 font-medium transition">Events</a>
+                            <a href="gallery.html" class="text-gray-600 hover:text-indigo-600 font-medium transition">Gallery</a>
+                            <a href="about.html" class="text-gray-600 hover:text-indigo-600 font-medium transition">About</a>
+                        </div>
+                        <!-- Theme toggle button -->
+                        <button id="theme-toggle" class="theme-btn p-2 rounded-md" aria-label="Toggle theme" title="Toggle day/night" onclick="if(window.toggleTheme) window.toggleTheme(); else console.log('toggleTheme not available');">
+                            <i data-feather="moon" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-btn" class="md:hidden" aria-label="Open menu" onclick="if(window.toggleMobileMenu) window.toggleMobileMenu(); else console.log('toggleMobileMenu not available');">
+                        <i data-feather="menu" class="text-gray-600"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="md:hidden hidden bg-white/95 backdrop-blur-md border-t">
+                <div class="px-6 py-4 space-y-4">
+                    <a href="index.html" class="block text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors">Home</a>
+                    <a href="events.html" class="block text-indigo-600 font-medium py-2">Events</a>
+                    <a href="gallery.html" class="block text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors">Gallery</a>
+                    <a href="about.html" class="block text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors">About</a>
+                    <div class="pt-4 border-t border-gray-200">
+                        <button id="mobile-theme-toggle" class="flex items-center space-x-3 text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors" onclick="if(window.toggleTheme) window.toggleTheme(); else console.log('toggleTheme not available');">
+                            <i data-feather="moon" class="w-5 h-5"></i>
+                            <span>Toggle Theme</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
+        <!-- Vanta background -->
+        <div id="vanta-bg" aria-hidden="true"></div>
+        <div class="hero-overlay"></div>
+        
+        <div class="container relative z-10 text-center px-4 sm:px-6">
+            <h1 class="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black mb-4 md:mb-6 tracking-tight leading-none">
+                Our Events
+            </h1>
+            <p class="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-300 mb-4 max-w-3xl mx-auto px-4">
+                Discover exciting competitions, cultural programs, and technical challenges at Esplendidez 2026
+            </p>
+
+            <!-- Previous Year Highlights directly under Our Events -->
+            <div class="relative max-w-5xl mx-auto">
+                <!-- Carousel viewport -->
+                <div id="prev-carousel" class="relative overflow-hidden rounded-2xl border border-white/20">
+                    <!-- Left Arrow -->
+                    <button id="carousel-prev" class="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/20 hover:bg-white/40 backdrop-blur-md text-white p-3 rounded-full transition-all duration-300 hover:scale-110 shadow-lg" aria-label="Previous">
+                        <i class="bi bi-chevron-left text-2xl"></i>
+                    </button>
+                    <!-- Right Arrow -->
+                    <button id="carousel-next" class="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white/20 hover:bg-white/40 backdrop-blur-md text-white p-3 rounded-full transition-all duration-300 hover:scale-110 shadow-lg" aria-label="Next">
+                        <i class="bi bi-chevron-right text-2xl"></i>
+                    </button>
+                    <div id="prev-carousel-track" class="flex items-center gap-6 will-change-transform prev-highlights-track">
+                        <!-- Original set -->
+                        <div class="prev-card flex-shrink-0">
+                            <img src="assets/prev/prev-1.jpg" alt="Tech Showcase 2024" loading="lazy" class="w-80 h-64 sm:h-80 object-cover rounded-xl" onerror="this.onerror=null;this.src='https://placehold.co/320x256?text=Tech+Showcase';">
+                        </div>
+                        <div class="prev-card flex-shrink-0">
+                            <img src="assets/prev/prev-2.jpg" alt="Cultural Night 2024" loading="lazy" class="w-80 h-64 sm:h-80 object-cover rounded-xl" onerror="this.onerror=null;this.src='https://placehold.co/320x256?text=Cultural+Night';">
+                        </div>
+                        <div class="prev-card flex-shrink-0">
+                            <img src="assets/prev/prev-3.jpg" alt="Sports Finale 2024" loading="lazy" class="w-80 h-64 sm:h-80 object-cover rounded-xl" onerror="this.onerror=null;this.src='https://placehold.co/320x256?text=Sports+Finale';">
+                        </div>
+                        <div class="prev-card flex-shrink-0">
+                            <img src="assets/prev/prev-4.jpg" alt="E-Sports Arena 2024" loading="lazy" class="w-80 h-64 sm:h-80 object-cover rounded-xl" onerror="this.onerror=null;this.src='https://placehold.co/320x256?text=E-Sports+Arena';">
+                        </div>
+                        <div class="prev-card flex-shrink-0">
+                            <img src="assets/prev/prev-5.jpg" alt="Power lifting 2024" loading="lazy" class="w-80 h-64 sm:h-80 object-cover rounded-xl" onerror="this.onerror=null;this.src='https://placehold.co/320x256?text=Networking+Hub';">
+                        </div>
+                        <div class="prev-card flex-shrink-0">
+                            <img src="assets/prev/prev-6.jpg" alt="Award Ceremony 2024" loading="lazy" class="w-80 h-64 sm:h-80 object-cover rounded-xl" onerror="this.onerror=null;this.src='https://placehold.co/320x256?text=Award+Ceremony';">
+                        </div>
+                        <!-- Duplicate set for seamless loop -->
+                        <div class="prev-card flex-shrink-0">
+                            <img src="assets/prev/prev-1.jpg" alt="Tech Showcase 2024" loading="lazy" class="w-80 h-64 sm:h-80 object-cover rounded-xl" onerror="this.onerror=null;this.src='https://placehold.co/320x256?text=Tech+Showcase';">
+                        </div>
+                        <div class="prev-card flex-shrink-0">
+                            <img src="assets/prev/prev-2.jpg" alt="Cultural Night 2024" loading="lazy" class="w-80 h-64 sm:h-80 object-cover rounded-xl" onerror="this.onerror=null;this.src='https://placehold.co/320x256?text=Cultural+Night';">
+                        </div>
+                        <div class="prev-card flex-shrink-0">
+                            <img src="assets/prev/prev-3.jpg" alt="Sports Finale 2024" loading="lazy" class="w-80 h-64 sm:h-80 object-cover rounded-xl" onerror="this.onerror=null;this.src='https://placehold.co/320x256?text=Sports+Finale';">
+                        </div>
+                        <div class="prev-card flex-shrink-0">
+                            <img src="assets/prev/prev-4.jpg" alt="E-Sports Arena 2024" loading="lazy" class="w-80 h-64 sm:h-80 object-cover rounded-xl" onerror="this.onerror=null;this.src='https://placehold.co/320x256?text=E-Sports+Arena';">
+                        </div>
+                        <div class="prev-card flex-shrink-0">
+                            <img src="assets/prev/prev-5.jpg" alt="Networking Hub 2024" loading="lazy" class="w-80 h-64 sm:h-80 object-cover rounded-xl" onerror="this.onerror=null;this.src='https://placehold.co/320x256?text=Networking+Hub';">
+                        </div>
+                        <div class="prev-card flex-shrink-0">
+                            <img src="assets/prev/prev-6.jpg" alt="Award Ceremony 2024" loading="lazy" class="w-80 h-64 sm:h-80 object-cover rounded-xl" onerror="this.onerror=null;this.src='https://placehold.co/320x256?text=Award+Ceremony';">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Heading and caption below images -->
+                <div class="text-center mt-4">
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold">Previous Year Highlights</h2>
+                    <p class="mt-1 opacity-90">A glimpse of Esplendidez 2024 moments</p>
+                    <br>
+                    <br>
+                </div>
+            </div>
+
+    <!-- Events Section -->
+    <section class="py-5 events-bg relative">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 bg-black/20"></div>
+        
+        <div class="container mx-auto px-4 sm:px-6 relative z-10">
+            <div class="text-center mb-12 md:mb-16">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 text-white">Event Categories</h2>
+                <p class="text-base sm:text-lg md:text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed px-4">
+                    Choose from our diverse range of events across multiple categories and showcase your talents
+                </p>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="max-w-3xl mx-4 md:mx-auto mb-12 md:mb-16">
+                <div class="relative group">
+                    <input type="text" id="event-search" placeholder="Search events, categories, prizes..." class="w-full px-6 sm:px-8 py-4 sm:py-5 pl-14 sm:pl-16 bg-white/20 backdrop-blur-lg border-2 border-white/40 rounded-3xl text-white placeholder-gray-200 focus:border-white focus:bg-white/25 focus:outline-none text-base sm:text-lg font-medium shadow-2xl transition-all duration-300 focus:scale-105 focus:shadow-3xl">
+                    <div class="absolute left-4 sm:left-5 top-1/2 transform -translate-y-1/2 text-white/80 group-focus-within:text-white transition-colors duration-300">
+                        <i class="bi bi-search text-xl"></i>
+                    </div>
+                    <div class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white/60 text-sm font-medium">
+                        <span class="hidden sm:inline">Press Enter</span>
+                        <i class="bi bi-arrow-return-left sm:hidden"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Category Navigation -->
+            <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-12 md:mb-16 px-4">
+                <button onclick="showCategory('all')" class="category-nav-btn bg-white/25 backdrop-blur-lg border-2 border-white/40 text-white px-6 py-4 rounded-2xl font-bold transition-all duration-300 hover:bg-gradient-to-r hover:from-blue-500 hover:to-cyan-500 hover:scale-110 hover:shadow-2xl active shadow-lg transform hover:-translate-y-1" data-category="all">
+                    <i class="bi bi-grid-3x3-gap mr-2 text-lg"></i><span class="hidden sm:inline">All </span>Events
+                </button>
+                <button onclick="showCategory('technical')" class="category-nav-btn bg-gradient-to-r from-blue-500/20 to-cyan-500/20 backdrop-blur-lg border-2 border-blue-400/40 text-white px-6 py-4 rounded-2xl font-bold transition-all duration-300 hover:from-blue-500 hover:to-cyan-500 hover:scale-110 hover:shadow-2xl shadow-lg transform hover:-translate-y-1" data-category="technical">
+                    <i class="bi bi-code-slash mr-2 text-lg"></i>Technical
+                </button>
+                <button onclick="showCategory('cultural')" class="category-nav-btn bg-gradient-to-r from-blue-500/20 to-cyan-500/20 backdrop-blur-lg border-2 border-blue-400/40 text-white px-6 py-4 rounded-2xl font-bold transition-all duration-300 hover:from-blue-500 hover:to-cyan-500 hover:scale-110 hover:shadow-2xl shadow-lg transform hover:-translate-y-1" data-category="cultural">
+                    <i class="bi bi-palette mr-2 text-lg"></i>Cultural
+                </button>
+                <button onclick="showCategory('sports')" class="category-nav-btn bg-gradient-to-r from-blue-500/20 to-cyan-500/20 backdrop-blur-lg border-2 border-blue-400/40 text-white px-6 py-4 rounded-2xl font-bold transition-all duration-300 hover:from-blue-500 hover:to-cyan-500 hover:scale-110 hover:shadow-2xl shadow-lg transform hover:-translate-y-1" data-category="sports">
+                    <i class="bi bi-trophy mr-2 text-lg"></i>Sports
+                </button>
+                <button onclick="showCategory('e-sports')" class="category-nav-btn bg-gradient-to-r from-blue-500/20 to-cyan-500/20 backdrop-blur-lg border-2 border-blue-400/40 text-white px-6 py-4 rounded-2xl font-bold transition-all duration-300 hover:from-blue-500 hover:to-cyan-500 hover:scale-110 hover:shadow-2xl shadow-lg transform hover:-translate-y-1" data-category="e-sports">
+                    <i class="bi bi-controller mr-2 text-lg"></i>E-Sports
+                </button>
+                <button onclick="showCategory('competitions')" class="category-nav-btn bg-gradient-to-r from-blue-500/20 to-cyan-500/20 backdrop-blur-lg border-2 border-blue-400/40 text-white px-6 py-4 rounded-2xl font-bold transition-all duration-300 hover:from-blue-500 hover:to-cyan-500 hover:scale-110 hover:shadow-2xl shadow-lg transform hover:-translate-y-1" data-category="competitions">
+                    <i class="bi bi-award mr-2 text-lg"></i>Competition
+                </button>
+            </div>
+
+            <!-- Events Container -->
+            <div id="events-container">
+                <!-- Technical Events -->
+                <div id="technical-section" class="event-category-section mb-16">
+                    <div class="text-center mb-8">
+                        <div class="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl p-6 mb-6 shadow-2xl">
+                            <h3 class="text-4xl font-bold text-white mb-3 flex items-center justify-center">
+                                <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center mr-4">
+                                    <i class="bi bi-code-slash text-3xl text-white"></i>
+                                </div>
+                                Technical Events
+                            </h3>
+                            <p class="text-white text-lg font-medium">Showcase your technical prowess and innovation</p>
+                        </div>
+                    </div>
+                    <div id="technical-events" class="events-grid">
+                        <!-- Technical events will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Cultural Events -->
+                <div id="cultural-section" class="event-category-section mb-16">
+                    <div class="text-center mb-8">
+                        <div class="bg-gradient-to-r from-purple-500 to-pink-600 rounded-2xl p-6 mb-6 shadow-2xl">
+                            <h3 class="text-4xl font-bold text-white mb-3 flex items-center justify-center">
+                                <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center mr-4">
+                                    <i class="bi bi-palette text-3xl text-white"></i>
+                                </div>
+                                Cultural Events
+                            </h3>
+                            <p class="text-white text-lg font-medium">Express your creativity and artistic talents</p>
+                        </div>
+                    </div>
+                    <div id="cultural-events" class="events-grid">
+                        <!-- Cultural events will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Sports Events -->
+                <div id="sports-section" class="event-category-section mb-16">
+                    <div class="text-center mb-8">
+                        <div class="bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl p-6 mb-6 shadow-2xl">
+                            <h3 class="text-4xl font-bold text-white mb-3 flex items-center justify-center">
+                                <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center mr-4">
+                                    <i class="bi bi-trophy text-3xl text-white"></i>
+                                </div>
+                                Sports Events
+                            </h3>
+                            <p class="text-white text-lg font-medium">Test your physical strength and teamwork</p>
+                        </div>
+                    </div>
+                    <div id="sports-events" class="events-grid">
+                        <!-- Sports events will be populated here -->
+                    </div>
+                </div>
+
+                <!-- E-Sports Events -->
+                <div id="e-sports-section" class="event-category-section mb-16">
+                    <div class="text-center mb-8">
+                        <div class="bg-gradient-to-r from-orange-500 to-red-600 rounded-2xl p-6 mb-6 shadow-2xl">
+                            <h3 class="text-4xl font-bold text-white mb-3 flex items-center justify-center">
+                                <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center mr-4">
+                                    <i class="bi bi-controller text-3xl text-white"></i>
+                                </div>
+                                E-Sports Events
+                            </h3>
+                            <p class="text-white text-lg font-medium">Dominate the digital arena with your gaming skills</p>
+                        </div>
+                    </div>
+                    <div id="e-sports-events" class="events-grid">
+                        <!-- E-Sports events will be populated here -->
+                    </div>
+                </div>
+
+                <!-- Competition Events -->
+                <div id="competitions-section" class="event-category-section mb-16">
+                    <div class="text-center mb-8">
+                        <div class="bg-gradient-to-r from-yellow-500 to-amber-600 rounded-2xl p-6 mb-6 shadow-2xl">
+                            <h3 class="text-4xl font-bold text-white mb-3 flex items-center justify-center">
+                                <div class="w-16 h-16 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center mr-4">
+                                    <i class="bi bi-award text-3xl text-white"></i>
+                                </div>
+                                Competition events
+                            </h3>
+                            <p class="text-white text-lg font-medium">Challenge your knowledge and quick thinking</p>
+                        </div>
+                    </div>
+                    <div id="competitions-events" class="events-grid">
+                        <!-- Competition events will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+                
+
+    <!-- Registration CTA -->
+    <section class="py-20 gradient-bg">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold mb-6 text-white">
+                Ready to Participate?
+            </h2>
+            <p class="text-xl text-gray-100 mb-8 max-w-2xl mx-auto">
+                Join thousands of students in this amazing tech fest. Register for multiple events and showcase your skills!
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="events.html" class="bg-transparent border-2 border-white text-white px-8 py-4 text-lg rounded-full font-bold transition-all duration-300 transform hover:scale-110 hover:shadow-2xl hover:bg-white hover:text-gray-900 flex items-center space-x-3 justify-center">
+                    <i data-feather="user-plus" class="w-6 h-6"></i>
+                    <span>Register Now</span>
+                </a>
+                <a href="#events" class="bg-transparent border-2 border-white text-white px-8 py-4 text-lg rounded-full font-bold transition-all duration-300 transform hover:scale-110 hover:shadow-2xl hover:bg-white hover:text-gray-900 flex items-center space-x-3 justify-center">
+                    <i data-feather="calendar" class="w-6 h-6"></i>
+                    <span>View All Events</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-6 site-footer">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <!-- Logo & Description -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="assets/logo.jpg" alt="Esplendidez Logo" class="h-10 w-auto">
+                        <h3 class="text-2xl font-bold">Esplendidez 2026</h3>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        The premier tech fest of Regional Institute of Science and Technology. Join us for innovation, competition, and cultural celebration.
+                    </p>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition">Home</a></li>
+                        <li><a href="events.html" class="text-gray-400 hover:text-white transition">Events</a></li>
+                        <li><a href="register.html" class="text-gray-400 hover:text-white transition">Register</a></li>
+                        <li><a href="about.html" class="text-gray-400 hover:text-white transition">About</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="mailto:esplendidez26@gmail.com" class="flex items-center text-gray-400 hover:text-white transition-colors duration-300 group">
+                                <i data-feather="mail" class="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300"></i> 
+                                Send us an email
+                            </a>
+                        </li>
+                        <li>
+                            <a href="tel:6900922920" class="flex items-center text-gray-400 hover:text-white transition-colors duration-300 group">
+                                <i data-feather="phone" class="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300"></i> 
+                                Give us a call
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.instagram.com/esplendidez_26" target="_blank" class="flex items-center text-gray-400 hover:text-white transition-colors duration-300 group">
+                                <i data-feather="instagram" class="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300"></i> 
+                                Follow on Instagram
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 pt-8 text-center">
+<p class="text-gray-400">© 2026 Esplendidez Tech Fest • Regional Institute of Science and Technology (RIST). All rights reserved.</p>
+                <p class="text-gray-500 text-sm mt-2">Developed with ❤️ by <span class="text-indigo-400 font-semibold">Afsar</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Social Media -->
+    <div class="floating-social" id="floating-social">
+        <a href="https://www.instagram.com/esplendidez_26" target="_blank" class="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl" title="Follow us on Instagram">
+            <i data-feather="instagram" class="w-6 h-6"></i>
+        </a>
+        <a href="mailto:esplendidez26@gmail.com" class="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl" title="Send us an email">
+            <i data-feather="mail" class="w-6 h-6"></i>
+        </a>
+        <a href="tel:6900922920" class="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center text-white hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl" title="Call us">
+            <i data-feather="phone" class="w-6 h-6"></i>
+        </a>
+        <button id="scroll-to-top" class="scroll-to-top w-12 h-12 bg-gradient-to-r from-gray-700 to-gray-900 rounded-full flex items-center justify-center text-white hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl" title="Scroll to top">
+            <i data-feather="arrow-up" class="w-6 h-6"></i>
+        </button>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.145.0/build/three.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/registration.js"></script>
+    <style>
+        /* Enhanced Event Card Animations */
+        .event-card {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .event-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg) translate(-100%, -100%);
+            transition: transform 0.8s ease;
+        }
+        
+        .event-card:hover::before {
+            transform: rotate(45deg) translate(100%, 100%);
+        }
+        
+        /* Category Button Glow Effect */
+        .category-nav-btn {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .category-nav-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            transition: width 0.6s, height 0.6s;
+            transform: translate(-50%, -50%);
+        }
+        
+        .category-nav-btn:hover::after {
+            width: 300px;
+            height: 300px;
+        }
+        
+        /* Search Bar Glow */
+        #event-search:focus {
+            box-shadow: 0 0 30px rgba(255,255,255,0.3), 0 0 60px rgba(255,255,255,0.1);
+        }
+        
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .category-nav-btn:hover {
+            animation: float 2s ease-in-out infinite;
+        }
+        
+        /* Pulse Animation for Active Category */
+        .category-nav-btn.active {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+        }
+        
+        /* Improved Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 6px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #764ba2, #667eea);
+        }
+        
+        /* Enhanced Grid Layout */
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            padding: 1rem;
+        }
+        
+        /* Mobile: horizontal scroll cards */
+        @media (max-width: 640px) {
+            .events-grid {
+                display: flex;
+                overflow-x: auto;
+                gap: 1rem;
+                padding: 0.75rem 1rem 1rem 1rem;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+            }
+            .events-grid > * {
+                flex: 0 0 85%;
+                max-width: 85%;
+                scroll-snap-align: start;
+            }
+        }
+    </style>
+    
+    <script>
+        // Search functionality for events
+        function initEventSearch() {
+            const searchInput = document.getElementById('event-search');
+            if (!searchInput) return;
+            
+            searchInput.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase().trim();
+                const eventCards = document.querySelectorAll('.event-card');
+                
+                console.log('Searching for:', searchTerm);
+                console.log('Found event cards:', eventCards.length);
+                
+                eventCards.forEach(card => {
+                    const eventName = card.querySelector('h3')?.textContent?.toLowerCase() || '';
+                    const eventCategory = card.querySelector('p')?.textContent?.toLowerCase() || '';
+                    const eventDescription = card.querySelector('.text-gray-200')?.textContent?.toLowerCase() || '';
+                    
+                    const searchableText = `${eventName} ${eventCategory} ${eventDescription}`;
+                    
+                    if (searchTerm === '' || searchableText.includes(searchTerm)) {
+                        // Show matching card
+                        card.style.display = 'block';
+                        card.style.opacity = '1';
+                        card.style.transform = 'scale(1)';
+                        card.style.filter = 'blur(0px)';
+                    } else {
+                        // Hide non-matching card
+                        card.style.display = 'none';
+                    }
+                });
+                
+                // Show/hide category sections based on visible cards
+                const sections = document.querySelectorAll('.event-category-section');
+                sections.forEach(section => {
+                    const visibleCards = section.querySelectorAll('.event-card[style*="display: block"], .event-card:not([style*="display: none"])');
+                    if (searchTerm === '' || visibleCards.length > 0) {
+                        section.style.display = 'block';
+                    } else {
+                        section.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Clear search on escape key
+            searchInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    this.value = '';
+                    this.dispatchEvent(new Event('input'));
+                }
+            });
+        }
+        
+        // Initialize search when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wait a bit for events to be populated
+            setTimeout(initEventSearch, 500);
+        });
+        
+        // Note: Events are populated by registration.js populateEventsByCategory() function
+
+        // Previous highlights carousel with manual controls
+        document.addEventListener('DOMContentLoaded', function() {
+            const track = document.getElementById('prev-carousel-track');
+            const prevBtn = document.getElementById('carousel-prev');
+            const nextBtn = document.getElementById('carousel-next');
+            
+            let currentIndex = 0;
+            const cardWidth = 320 + 24; // card width + gap
+            const totalCards = 6; // original set (not counting duplicates)
+            
+            function updateCarousel() {
+                const offset = -currentIndex * cardWidth;
+                track.style.transform = `translateX(${offset}px)`;
+                track.style.transition = 'transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1)';
+            }
+            
+            nextBtn.addEventListener('click', () => {
+                currentIndex++;
+                if (currentIndex >= totalCards) {
+                    currentIndex = 0;
+                    track.style.transition = 'none';
+                    track.style.transform = 'translateX(0)';
+                    setTimeout(() => {
+                        currentIndex = 1;
+                        updateCarousel();
+                    }, 50);
+                } else {
+                    updateCarousel();
+                }
+            });
+            
+            prevBtn.addEventListener('click', () => {
+                currentIndex--;
+                if (currentIndex < 0) {
+                    currentIndex = totalCards - 1;
+                    track.style.transition = 'none';
+                    const offset = -totalCards * cardWidth;
+                    track.style.transform = `translateX(${offset}px)`;
+                    setTimeout(() => {
+                        updateCarousel();
+                    }, 50);
+                } else {
+                    updateCarousel();
+                }
+            });
+            
+            // Auto-scroll every 1 seconds
+            let autoScroll = setInterval(() => {
+                nextBtn.click();
+            }, 1000);
+            
+            // Pause on hover
+            track.addEventListener('mouseenter', () => clearInterval(autoScroll));
+            track.addEventListener('mouseleave', () => {
+                autoScroll = setInterval(() => {
+                    nextBtn.click();
+                }, 1000);
+            });
+        });
+    </script>
+</body>
+</html>

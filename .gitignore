@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+backend/node_modules/
+
+# Environment files
+.env
+backend/.env
+
+# Uploads (user-generated content)
+uploads/
+backend/uploads/
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build outputs
+dist/
+build/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Backup folder
+backup/
+
+# Large video files (host separately on CDN)
+assets/video-bg.mp4
+assets/video-gallery.mp4
+*.mp4

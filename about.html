@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Esplendidez 2026</title>
+    <link rel="icon" type="image/x-icon" href="assets/logo.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { darkMode: 'class', theme: { extend: {} } }</script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-50 about-page">
+    <!-- Navigation -->
+    <nav class="site-nav fixed top-0 left-0 w-full bg-white/90 backdrop-blur-md z-50 shadow-sm" role="navigation" aria-label="Main navigation">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center">
+                <!-- Left: Logo and Name -->
+                <div class="flex items-center space-x-2">
+                    <img src="assets/logo.jpg" alt="Esplendidez Logo" class="h-10 w-auto mr-2">
+                    <a href="index.html" class="text-xl font-bold text-gray-800">Esplendidez</a>
+                </div>
+                
+                <!-- Spacer to push content to the right -->
+                <div class="flex-grow"></div>
+                
+                <!-- Right: Navigation + Theme Toggle (Desktop) + Mobile Button -->
+                <div class="flex items-center">
+                    <!-- Desktop Navigation -->
+                    <div class="hidden md:flex items-center space-x-4">
+                        <div class="flex space-x-8">
+                            <a href="index.html" class="text-gray-600 hover:text-indigo-600 font-medium transition">Home</a>
+                            <a href="events.html" class="text-gray-600 hover:text-indigo-600 font-medium transition">Events</a>
+                            <a href="gallery.html" class="text-gray-600 hover:text-indigo-600 font-medium transition">Gallery</a>
+                            <a href="about.html" class="text-indigo-600 font-medium">About</a>
+                        </div>
+                        <!-- Theme toggle button -->
+                        <button id="theme-toggle" class="theme-btn p-2 rounded-md" aria-label="Toggle theme" title="Toggle day/night" onclick="if(window.toggleTheme) window.toggleTheme(); else console.log('toggleTheme not available');">
+                            <i data-feather="moon" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-btn" class="md:hidden" aria-label="Open menu" onclick="if(window.toggleMobileMenu) window.toggleMobileMenu(); else console.log('toggleMobileMenu not available');">
+                        <i data-feather="menu" class="text-gray-600"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="md:hidden hidden bg-white/95 backdrop-blur-md border-t">
+                <div class="px-6 py-4 space-y-4">
+                    <a href="index.html" class="block text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors">Home</a>
+                    <a href="events.html" class="block text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors">Events</a>
+                    <a href="gallery.html" class="block text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors">Gallery</a>
+                    <a href="about.html" class="block text-indigo-600 font-medium py-2">About</a>
+                    <div class="pt-4 border-t border-gray-200">
+                        <button id="mobile-theme-toggle" class="flex items-center space-x-3 text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors" onclick="if(window.toggleTheme) window.toggleTheme(); else console.log('toggleTheme not available');">
+                            <i data-feather="moon" class="w-5 h-5"></i>
+                            <span>Toggle Theme</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- About Section -->
+    <section class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="max-w-6xl mx-auto">
+                <!-- Hero Section -->
+                <div class="text-center mb-12 md:mb-16 px-4">
+                    <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 md:mb-6 leading-tight">About Esplendidez 2026</h1>
+                    <p class="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+                        The premier tech fest of Regional Institute of Science and Technology, bringing together innovation, competition, and cultural celebration.
+                    </p>
+                </div>
+
+                <!-- Main Content Grid -->
+                <div class="grid lg:grid-cols-2 gap-8 md:gap-12 mb-12 md:mb-16">
+                    <!-- About Content -->
+                    <div class="bg-white rounded-2xl shadow-xl p-4 sm:p-6 md:p-8">
+                        <div class="flex items-center mb-4 md:mb-6">
+                            <div class="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-indigo-100 rounded-full mr-3 sm:mr-4">
+                                <i class="bi bi-lightbulb-fill text-lg sm:text-xl text-indigo-600"></i>
+                            </div>
+                            <h2 class="text-xl sm:text-2xl font-bold">Our Vision</h2>
+                        </div>
+                        <p class="text-gray-600 text-lg leading-relaxed mb-6">
+<strong>Esplendidez 2026</strong> is the annual techno-cultural fest of the <strong> Regional Institute of Science and Technology (RIST), Meghalaya</strong>, affiliated with NEHU. It’s a vibrant celebration of innovation, creativity, and culture, bringing together students from across Northeast India.
+<br><br>The fest blends technical brilliance and artistic expression, featuring hackathons, project expos, workshops, cultural nights, and sports events. It serves as a platform for students to innovate, compete, and collaborate, reflecting RIST’s vision of nurturing both technical excellence and creative talent.
+                        </p>
+                        <p class="text-gray-600 text-lg leading-relaxed mb-6">
+With modern infrastructure and an enthusiastic student community, <strong>Esplendidez has been a proud tradition for over a decade</strong>, growing into one of Northeast India's most awaited festivals — a true fusion of technology, art, and youthful energy.
+                        </p>
+                    </div>
+
+                    <!-- Features Grid -->
+                    <div class="space-y-6">
+                        <div class="bg-white rounded-xl shadow-lg p-6">
+                            <div class="flex items-center mb-4">
+                                <i class="bi bi-trophy-fill text-2xl text-yellow-600 mr-4"></i>
+                                <h3 class="text-xl font-semibold">Competitions</h3>
+                            </div>
+                            <p class="text-gray-600">Technical challenges, coding competitions, and innovative contests to test your skills.</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-lg p-6">
+                            <div class="flex items-center mb-4">
+                                <i class="bi bi-palette-fill text-2xl text-purple-600 mr-4"></i>
+                                <h3 class="text-xl font-semibold">Cultural Events</h3>
+                            </div>
+                            <p class="text-gray-600">Art exhibitions, performances, and creative showcases celebrating diverse talents.</p>
+                        </div>
+                        
+                        <div class="bg-white rounded-xl shadow-lg p-6">
+                            <div class="flex items-center mb-4">
+                                <i class="bi bi-people-fill text-2xl text-blue-600 mr-4"></i>
+                                <h3 class="text-xl font-semibold">Networking</h3>
+                            </div>
+                            <p class="text-gray-600">Connect with like-minded individuals, industry experts, and fellow innovators.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <section class="py-12 md:py-16 lg:py-20 bg-gray-900 text-white get-in-touch rounded-2xl">
+                    <div class="text-center mb-8 md:mb-12">
+                        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 md:mb-6">Get In Touch</h2>
+                        <p class="text-base sm:text-lg md:text-xl mb-8 md:mb-12 text-gray-300 max-w-3xl mx-auto">
+                            Have questions? Need more information? We're here to help!
+                        </p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+                        <div class="text-center contact-item">
+                            <a href="mailto:esplendidez26@gmail.com" class="block group transition-all duration-300 hover:transform hover:scale-105 p-4 rounded-xl">
+                                <div class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:bg-red-500 group-hover:shadow-lg transition-all duration-300">
+                                    <i data-feather="mail" class="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 group-hover:scale-110 transition-transform duration-300"></i>
+                                </div>
+                                <h4 class="text-sm sm:text-base font-semibold mb-1 md:mb-2 group-hover:text-white transition-colors duration-300">Email</h4>
+                                <span class="text-xs sm:text-sm md:text-base text-gray-300 group-hover:text-white transition-colors duration-300">
+                                    Get in touch
+                                </span>
+                            </a>
+                        </div>
+                        
+                        <div class="text-center contact-item">
+                            <a href="tel:6900922920" class="block group transition-all duration-300 hover:transform hover:scale-105 p-4 rounded-xl">
+                                <div class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:bg-green-500 group-hover:shadow-lg transition-all duration-300">
+                                    <i data-feather="phone" class="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 group-hover:scale-110 transition-transform duration-300"></i>
+                                </div>
+                                <h4 class="text-sm sm:text-base font-semibold mb-1 md:mb-2 group-hover:text-white transition-colors duration-300">Phone</h4>
+                                <span class="text-xs sm:text-sm md:text-base text-gray-300 group-hover:text-white transition-colors duration-300">
+                                    Call us now
+                                </span>
+                            </a>
+                        </div>
+                        
+                        <div class="text-center contact-item">
+                            <a href="https://www.instagram.com/esplendidez_26" target="_blank" class="block group transition-all duration-300 hover:transform hover:scale-105 p-4 rounded-xl">
+                                <div class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-pink-600 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:bg-pink-500 group-hover:shadow-lg transition-all duration-300">
+                                    <i data-feather="instagram" class="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 group-hover:scale-110 transition-transform duration-300"></i>
+                                </div>
+                                <h4 class="text-sm sm:text-base font-semibold mb-1 md:mb-2 group-hover:text-white transition-colors duration-300">Instagram</h4>
+                                <span class="text-xs sm:text-sm md:text-base text-gray-300 group-hover:text-white transition-colors duration-300">
+                                    Follow us
+                                </span>
+                            </a>
+                        </div>
+                        
+                        <div class="text-center contact-item">
+                            <a href="https://maps.app.goo.gl/791H1mvzYACLUSmF7?g_st=ipc" target="_blank" class="block group transition-all duration-300 hover:transform hover:scale-105 p-4 rounded-xl">
+                                <div class="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4 group-hover:bg-blue-500 group-hover:shadow-lg transition-all duration-300">
+                                    <i data-feather="map-pin" class="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 group-hover:scale-110 transition-transform duration-300"></i>
+                                </div>
+                                <h4 class="text-sm sm:text-base font-semibold mb-1 md:mb-2 group-hover:text-white transition-colors duration-300">Location</h4>
+                                <span class="text-xs sm:text-sm md:text-base text-gray-300 group-hover:text-white transition-colors duration-300">
+                                    View location
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16 site-footer">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <!-- Logo & Description -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="assets/logo.jpg" alt="Esplendidez Logo" class="h-10 w-auto">
+                        <h3 class="text-2xl font-bold">Esplendidez 2026</h3>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        The premier tech fest of Regional Institute of Science and Technology. Join us for innovation, competition, and cultural celebration.
+                    </p>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition">Home</a></li>
+                        <li><a href="events.html" class="text-gray-400 hover:text-white transition">Events</a></li>
+                        <li><a href="register.html" class="text-gray-400 hover:text-white transition">Register</a></li>
+                        <li><a href="about.html" class="text-gray-400 hover:text-white transition">About</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="mailto:esplendidez26@gmail.com" class="flex items-center text-gray-400 hover:text-white transition-colors duration-300 group">
+                                <i data-feather="mail" class="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300"></i> 
+                                esplendidez26@gmail.com
+                            </a>
+                        </li>
+                        <li>
+                            <a href="tel:6900922920" class="flex items-center text-gray-400 hover:text-white transition-colors duration-300 group">
+                                <i data-feather="phone" class="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300"></i> 
+                                6900922920
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.instagram.com/esplendidez_26" target="_blank" class="flex items-center text-gray-400 hover:text-white transition-colors duration-300 group">
+                                <i data-feather="instagram" class="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300"></i> 
+                                @esplendidez_26
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 pt-8 text-center">
+<p class="text-gray-400">© 2026 Esplendidez Tech Fest • Regional Institute of Science and Technology (RIST). All rights reserved.</p>
+                <p class="text-gray-500 text-sm mt-2">Developed with ❤️ by <span class="text-indigo-400 font-semibold">Afsar</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Social Media -->
+    <div class="floating-social" id="floating-social">
+        <a href="https://www.instagram.com/esplendidez_26" target="_blank" class="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl">
+            <i data-feather="instagram" class="w-6 h-6"></i>
+        </a>
+        <a href="mailto:esplendidez26@gmail.com" class="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl">
+            <i data-feather="mail" class="w-6 h-6"></i>
+        </a>
+        <a href="tel:6900922920" class="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center text-white hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl">
+            <i data-feather="phone" class="w-6 h-6"></i>
+        </a>
+        <button id="scroll-to-top" class="scroll-to-top w-12 h-12 bg-gradient-to-r from-gray-700 to-gray-900 rounded-full flex items-center justify-center text-white hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl" title="Scroll to top">
+            <i data-feather="arrow-up" class="w-6 h-6"></i>
+        </button>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/notifications.js"></script>
+</body>
+</html>

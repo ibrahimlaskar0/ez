@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Esplendidez 2026</title>
+    <meta name="description" content="Esplendidez Gallery: photos and videos from previous editions. See highlights and memories.">
+    <meta name="keywords" content="Esplendidez gallery, RIST photos, fest highlights, tech fest pictures">
+    <meta property="og:title" content="Esplendidez 2026 - Gallery">
+    <meta property="og:description" content="Relive the moments from previous editions of Esplendidez.">
+    <meta property="og:type" content="website">
+    <link rel="canonical" href="gallery.html">
+    <link rel="icon" type="image/x-icon" href="assets/logo.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { darkMode: 'class', theme: { extend: {} } }</script>
+    <script src="https://unpkg.com/feather-icons" defer></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-50 gallery-page">
+    <!-- Navigation -->
+    <nav class="site-nav fixed top-0 left-0 w-full bg-white/90 backdrop-blur-md z-50 shadow-sm" role="navigation" aria-label="Main navigation">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center">
+                <!-- Left: Logo and Name -->
+                <div class="flex items-center space-x-2">
+                    <img src="assets/logo.jpg" alt="Esplendidez Logo" class="h-10 w-auto mr-2">
+                    <a href="index.html" class="text-xl font-bold text-gray-800">Esplendidez</a>
+                </div>
+                
+                <!-- Spacer to push content to the right -->
+                <div class="flex-grow"></div>
+                
+                <!-- Right: Navigation + Theme Toggle (Desktop) + Mobile Button -->
+                <div class="flex items-center">
+                    <!-- Desktop Navigation -->
+                    <div class="hidden md:flex items-center space-x-4">
+                        <div class="flex space-x-8">
+                            <a href="index.html" class="text-gray-600 hover:text-indigo-600 font-medium transition">Home</a>
+                            <a href="events.html" class="text-gray-600 hover:text-indigo-600 font-medium transition">Events</a>
+                            <a href="gallery.html" class="text-indigo-600 font-medium">Gallery</a>
+                            <a href="about.html" class="text-gray-600 hover:text-indigo-600 font-medium transition">About</a>
+                        </div>
+                        <!-- Theme toggle button -->
+                        <button id="theme-toggle" class="theme-btn p-2 rounded-md" aria-label="Toggle theme" title="Toggle day/night" onclick="if(window.toggleTheme) window.toggleTheme(); else console.log('toggleTheme not available');">
+                            <i data-feather="moon" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-btn" class="md:hidden" aria-label="Open menu" onclick="if(window.toggleMobileMenu) window.toggleMobileMenu(); else console.log('toggleMobileMenu not available');">
+                        <i data-feather="menu" class="text-gray-600"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="md:hidden hidden bg-white/95 backdrop-blur-md border-t">
+                <div class="px-6 py-4 space-y-4">
+                    <a href="index.html" class="block text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors">Home</a>
+                    <a href="events.html" class="block text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors">Events</a>
+                    <a href="gallery.html" class="block text-indigo-600 font-medium py-2">Gallery</a>
+                    <a href="about.html" class="block text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors">About</a>
+                    <div class="pt-4 border-t border-gray-200">
+                        <button id="mobile-theme-toggle" class="flex items-center space-x-3 text-gray-600 hover:text-indigo-600 font-medium py-2 transition-colors" onclick="if(window.toggleTheme) window.toggleTheme(); else console.log('toggleTheme not available');">
+                            <i data-feather="moon" class="w-5 h-5"></i>
+                            <span>Toggle Theme</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Gallery Section -->
+    <section class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="max-w-6xl mx-auto">
+                <!-- Hero Section -->
+                <div class="text-center mb-12 md:mb-16 px-4">
+                    <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 md:mb-6 leading-tight">Gallery</h1>
+                    <p class="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+                        Relive the moments from previous editions of Esplendidez and get a glimpse of what's coming in 2026!
+                    </p>
+                </div>
+
+                <!-- Featured Video Section -->
+                <div class="bg-white rounded-2xl shadow-xl p-4 sm:p-6 md:p-8 mb-12 md:mb-16">
+                    <div class="text-center mb-6 md:mb-8">
+                        <div class="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-red-100 rounded-full mb-3 md:mb-4">
+                            <i class="bi bi-play-circle-fill text-2xl sm:text-3xl text-red-600"></i>
+                        </div>
+                        <h2 class="text-xl sm:text-2xl md:text-3xl font-bold mb-3 md:mb-4">Featured Video</h2>
+                        <p class="text-gray-600 text-sm sm:text-base md:text-lg">Watch highlights from Esplendidez and experience the energy!</p>
+                    </div>
+                    
+                    <div class="relative max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-2xl">
+<video id="featured-video" autoplay muted loop playsinline preload="metadata" disablepictureinpicture controlslist="nodownload noremoteplayback" class="w-full h-auto">
+                            <source src="assets/video-gallery.mp4" type="video/mp4">
+                            <p class="text-center py-8 text-gray-500">Your browser does not support the video tag.</p>
+                        </video>
+                    </div>
+                </div>
+
+                <!-- Photo Gallery Section -->
+                <div class="mb-16">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-bold mb-4">Photo Gallery</h2>
+                        <p class="text-gray-600 text-lg">Memorable moments captured throughout our tech fest</p>
+                    </div>
+                    
+                    <div id="gallery-grid" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                </div>
+
+                <!-- Call to Action -->
+                <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-8 text-center text-white">
+                    <h2 class="text-3xl font-bold mb-4">Be Part of Esplendidez 2026</h2>
+                    <p class="text-xl mb-8 opacity-90">
+                        Create your own memories and be featured in our next gallery!
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="events.html" class="bg-transparent border-2 border-white text-white px-8 py-4 text-lg rounded-full font-bold transition-all duration-300 transform hover:scale-110 hover:shadow-2xl hover:bg-white hover:text-gray-900 flex items-center space-x-3 justify-center">
+                            <i data-feather="user-plus" class="w-6 h-6"></i>
+                            <span>Register Now</span>
+                        </a>
+                        <a href="events.html" class="bg-transparent border-2 border-white text-white px-8 py-4 text-lg rounded-full font-bold transition-all duration-300 transform hover:scale-110 hover:shadow-2xl hover:bg-white hover:text-gray-900 flex items-center space-x-3 justify-center">
+                            <i data-feather="calendar" class="w-6 h-6"></i>
+                            <span>View Events</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-16 site-footer">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <!-- Logo & Description -->
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <img src="assets/logo.jpg" alt="Esplendidez Logo" class="h-10 w-auto">
+                        <h3 class="text-2xl font-bold">Esplendidez 2026</h3>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        The premier tech fest of Regional Institute of Science and Technology. Join us for innovation, competition, and cultural celebration.
+                    </p>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white transition">Home</a></li>
+                        <li><a href="events.html" class="text-gray-400 hover:text-white transition">Events</a></li>
+                        <li><a href="register.html" class="text-gray-400 hover:text-white transition">Register</a></li>
+                        <li><a href="about.html" class="text-gray-400 hover:text-white transition">About</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Contact -->
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="mailto:esplendidez26@gmail.com" class="flex items-center text-gray-400 hover:text-white transition-colors duration-300 group">
+                                <i data-feather="mail" class="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300"></i> 
+                                esplendidez26@gmail.com
+                            </a>
+                        </li>
+                        <li>
+                            <a href="tel:6900922920" class="flex items-center text-gray-400 hover:text-white transition-colors duration-300 group">
+                                <i data-feather="phone" class="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300"></i> 
+                                6900922920
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.instagram.com/esplendidez_26" target="_blank" class="flex items-center text-gray-400 hover:text-white transition-colors duration-300 group">
+                                <i data-feather="instagram" class="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300"></i> 
+                                @esplendidez_26
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 pt-8 text-center">
+<p class="text-gray-400">© 2026 Esplendidez Tech Fest • Regional Institute of Science and Technology (RIST). All rights reserved.</p>
+                <p class="text-gray-500 text-sm mt-2">Developed with ❤️ by <span class="text-indigo-400 font-semibold">Afsar</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Social Media -->
+    <div class="floating-social" id="floating-social">
+        <a href="https://www.instagram.com/esplendidez_26" target="_blank" class="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl">
+            <i data-feather="instagram" class="w-6 h-6"></i>
+        </a>
+        <a href="mailto:esplendidez26@gmail.com" class="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl">
+            <i data-feather="mail" class="w-6 h-6"></i>
+        </a>
+        <a href="tel:6900922920" class="w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center text-white hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl">
+            <i data-feather="phone" class="w-6 h-6"></i>
+        </a>
+        <button id="scroll-to-top" class="scroll-to-top w-12 h-12 bg-gradient-to-r from-gray-700 to-gray-900 rounded-full flex items-center justify-center text-white hover:scale-110 transition-all duration-300 shadow-lg hover:shadow-xl" title="Scroll to top">
+            <i data-feather="arrow-up" class="w-6 h-6"></i>
+        </button>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/notifications.js"></script>
+    <script>
+        // Auto-load images from assets/gallery and enable lightbox
+        (function initGallery(){
+            const grid = document.getElementById('gallery-grid');
+            if(!grid) return;
+            
+            // Generate list of possible image filenames with multiple formats
+            const imageNames = [];
+            const formats = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg', 'JPG', 'JPEG', 'PNG', 'SVG'];
+            
+            // Numbered gallery images (gallery-1 to gallery-60)
+            for (let i = 1; i <= 60; i++) {
+                formats.forEach(ext => {
+                    imageNames.push(`gallery-${i}.${ext}`);
+                });
+            }
+            
+            // Alternative naming patterns
+            for (let i = 1; i <= 20; i++) {
+                formats.forEach(ext => {
+                    imageNames.push(`img${i}.${ext}`);
+                    imageNames.push(`image${i}.${ext}`);
+                    imageNames.push(`photo${i}.${ext}`);
+                });
+            }
+            
+            // Event-specific names
+            const eventNames = ['technical', 'cultural', 'sports', 'esports', 'competitions', 
+                               'stage', 'crowd', 'winners', 'team', 'event'];
+            eventNames.forEach(name => {
+                formats.forEach(ext => {
+                    imageNames.push(`${name}.${ext}`);
+                });
+            });
+            
+            let loadedCount = 0;
+            const maxDisplay = 100; // Maximum images to display
+            const foundImages = new Set(); // Track unique base filenames to avoid duplicates
+            
+            // Try to load each image
+            imageNames.forEach((imageName, index) => {
+                // Extract base filename without extension to prevent duplicates
+                const baseName = imageName.replace(/\.[^.]+$/, '').toLowerCase();
+                
+                // Skip if we already found this base image or reached max
+                if (foundImages.has(baseName) || loadedCount >= maxDisplay) return;
+                
+                const src = `assets/gallery/${imageName}`;
+                const img = new Image();
+                
+                img.onload = function() {
+                    // Double-check we haven't loaded this base image yet
+                    if (foundImages.has(baseName) || loadedCount >= maxDisplay) return;
+                    foundImages.add(baseName);
+                    // Image loaded successfully, create gallery item
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 transform hover:scale-105';
+                    wrapper.style.animationDelay = `${loadedCount * 0.1}s`;
+                    wrapper.innerHTML = `
+                        <a href="${src}" class="gallery-link" data-index="${loadedCount}">
+                            <div class="aspect-square relative group">
+                                <img loading="lazy" src="${src}" alt="Esplendidez Gallery ${loadedCount + 1}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                    <div class="absolute bottom-4 left-4">
+                                        <div class="bg-white/20 backdrop-blur-sm rounded-lg px-3 py-1">
+                                            <p class="text-white text-sm font-medium">View Image</p>
+                                        </div>
+                                    </div>
+                                    <div class="absolute top-4 right-4">
+                                        <div class="bg-white/20 backdrop-blur-sm rounded-full p-2">
+                                            <i class="bi bi-zoom-in text-white"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    `;
+                    grid.appendChild(wrapper);
+                    loadedCount++;
+                };
+                
+                img.onerror = function() {
+                    // Image failed to load, try next one silently
+                    console.log(`Image not found: ${src}`);
+                };
+                
+                img.src = src;
+            });
+            
+            // Show message if no images found after a delay
+            setTimeout(() => {
+                if (loadedCount === 0) {
+                    grid.innerHTML = `
+                        <div class="col-span-full text-center py-16">
+                            <div class="bg-white rounded-2xl shadow-lg p-8 max-w-md mx-auto">
+                                <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
+                                    <i class="bi bi-images text-2xl text-gray-400"></i>
+                                </div>
+                                <h3 class="text-xl font-semibold text-gray-700 mb-2">No Images Found</h3>
+                                <p class="text-gray-500 mb-4">Add photos to <code class="bg-gray-100 px-2 py-1 rounded text-sm">assets/gallery/</code> folder.</p>
+                                <p class="text-sm text-gray-400">Supported formats: JPG, JPEG, PNG, GIF, WEBP, BMP, SVG (any case)</p>
+                                <p class="text-sm text-gray-400">Supported names: gallery-1, gallery-2, img1, photo1, etc.</p>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    console.log(`Gallery loaded ${loadedCount} images`);
+                }
+            }, 2000);
+
+            // Lightbox modal
+            const modal = document.createElement('div');
+            modal.id = 'lightbox-modal';
+            modal.className = 'fixed inset-0 bg-black/90 hidden items-center justify-center z-50';
+            modal.innerHTML = `
+                <button id="lb-close" class="absolute top-4 right-4 text-white text-3xl">&times;</button>
+                <img id="lb-image" src="" alt="Preview" class="max-w-[90vw] max-h-[85vh] rounded-lg shadow-2xl"/>
+            `;
+            document.body.appendChild(modal);
+
+            document.addEventListener('click', (e) => {
+                const a = e.target.closest('a.gallery-link');
+                if(!a) return;
+                e.preventDefault();
+                const img = document.getElementById('lb-image');
+                img.src = a.getAttribute('href');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            });
+            document.getElementById('lb-close').addEventListener('click', ()=>{
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            });
+            modal.addEventListener('click', (e)=>{ if(e.target === modal){ modal.classList.add('hidden'); modal.classList.remove('flex'); }});
+            document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ modal.classList.add('hidden'); modal.classList.remove('flex'); }});
+        })();
+        // Ensure featured video can play on user gesture
+        (function(){
+            const v = document.getElementById('featured-video');
+            if(!v) return;
+            const attempt = () => v.play().catch(()=>{});
+            document.addEventListener('pointerdown', attempt, { once: true, passive: true });
+        })();
+    </script>
+</body>
+</html>
+
