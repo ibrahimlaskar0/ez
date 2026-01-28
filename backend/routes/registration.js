@@ -15,11 +15,14 @@ const router = express.Router();
 router.use(cors());
 
 // Detect deployment/storage
+const hasCloudinary = !!process.env.CLOUDINARY_URL;  // Check if URL exists
+const cloudinary = hasCloudinary ? require('cloudinary').v2 : null;  // Load SDK
+if (cloudinary) { cloudinary.config({ secure: true }); }  // Auto-configure from CLOUDINARY_URL
+
 const isVercel = !!process.env.VERCEL;
-const hasCloudinary = !!process.env.CLOUDINARY_URL;
 let UPLOAD_DIR = path.join(__dirname, '..', 'uploads');
 if (isVercel) UPLOAD_DIR = '/tmp/uploads';
-if (!hasCloudinary) { try { fs.mkdirSync(UPLOAD_DIR, { recursive: true }); } catch (e) { /* directory may already exist */ } }
+// if (!hasCloudinary) { try { fs.mkdirSync(UPLOAD_DIR, { recursive: true }); } catch (e) { /* directory may already exist */ } }
 
 // Multer storage (memory for Cloudinary, disk otherwise)
 const storage = hasCloudinary 
@@ -32,7 +35,7 @@ const storage = hasCloudinary
         cb(null, `${uuidv4()}${safeExt}`);
       },
     });
-const cloudinary = hasCloudinary ? require('cloudinary').v2 : null;
+// const cloudinary = hasCloudinary ? require('cloudinary').v2 : null;
 if (cloudinary) { cloudinary.config({ secure: true }); }
 
 async function uploadToCloud(file, folder) {
