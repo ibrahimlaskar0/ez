@@ -131,13 +131,40 @@
         if (card) {
           const summary = document.createElement('div');
           summary.className = 'mt-4 text-white/90 text-sm';
-          summary.innerHTML = `
-            <div class="grid grid-cols-2 gap-2">
-              <div><strong>Name:</strong> ${pending.data.participantName}</div>
-              <div><strong>Email:</strong> ${pending.data.participantEmail}</div>
-              <div><strong>Event:</strong> ${pending.data.eventName}</div>
-              <div><strong>Fee:</strong> ₹${pending.data.eventFee}</div>
-            </div>`;
+
+          const grid = document.createElement('div');
+          grid.className = 'grid grid-cols-2 gap-2';
+
+          const nameDiv = document.createElement('div');
+          const nameLabel = document.createElement('strong');
+          nameLabel.textContent = 'Name:';
+          nameDiv.appendChild(nameLabel);
+          nameDiv.appendChild(document.createTextNode(' ' + (pending.data.participantName || '')));
+
+          const emailDiv = document.createElement('div');
+          const emailLabel = document.createElement('strong');
+          emailLabel.textContent = 'Email:';
+          emailDiv.appendChild(emailLabel);
+          emailDiv.appendChild(document.createTextNode(' ' + (pending.data.participantEmail || '')));
+
+          const eventDiv = document.createElement('div');
+          const eventLabel = document.createElement('strong');
+          eventLabel.textContent = 'Event:';
+          eventDiv.appendChild(eventLabel);
+          eventDiv.appendChild(document.createTextNode(' ' + (pending.data.eventName || '')));
+
+          const feeDiv = document.createElement('div');
+          const feeLabel = document.createElement('strong');
+          feeLabel.textContent = 'Fee:';
+          feeDiv.appendChild(feeLabel);
+          feeDiv.appendChild(document.createTextNode(' ₹' + (pending.data.eventFee || '')));
+
+          grid.appendChild(nameDiv);
+          grid.appendChild(emailDiv);
+          grid.appendChild(eventDiv);
+          grid.appendChild(feeDiv);
+
+          summary.appendChild(grid);
           card.appendChild(summary);
         }
       } catch {}
