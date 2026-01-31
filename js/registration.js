@@ -161,8 +161,6 @@ function createEventCard(ev) {
 
 // Populate Events page with categorized sections
 function populateEventsByCategory() {
-    console.log('populateEventsByCategory called');
-    console.log('Total events:', eventsList.length);
     
     const categories = {
         'Technical': 'technical-events',
@@ -175,7 +173,6 @@ function populateEventsByCategory() {
     // Clear all containers first
     Object.values(categories).forEach(containerId => {
         const container = document.getElementById(containerId);
-        console.log(`Container ${containerId}:`, container ? 'found' : 'NOT FOUND');
         if (container) {
             container.innerHTML = '';
         }
@@ -185,16 +182,12 @@ function populateEventsByCategory() {
     eventsList.forEach(ev => {
         const containerId = categories[ev.category];
         const container = document.getElementById(containerId);
-        console.log(`Event: ${ev.name}, Category: ${ev.category}, Container ID: ${containerId}, Container found: ${!!container}`);
         
         if (container) {
             const eventCard = document.createElement('div');
             eventCard.innerHTML = createEventCard(ev);
-            console.log('Created card HTML length:', eventCard.innerHTML.length);
             container.appendChild(eventCard.firstElementChild);
-            console.log('Appended to container. Container children count:', container.children.length);
         } else {
-            console.error(`Container not found for ${ev.category} (ID: ${containerId})`);
         }
     });
     
