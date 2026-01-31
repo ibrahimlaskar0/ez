@@ -22,10 +22,10 @@ function resolveApiBase() {
         }
 
         const port = Number(sessionStorage.getItem('API_PORT')) || DEFAULT_API_PORT;
-        return `http://${host}:${port}/api`;
+        return `https://${host}:${port}/api`;
     } catch (_) {
         // Safe fallback
-        return `http://127.0.0.1:${DEFAULT_API_PORT}/api`;
+        return `https://127.0.0.1:${DEFAULT_API_PORT}/api`;
     }
 }
 
@@ -79,7 +79,7 @@ class ApiService {
                     const text = await response.text();
                     try { data = JSON.parse(text); } catch (_) { data = { message: text }; }
                 } catch (_) {
-                    data = { message: `HTTP ${response.status}` };
+                    data = { message: `HTTPS ${response.status}` };
                 }
             }
 
@@ -256,3 +256,4 @@ document.addEventListener('DOMContentLoaded', async () => {
 window.ApiService = ApiService;
 
 window.FallbackStorage = FallbackStorage;
+
