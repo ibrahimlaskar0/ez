@@ -3,6 +3,12 @@
     try { return new URLSearchParams(window.location.search).get(name); } catch { return null; }
   }
 
+  // Detect iOS/Mobile browsers
+  function isMobileBrowser() {
+    const ua = navigator.userAgent || '';
+    return /iPhone|iPad|iPod|Android|Mobile/i.test(ua);
+  }
+
   // IndexedDB helpers
   function idbOpen(){
     return new Promise((resolve, reject) => {
@@ -34,6 +40,20 @@
     });
   }
 
+  // NEW: Try to parse URL-encoded data fallback
+  function parseUrlEncodedData() {
+    try {
+      const encodedData = getParam('data');
+      if (encodedData) {
+        const decoded = decodeURIComponent(encodedData);
+        return JSON.parse(atob(decoded));
+      }
+    } catch (e) {
+      console.warn('Failed to parse URL-encoded data:', e);
+    }
+    return null;
+  }
+
   document.addEventListener('DOMContentLoaded', async () => {
     const form = document.getElementById('payment-form');
     const utrInput = document.getElementById('utr-id');
@@ -47,10 +67,20 @@
     }
 
     // Determine pending reg id - support both 'regId' and 'registration' parameters
-    let regId = getParam('regId') || getParam('registration') || sessionStorage.getItem('pendingPaymentId');
+    let regId = getParam('regId') || getParam('registration');
+    
+    // Try sessionStorage only if not on mobile
+    if (!regId && !isMobileBrowser()) {
+      try {
+        regId = sessionStorage.getItem('pendingPaymentId');
+      } catch (e) {
+        console.warn('sessionStorage blocked:', e);
+      }
+    }
     
     console.log('Payment Debug - RegId:', regId);
     console.log('Payment Debug - URL params:', window.location.search);
+    console.log('Payment Debug - Mobile browser:', isMobileBrowser());
     
     if(!regId){
       console.error('No pending registration ID found');
@@ -60,28 +90,42 @@
     let pending = null;
     let fileNeedsReupload = false;
     
-    // Try IndexedDB first
-    try {
-      const db = await idbOpen();
-      console.log('IndexedDB opened successfully');
-      
-      // Debug: List all records in the database
-      const allRecords = await new Promise((resolve, reject) => {
-        const tx = db.transaction('pendingRegs', 'readonly');
-        const req = tx.objectStore('pendingRegs').getAll();
-        req.onsuccess = () => resolve(req.result || []);
-        req.onerror = () => reject(req.error);
-      });
-      console.log('All records in IndexedDB:', allRecords.length, allRecords.map(r => r.id));
-      
-      pending = regId ? await idbGet(db, regId) : null;
-      console.log('Pending record from IndexedDB:', pending);
-    } catch (e) {
-      console.warn('IndexedDB unavailable:', e);
+    // Try URL-encoded data first (best for mobile)
+    const urlData = parseUrlEncodedData();
+    if (urlData) {
+      pending = {
+        id: regId || urlData.regId || ('REG_' + Date.now()),
+        data: urlData,
+        collegeIdFile: null
+      };
+      fileNeedsReupload = true;
+      console.log('✅ Loaded registration from URL parameters (mobile-friendly)');
+    }
+    
+    // Try IndexedDB second (if URL data not available)
+    if (!pending && !isMobileBrowser()) {
+      try {
+        const db = await idbOpen();
+        console.log('IndexedDB opened successfully');
+        
+        // Debug: List all records in the database
+        const allRecords = await new Promise((resolve, reject) => {
+          const tx = db.transaction('pendingRegs', 'readonly');
+          const req = tx.objectStore('pendingRegs').getAll();
+          req.onsuccess = () => resolve(req.result || []);
+          req.onerror = () => reject(req.error);
+        });
+        console.log('All records in IndexedDB:', allRecords.length, allRecords.map(r => r.id));
+        
+        pending = regId ? await idbGet(db, regId) : null;
+        console.log('Pending record from IndexedDB:', pending);
+      } catch (e) {
+        console.warn('IndexedDB unavailable:', e);
+      }
     }
     
     // Fallback to sessionStorage if IndexedDB didn't have the data
-    if (!pending) {
+    if (!pending && !isMobileBrowser()) {
       console.log('Trying sessionStorage fallback...');
       try {
         const storedRegId = sessionStorage.getItem('pendingPaymentId');
@@ -107,11 +151,15 @@
       
     if (!pending) {
       console.error('No pending record found for regId:', regId);
+      console.error('Storage attempts failed. URL params:', window.location.search);
+      
       // Show detailed error to user
       alert(`No saved registration found. Please register again.\n\nThis can happen if:\n1. You're using private/incognito browsing\n2. Browser storage is disabled\n3. You navigated here directly\n\nClick OK to go to the registration page.`);
       window.location.href = 'register.html';
       return;
     }
+
+    console.log('✅ Registration data loaded successfully:', pending.data);
 
     // Show College ID re-upload field if file is not available
     if (fileNeedsReupload || !pending.collegeIdFile) {
@@ -175,9 +223,7 @@
         e.preventDefault();
         try {
           if(!regId){
-            alert('Missing registration reference. Please complete the registration form first.\n\nClick OK to go to the registration page.');
-            window.location.href = 'register.html';
-            return;
+            regId = pending.id || ('REG_' + Date.now());
           }
           if(!pending){
             const db = await idbOpen();
@@ -244,12 +290,12 @@
           // Submit to backend
           const btn = form.querySelector('button[type="submit"]');
           const original = btn?.innerHTML;
-          if(btn){ btn.disabled = true; btn.innerHTML = '<span class="animate-pulse">Submitting...</span>'; }
+          if(btn){ btn.disabled = true; btn.innerHTML = '<span class="animate-pulse">Submitting...</span>'; };
           const res = await window.ApiService.registerForEventMultipart(fd);
 
           // Cleanup local pending record
           try { const db = await idbOpen(); await idbDelete(db, regId); } catch {}
-          sessionStorage.removeItem('pendingPaymentId');
+          try { sessionStorage.removeItem('pendingPaymentId'); } catch {}
 
           // Navigate to success page
           const rid = res?.data?.registrationId || regId;
