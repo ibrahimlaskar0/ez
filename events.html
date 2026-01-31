@@ -525,8 +525,7 @@
                 const searchTerm = e.target.value.toLowerCase().trim();
                 const eventCards = document.querySelectorAll('.event-card');
                 
-                console.log('Searching for:', searchTerm);
-                console.log('Found event cards:', eventCards.length);
+              
                 
                 eventCards.forEach(card => {
                     const eventName = card.querySelector('h3')?.textContent?.toLowerCase() || '';
