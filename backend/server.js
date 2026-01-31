@@ -57,6 +57,8 @@ if (process.env.FRONTEND_URL) {
 // Production domains
 prodOrigins.push('https://esplendidez.tech');
 prodOrigins.push('https://www.esplendidez.tech');
+prodOrigins.push('https://esplendidez.online');
+prodOrigins.push('https://www.esplendidez.online');
 prodOrigins.push('https://ibrahimlaskar0.github.io');
 // Netlify site (fallback if env not set)
 prodOrigins.push('https://esplendidez-2026-frontend.netlify.app');
