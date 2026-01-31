@@ -264,7 +264,7 @@
                 }
                 
                 // Fallback to localStorage
-                const userRegistrations = JSON.parse(localStorage.getItem('myRegistrations')) || [];
+                const userRegistrations = JSON.parse(sessionStorage.getItem('myRegistrations')) || [];
                 const userReg = userRegistrations.find(reg => reg.id === regId);
                 
                 if (userReg) {
@@ -281,7 +281,7 @@
                     
                     let registration = null;
                     for (const categoryKey of categoryKeys) {
-                        const registrations = JSON.parse(localStorage.getItem(categoryKey)) || [];
+                        const registrations = JSON.parse(sessionStorage.getItem(categoryKey)) || [];
                         const found = registrations.find(reg => reg.id === regId);
                         if (found) {
                             registration = found;
@@ -295,7 +295,7 @@
                 }
             } else {
                 // Show latest user registration if no ID provided
-                const userRegistrations = JSON.parse(localStorage.getItem('myRegistrations')) || [];
+                const userRegistrations = JSON.parse(sessionStorage.getItem('myRegistrations')) || [];
                 if (userRegistrations.length > 0) {
                     displayRegistrationDetails(userRegistrations[userRegistrations.length - 1]);
                 }
@@ -336,4 +336,5 @@
         }
     </script>
 </body>
+
 </html>
