@@ -12,7 +12,7 @@
  */
 const eventsList = [
     // Cultural Events - Creative and artistic competitions
-    {category:"Cultural", name:"Prom Night", fee:"600/300(Solo)", teamType:"individual/Team"},
+    {category:"Cultural", name:"Prom Night", fee:"600/300(Solo)", teamType:"Team"},
     {category:"Cultural", name:"Cos Play", fee:300, teamType:"individual"},
     {category:"Cultural", name:"Dance Competition", fee:"200 (solo)/500 (group)", teamType:"team"},
     {category:"Cultural", name:"Song Competition", fee:200, teamType:"individual"},
