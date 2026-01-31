@@ -29,13 +29,13 @@ const eventsList = [
     
     // Technical Events - Engineering and programming challenges
     {category:"Technical", name:"Coding Competition", fee:200, teamType:"individual"},
-    {category:"Technical", name:"Robotron", fee:1000, teamType:"team"},
+    {category:"Technical", name:"Robotron", fee:300, teamType:"team"},
     {category:"Technical", name:"Model Making", fee:200, teamType:"individual"},
 
     // E-Sports Events - Gaming competitions
     {category:"E-Sports", name:"BGMI", fee:10, teamType:"team"},
     {category:"E-Sports", name:"ML", fee:500, teamType:"team"},
-    {category:"E-Sports", name:"FIFA", fee:250, teamType:"individual"},
+    {category:"E-Sports", name:"FIFA", fee:200, teamType:"individual"},
     
     // Competition Events - Academic and skill-based contests
     {category:"Competitions", name:"Quiz", fee:150, teamType:"individual"},
