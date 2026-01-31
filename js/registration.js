@@ -12,9 +12,9 @@
  */
 const eventsList = [
     // Cultural Events - Creative and artistic competitions
-    {category:"Cultural", name:"Prom Night", fee:"600/250 (single for girls)", teamType:"individual/Duo"},
+    {category:"Cultural", name:"Prom Night", fee:"600/300(single)", teamType:"individual/Duo"},
     {category:"Cultural", name:"Cos Play", fee:300, teamType:"individual"},
-    {category:"Cultural", name:"Dance Competition", fee:"200 (solo) / 500 (group)", teamType:"individual"},
+    {category:"Cultural", name:"Dance Competition", fee:"200 (solo)/500 (group)", teamType:"team"},
     {category:"Cultural", name:"Song Competition", fee:200, teamType:"individual"},
     {category:"Cultural", name:"Fashion Show", fee:500, teamType:"individual"},    
     // Sports Events - Physical competitions and athletics
@@ -33,8 +33,8 @@ const eventsList = [
     {category:"Technical", name:"Model Making", fee:200, teamType:"individual"},
 
     // E-Sports Events - Gaming competitions
-    {category:"E-Sports", name:"BGMI", fee:500, teamType:"team"},
-    {category:"E-Sports", name:"ML", fee:600, teamType:"team"},
+    {category:"E-Sports", name:"BGMI", fee:10, teamType:"team"},
+    {category:"E-Sports", name:"ML", fee:500, teamType:"team"},
     {category:"E-Sports", name:"FIFA", fee:250, teamType:"individual"},
     
     // Competition Events - Academic and skill-based contests
