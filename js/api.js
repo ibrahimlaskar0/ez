@@ -10,7 +10,7 @@ const DEFAULT_API_PORT = 5001;
 function resolveApiBase() {
     try {
         // Allow explicit overrides first
-        const explicit = (window.ESPL_API_BASE || localStorage.getItem('API_BASE') || '').trim();
+        const explicit = (window.ESPL_API_BASE || sessionStorage.getItem('API_BASE') || '').trim();
         if (explicit) {
             return explicit.replace(/\/+$/, '') + '/api';
         }
@@ -21,7 +21,7 @@ function resolveApiBase() {
             host = '127.0.0.1';
         }
 
-        const port = Number(localStorage.getItem('API_PORT')) || DEFAULT_API_PORT;
+        const port = Number(sessionStorage.getItem('API_PORT')) || DEFAULT_API_PORT;
         return `http://${host}:${port}/api`;
     } catch (_) {
         // Safe fallback
@@ -201,7 +201,7 @@ class FallbackStorage {
             this.isBackendAvailable = true;
             return true;
         } catch (error) {
-            console.warn('Backend not available, falling back to localStorage');
+            console.warn('Backend not available, falling back to sessionStorage');
             this.isBackendAvailable = false;
             return false;
         }
@@ -213,13 +213,13 @@ class FallbackStorage {
                 const response = await ApiService.getAllRegistrations();
                 return response.data || response.registrations || [];
             } catch (error) {
-                console.warn('Backend failed, using localStorage');
+                console.warn('Backend failed, using sessionStorage');
                 this.isBackendAvailable = false;
             }
         }
         
         // Fallback to localStorage
-        const stored = localStorage.getItem('registrations');
+        const stored = sessionStorage.getItem('registrations');
         return stored ? JSON.parse(stored) : [];
     }
 
@@ -228,7 +228,7 @@ class FallbackStorage {
             try {
                 return await ApiService.registerForEvent(registrationData);
             } catch (error) {
-                console.warn('Backend failed, saving to localStorage');
+                console.warn('Backend failed, saving to sessionStorage');
                 this.isBackendAvailable = false;
             }
         }
@@ -241,7 +241,7 @@ class FallbackStorage {
             createdAt: new Date().toISOString()
         };
         registrations.push(newRegistration);
-        localStorage.setItem('registrations', JSON.stringify(registrations));
+        sessionStorage.setItem('registrations', JSON.stringify(registrations));
         return { success: true, data: newRegistration };
     }
 }
@@ -254,4 +254,5 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Export for global use
 window.ApiService = ApiService;
+
 window.FallbackStorage = FallbackStorage;
