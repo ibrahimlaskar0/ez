@@ -52,11 +52,10 @@ class ApiService {
             headers = { ...(fetchOptions.headers || {}) };
         } else {
             // For JSON bodies, add Content-Type header
-            headers = { 
-                'Content-Type': 'application/json',
-                ...API_CONFIG.HEADERS, 
-                ...(fetchOptions.headers || {}) 
-            };
+            if (!isFormData && fetchOptions.body) {
+  headers['Content-Type'] = 'application/json';
+}
+
         }
         
         const config = {
@@ -256,4 +255,5 @@ document.addEventListener('DOMContentLoaded', async () => {
 window.ApiService = ApiService;
 
 window.FallbackStorage = FallbackStorage;
+
 
