@@ -396,15 +396,16 @@ if (!isStorageAvailable('localStorage')) {
             <i class="bi bi-exclamation-triangle-fill mr-3 text-2xl"></i>
             <div>
                 <strong class="block mb-1">Private Browsing Detected</strong>
-                <p class="text-sm">Registration requires localStorage. Please disable private/incognito mode and try again.</p>
+                <p class="text-sm">Registration data cannot be saved in private/incognito mode. Please disable private browsing and try again.</p>
             </div>
         </div>
     `;
     document.body.appendChild(warningDiv);
     
-    // Disable form submission
-    if(form) {
-        form.addEventListener('submit', (e) => {
+    // Disable form submission - check if form exists first
+    const registrationForm = document.getElementById("registration-form");
+    if(registrationForm) {
+        registrationForm.addEventListener('submit', (e) => {
             e.preventDefault();
             alert('Registration cannot proceed in private/incognito mode. Please use a regular browser window.');
         }, true);
