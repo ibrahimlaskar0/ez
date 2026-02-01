@@ -682,7 +682,7 @@ if(form){
 
         // Ensure at least one storage method worked
         if (!localStorageSuccess && !idbSuccess) {
-            alert('Unable to save registration data. Please check if your browser allows storage and try again.');
+            alert('❌ Unable to save registration data.\n\nPossible causes:\n• Private/incognito browsing mode\n• Browser storage is disabled\n• Storage quota exceeded\n\nPlease try:\n1. Disable private/incognito mode\n2. Check browser settings to allow storage\n3. Clear browser cache and try again\n4. Use Chrome or Firefox if issues persist\n\nClick OK to try again.');
             return;
         }
 
