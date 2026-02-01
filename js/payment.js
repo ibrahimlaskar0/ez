@@ -47,7 +47,7 @@
     }
 
     // Determine pending reg id - support both 'regId' and 'registration' parameters
-    let regId = getParam('regId') || getParam('registration') || sessionStorage.getItem('pendingPaymentId');
+    let regId = getParam('regId') || getParam('registration') || localStorage.getItem('pendingPaymentId');
     
     console.log('Payment Debug - RegId:', regId);
     console.log('Payment Debug - URL params:', window.location.search);
@@ -80,28 +80,28 @@
       console.warn('IndexedDB unavailable:', e);
     }
     
-    // Fallback to sessionStorage if IndexedDB didn't have the data
+    // Fallback to localStorage if IndexedDB didn't have the data
     if (!pending) {
-      console.log('Trying sessionStorage fallback...');
+      console.log('Trying localStorage fallback...');
       try {
-        const storedRegId = sessionStorage.getItem('pendingPaymentId');
-        const storedData = sessionStorage.getItem('pendingRegData');
+        const storedRegId = localStorage.getItem('pendingPaymentId');
+        const storedData = localStorage.getItem('pendingRegData');
         
         if (storedData && (storedRegId === regId || !regId)) {
           const data = JSON.parse(storedData);
           pending = {
             id: storedRegId,
             data: data,
-            collegeIdFile: null // File not available from sessionStorage
+            collegeIdFile: null // File not available from localStorage
           };
           fileNeedsReupload = true;
-          console.log('Loaded registration from sessionStorage (file will need re-upload):', pending);
+          console.log('Loaded registration from localStorage (file will need re-upload):', pending);
           
           // Update regId if it was missing
           if (!regId) regId = storedRegId;
         }
       } catch (e) {
-        console.warn('sessionStorage fallback failed:', e);
+        console.warn('localStorage fallback failed:', e);
       }
     }
       
@@ -249,7 +249,10 @@
 
           // Cleanup local pending record
           try { const db = await idbOpen(); await idbDelete(db, regId); } catch {}
-          sessionStorage.removeItem('pendingPaymentId');
+          localStorage.removeItem('pendingPaymentId');
+          localStorage.removeItem('pendingPaymentEmail');
+          localStorage.removeItem('pendingPaymentEvent');
+          localStorage.removeItem('pendingRegData');
 
           // Navigate to success page
           const rid = res?.data?.registrationId || regId;

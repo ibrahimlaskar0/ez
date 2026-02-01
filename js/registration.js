@@ -374,6 +374,43 @@ if(teamSizeInput){
     });
 }
 
+// Check localStorage availability and warn user
+function isStorageAvailable(type) {
+    try {
+        const storage = window[type];
+        const test = '__storage_test__';
+        storage.setItem(test, test);
+        storage.removeItem(test);
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+// Display warning if localStorage is not available
+if (!isStorageAvailable('localStorage')) {
+    const warningDiv = document.createElement('div');
+    warningDiv.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-red-500 text-white px-6 py-4 rounded-lg shadow-xl max-w-md';
+    warningDiv.innerHTML = `
+        <div class="flex items-start">
+            <i class="bi bi-exclamation-triangle-fill mr-3 text-2xl"></i>
+            <div>
+                <strong class="block mb-1">Private Browsing Detected</strong>
+                <p class="text-sm">Registration requires localStorage. Please disable private/incognito mode and try again.</p>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(warningDiv);
+    
+    // Disable form submission
+    if(form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Registration cannot proceed in private/incognito mode. Please use a regular browser window.');
+        }, true);
+    }
+}
+
 // Handle URL parameters for single event registration
 if(eventInput && feeInput){
     const params = new URLSearchParams(window.location.search);
@@ -595,15 +632,15 @@ if(form){
             tx.onerror = () => reject(tx.error);
         });
 
-        // Save to sessionStorage as backup (works better on mobile)
+        // Save to localStorage as backup (persistent across tabs/refreshes)
         try {
-            sessionStorage.setItem('pendingPaymentId', regId);
-            sessionStorage.setItem('pendingPaymentEmail', email);
-            sessionStorage.setItem('pendingPaymentEvent', eventName);
-            sessionStorage.setItem('pendingRegData', JSON.stringify(pendingRecord.data));
-            console.log('Saved registration to sessionStorage as backup');
+            localStorage.setItem('pendingPaymentId', regId);
+            localStorage.setItem('pendingPaymentEmail', email);
+            localStorage.setItem('pendingPaymentEvent', eventName);
+            localStorage.setItem('pendingRegData', JSON.stringify(pendingRecord.data));
+            console.log('Saved registration to localStorage as backup');
         } catch (e) {
-            console.warn('sessionStorage backup failed:', e);
+            console.warn('localStorage backup failed:', e);
         }
 
         // Try IndexedDB for file storage
@@ -626,10 +663,10 @@ if(form){
                 idbSuccess = true;
             }
         } catch (e) {
-            console.error('IndexedDB save failed (using sessionStorage backup):', e);
+            console.error('IndexedDB save failed (using localStorage backup):', e);
         }
 
-        // If IndexedDB failed but we have sessionStorage, continue anyway
+        // If IndexedDB failed but we have localStorage, continue anyway
         if (!idbSuccess) {
             console.warn('IndexedDB unavailable - file will need to be re-uploaded on payment page');
         }
