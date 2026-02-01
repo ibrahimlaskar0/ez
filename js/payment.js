@@ -34,7 +34,32 @@
     });
   }
 
+  // Test localStorage availability
+  function testLocalStorage() {
+    try {
+      const test = '__storage_test__';
+      localStorage.setItem(test, test);
+      localStorage.removeItem(test);
+      return true;
+    } catch (e) {
+      console.error('❌ localStorage is not available:', e);
+      return false;
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', async () => {
+    console.log('=== Payment Page Initialization ===');
+    
+    // Check localStorage availability
+    const hasLocalStorage = testLocalStorage();
+    if (!hasLocalStorage) {
+      alert('⚠ Browser storage is not available.\n\nYou may be in private/incognito mode or storage is disabled.\n\nPlease enable storage or use a regular browser window and try again.');
+      console.error('❌ localStorage test failed - redirecting to registration');
+      window.location.href = 'register.html';
+      return;
+    }
+    console.log('✓ localStorage is available');
+    
     const form = document.getElementById('payment-form');
     const utrInput = document.getElementById('utr-id');
 
@@ -47,13 +72,21 @@
     }
 
     // Determine pending reg id - support both 'regId' and 'registration' parameters
-    let regId = getParam('regId') || getParam('registration') || sessionStorage.getItem('pendingPaymentId');
+    let regId = getParam('regId') || getParam('registration') || localStorage.getItem('pendingPaymentId');
     
-    console.log('Payment Debug - RegId:', regId);
+    console.log('=== Payment Page Debug Info ===');
+    console.log('Payment Debug - RegId from URL or storage:', regId);
     console.log('Payment Debug - URL params:', window.location.search);
+    console.log('Payment Debug - localStorage pendingPaymentId:', localStorage.getItem('pendingPaymentId'));
+    console.log('Payment Debug - localStorage keys:', Object.keys(localStorage).filter(k => k.includes('pending')));
     
     if(!regId){
-      console.error('No pending registration ID found');
+      console.error('❌ No pending registration ID found anywhere');
+      alert('No registration ID found. Please complete the registration form first.\n\nMake sure you:\n1. Are not in private/incognito mode\n2. Have not cleared browser data\n3. Came from the registration page\n\nClick OK to go to registration.');
+      window.location.href = 'register.html';
+      return;
+    } else {
+      console.log('✓ Registration ID found:', regId);
     }
 
     // Load pending record for summary display
@@ -80,38 +113,81 @@
       console.warn('IndexedDB unavailable:', e);
     }
     
-    // Fallback to sessionStorage if IndexedDB didn't have the data
+    // Fallback to localStorage if IndexedDB didn't have the data
     if (!pending) {
-      console.log('Trying sessionStorage fallback...');
+      console.log('⚠ No data in IndexedDB, trying localStorage fallback...');
       try {
-        const storedRegId = sessionStorage.getItem('pendingPaymentId');
-        const storedData = sessionStorage.getItem('pendingRegData');
+        const storedRegId = localStorage.getItem('pendingPaymentId');
+        const storedData = localStorage.getItem('pendingRegData');
+        
+        console.log('localStorage check - storedRegId:', storedRegId);
+        console.log('localStorage check - has storedData:', !!storedData);
+        console.log('localStorage check - comparing:', storedRegId, 'vs', regId);
         
         if (storedData && (storedRegId === regId || !regId)) {
           const data = JSON.parse(storedData);
           pending = {
             id: storedRegId,
             data: data,
-            collegeIdFile: null // File not available from sessionStorage
+            collegeIdFile: null // File not available from localStorage
           };
           fileNeedsReupload = true;
-          console.log('Loaded registration from sessionStorage (file will need re-upload):', pending);
+          console.log('✓ Successfully loaded registration from localStorage:', pending);
+          console.log('⚠ File re-upload will be required');
           
           // Update regId if it was missing
-          if (!regId) regId = storedRegId;
+          if (!regId) {
+            regId = storedRegId;
+            console.log('✓ Updated regId from localStorage:', regId);
+          }
+        } else {
+          console.error('❌ localStorage data not found or ID mismatch');
+          if (!storedData) console.error('  - No pendingRegData in localStorage');
+          if (storedRegId !== regId) console.error('  - ID mismatch: stored=' + storedRegId + ' vs expected=' + regId);
         }
       } catch (e) {
-        console.warn('sessionStorage fallback failed:', e);
+        console.error('❌ localStorage fallback failed:', e);
       }
+    } else {
+      console.log('✓ Successfully loaded data from IndexedDB');
     }
       
     if (!pending) {
-      console.error('No pending record found for regId:', regId);
+      console.error('❌ No pending record found for regId:', regId);
+      console.error('❌ Storage check results:');
+      console.error('  - IndexedDB: No data');
+      console.error('  - localStorage: No data or ID mismatch');
+      console.error('  - Possible causes:');
+      console.error('    1. Private/incognito browsing mode');
+      console.error('    2. Browser storage disabled or full');
+      console.error('    3. Different browser/device than registration');
+      console.error('    4. Storage data was cleared');
+      console.error('    5. Came directly to payment page');
+      
       // Show detailed error to user
-      alert(`No saved registration found. Please register again.\n\nThis can happen if:\n1. You're using private/incognito browsing\n2. Browser storage is disabled\n3. You navigated here directly\n\nClick OK to go to the registration page.`);
+      alert(`❌ No saved registration found. Please register again.
+
+This can happen if:
+1. You're using private/incognito browsing
+2. Browser storage is disabled or full
+3. You're using a different browser or device
+4. You cleared browser data
+5. You navigated here directly without registering
+
+Current Registration ID: ${regId || 'Not found'}
+
+Click OK to go to the registration page.`);
       window.location.href = 'register.html';
       return;
     }
+    
+    console.log('✅ Successfully loaded pending registration data');
+    console.log('Registration details:', {
+      id: pending.id,
+      name: pending.data?.participantName,
+      email: pending.data?.participantEmail,
+      event: pending.data?.eventName
+    });
 
     // Show College ID re-upload field if file is not available
     if (fileNeedsReupload || !pending.collegeIdFile) {
@@ -249,7 +325,10 @@
 
           // Cleanup local pending record
           try { const db = await idbOpen(); await idbDelete(db, regId); } catch {}
-          sessionStorage.removeItem('pendingPaymentId');
+          localStorage.removeItem('pendingPaymentId');
+          localStorage.removeItem('pendingPaymentEmail');
+          localStorage.removeItem('pendingPaymentEvent');
+          localStorage.removeItem('pendingRegData');
 
           // Navigate to success page
           const rid = res?.data?.registrationId || regId;

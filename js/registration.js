@@ -374,6 +374,47 @@ if(teamSizeInput){
     });
 }
 
+// Check localStorage availability and warn user
+function isStorageAvailable(type) {
+    try {
+        const storage = window[type];
+        const test = '__storage_test__';
+        storage.setItem(test, test);
+        storage.removeItem(test);
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+// Display warning if localStorage is not available
+if (!isStorageAvailable('localStorage')) {
+    const PULSE_ANIMATION_DURATION = 1000; // milliseconds
+    const warningDiv = document.createElement('div');
+    warningDiv.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-red-500 text-white px-6 py-4 rounded-lg shadow-xl max-w-md';
+    warningDiv.innerHTML = `
+        <div class="flex items-start">
+            <i class="bi bi-exclamation-triangle-fill mr-3 text-2xl"></i>
+            <div>
+                <strong class="block mb-1">Private Browsing Detected</strong>
+                <p class="text-sm">Registration data cannot be saved in private/incognito mode. Please disable private browsing and try again.</p>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(warningDiv);
+    
+    // Disable form submission
+    const registrationForm = document.getElementById("registration-form");
+    if (registrationForm) {
+        registrationForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            // Show error in the existing warning banner instead of using alert
+            warningDiv.classList.add('animate-pulse');
+            setTimeout(() => warningDiv.classList.remove('animate-pulse'), PULSE_ANIMATION_DURATION);
+        });
+    }
+}
+
 // Handle URL parameters for single event registration
 if(eventInput && feeInput){
     const params = new URLSearchParams(window.location.search);
@@ -595,15 +636,25 @@ if(form){
             tx.onerror = () => reject(tx.error);
         });
 
-        // Save to sessionStorage as backup (works better on mobile)
+        // Save to localStorage as backup (persistent across tabs/refreshes)
+        // IMPORTANT: Save localStorage FIRST before IndexedDB to ensure it's always available
+        let localStorageSuccess = false;
         try {
-            sessionStorage.setItem('pendingPaymentId', regId);
-            sessionStorage.setItem('pendingPaymentEmail', email);
-            sessionStorage.setItem('pendingPaymentEvent', eventName);
-            sessionStorage.setItem('pendingRegData', JSON.stringify(pendingRecord.data));
-            console.log('Saved registration to sessionStorage as backup');
+            localStorage.setItem('pendingPaymentId', regId);
+            localStorage.setItem('pendingPaymentEmail', email);
+            localStorage.setItem('pendingPaymentEvent', eventName);
+            localStorage.setItem('pendingRegData', JSON.stringify(pendingRecord.data));
+            
+            // Verify localStorage write was successful
+            const verifyId = localStorage.getItem('pendingPaymentId');
+            if (verifyId === regId) {
+                localStorageSuccess = true;
+                console.log('✓ Successfully saved to localStorage:', regId);
+            } else {
+                console.error('localStorage verification failed - data mismatch');
+            }
         } catch (e) {
-            console.warn('sessionStorage backup failed:', e);
+            console.error('localStorage save failed:', e);
         }
 
         // Try IndexedDB for file storage
@@ -622,20 +673,31 @@ if(form){
             });
             
             if (verification) {
-                console.log('Verified IndexedDB save:', verification);
+                console.log('✓ Verified IndexedDB save:', verification);
                 idbSuccess = true;
             }
         } catch (e) {
-            console.error('IndexedDB save failed (using sessionStorage backup):', e);
+            console.error('IndexedDB save failed (using localStorage backup):', e);
         }
 
-        // If IndexedDB failed but we have sessionStorage, continue anyway
-        if (!idbSuccess) {
-            console.warn('IndexedDB unavailable - file will need to be re-uploaded on payment page');
+        // Ensure at least one storage method worked
+        if (!localStorageSuccess && !idbSuccess) {
+            alert('❌ Unable to save registration data.\n\nPossible causes:\n• Private/incognito browsing mode\n• Browser storage is disabled\n• Storage quota exceeded\n\nPlease try:\n1. Disable private/incognito mode\n2. Check browser settings to allow storage\n3. Clear browser cache and try again\n4. Use Chrome or Firefox if issues persist\n\nClick OK to try again.');
+            return;
         }
+
+        // If IndexedDB failed but we have localStorage, continue anyway
+        if (!idbSuccess && localStorageSuccess) {
+            console.warn('⚠ IndexedDB unavailable - file will need to be re-uploaded on payment page');
+        }
+
+        // Add a small delay before redirect to ensure localStorage write completes on iOS Safari
+        // iOS Safari has a known issue where localStorage may not persist if navigation is too fast
+        await new Promise(resolve => setTimeout(resolve, 100));
 
         // Redirect to payment with unique registration ID
         const paymentUrl = `payment.html?regId=${regId}&email=${encodeURIComponent(email)}&event=${encodeURIComponent(eventName)}`;
+        console.log('Redirecting to payment page:', paymentUrl);
         window.location.href = paymentUrl;
     });
 }

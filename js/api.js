@@ -200,7 +200,7 @@ class FallbackStorage {
             this.isBackendAvailable = true;
             return true;
         } catch (error) {
-            console.warn('Backend not available, falling back to sessionStorage');
+            console.warn('Backend not available, falling back to localStorage');
             this.isBackendAvailable = false;
             return false;
         }
@@ -212,13 +212,13 @@ class FallbackStorage {
                 const response = await ApiService.getAllRegistrations();
                 return response.data || response.registrations || [];
             } catch (error) {
-                console.warn('Backend failed, using sessionStorage');
+                console.warn('Backend failed, using localStorage');
                 this.isBackendAvailable = false;
             }
         }
         
         // Fallback to localStorage
-        const stored = sessionStorage.getItem('registrations');
+        const stored = localStorage.getItem('registrations');
         return stored ? JSON.parse(stored) : [];
     }
 
@@ -227,7 +227,7 @@ class FallbackStorage {
             try {
                 return await ApiService.registerForEvent(registrationData);
             } catch (error) {
-                console.warn('Backend failed, saving to sessionStorage');
+                console.warn('Backend failed, saving to localStorage');
                 this.isBackendAvailable = false;
             }
         }
@@ -240,7 +240,7 @@ class FallbackStorage {
             createdAt: new Date().toISOString()
         };
         registrations.push(newRegistration);
-        sessionStorage.setItem('registrations', JSON.stringify(registrations));
+        localStorage.setItem('registrations', JSON.stringify(registrations));
         return { success: true, data: newRegistration };
     }
 }
