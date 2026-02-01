@@ -402,13 +402,15 @@ if (!isStorageAvailable('localStorage')) {
     `;
     document.body.appendChild(warningDiv);
     
-    // Disable form submission - check if form exists first
+    // Disable form submission
     const registrationForm = document.getElementById("registration-form");
     if(registrationForm) {
         registrationForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            alert('Registration cannot proceed in private/incognito mode. Please use a regular browser window.');
-        }, true);
+            // Show error in the existing warning banner instead of using alert
+            warningDiv.classList.add('animate-pulse');
+            setTimeout(() => warningDiv.classList.remove('animate-pulse'), 1000);
+        });
     }
 }
 
