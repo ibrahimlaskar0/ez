@@ -637,14 +637,24 @@ if(form){
         });
 
         // Save to localStorage as backup (persistent across tabs/refreshes)
+        // IMPORTANT: Save localStorage FIRST before IndexedDB to ensure it's always available
+        let localStorageSuccess = false;
         try {
             localStorage.setItem('pendingPaymentId', regId);
             localStorage.setItem('pendingPaymentEmail', email);
             localStorage.setItem('pendingPaymentEvent', eventName);
             localStorage.setItem('pendingRegData', JSON.stringify(pendingRecord.data));
-            console.log('Saved registration to localStorage as backup');
+            
+            // Verify localStorage write was successful
+            const verifyId = localStorage.getItem('pendingPaymentId');
+            if (verifyId === regId) {
+                localStorageSuccess = true;
+                console.log('✓ Successfully saved to localStorage:', regId);
+            } else {
+                console.error('localStorage verification failed - data mismatch');
+            }
         } catch (e) {
-            console.warn('localStorage backup failed:', e);
+            console.error('localStorage save failed:', e);
         }
 
         // Try IndexedDB for file storage
@@ -663,20 +673,31 @@ if(form){
             });
             
             if (verification) {
-                console.log('Verified IndexedDB save:', verification);
+                console.log('✓ Verified IndexedDB save:', verification);
                 idbSuccess = true;
             }
         } catch (e) {
             console.error('IndexedDB save failed (using localStorage backup):', e);
         }
 
-        // If IndexedDB failed but we have localStorage, continue anyway
-        if (!idbSuccess) {
-            console.warn('IndexedDB unavailable - file will need to be re-uploaded on payment page');
+        // Ensure at least one storage method worked
+        if (!localStorageSuccess && !idbSuccess) {
+            alert('Unable to save registration data. Please check if your browser allows storage and try again.');
+            return;
         }
+
+        // If IndexedDB failed but we have localStorage, continue anyway
+        if (!idbSuccess && localStorageSuccess) {
+            console.warn('⚠ IndexedDB unavailable - file will need to be re-uploaded on payment page');
+        }
+
+        // Add a small delay before redirect to ensure localStorage write completes on iOS Safari
+        // iOS Safari has a known issue where localStorage may not persist if navigation is too fast
+        await new Promise(resolve => setTimeout(resolve, 100));
 
         // Redirect to payment with unique registration ID
         const paymentUrl = `payment.html?regId=${regId}&email=${encodeURIComponent(email)}&event=${encodeURIComponent(eventName)}`;
+        console.log('Redirecting to payment page:', paymentUrl);
         window.location.href = paymentUrl;
     });
 }
