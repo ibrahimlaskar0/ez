@@ -389,6 +389,7 @@ function isStorageAvailable(type) {
 
 // Display warning if localStorage is not available
 if (!isStorageAvailable('localStorage')) {
+    const PULSE_ANIMATION_DURATION = 1000; // milliseconds
     const warningDiv = document.createElement('div');
     warningDiv.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-red-500 text-white px-6 py-4 rounded-lg shadow-xl max-w-md';
     warningDiv.innerHTML = `
@@ -404,12 +405,12 @@ if (!isStorageAvailable('localStorage')) {
     
     // Disable form submission
     const registrationForm = document.getElementById("registration-form");
-    if(registrationForm) {
+    if (registrationForm) {
         registrationForm.addEventListener('submit', (e) => {
             e.preventDefault();
             // Show error in the existing warning banner instead of using alert
             warningDiv.classList.add('animate-pulse');
-            setTimeout(() => warningDiv.classList.remove('animate-pulse'), 1000);
+            setTimeout(() => warningDiv.classList.remove('animate-pulse'), PULSE_ANIMATION_DURATION);
         });
     }
 }
