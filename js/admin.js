@@ -4,6 +4,9 @@
  * Version: 2.1
  */
 
+// DEVELOPER NOTE: Admin session duration - 24 hours in milliseconds
+const ADMIN_SESSION_DURATION_MS = 24 * 60 * 60 * 1000;
+
 let currentCategory = 'technical';
 // Disable optional backend metadata enrichment for images (no API in your backend)
 window.ENABLE_IMAGE_METADATA = false;
@@ -818,7 +821,7 @@ function ensureAdminAuth() {
         if (pass === saved) {
             // DEVELOPER NOTE: Store admin auth status in localStorage with 24-hour expiration
             localStorage.setItem('espl_admin_authenticated', '1');
-            localStorage.setItem('espl_admin_auth_expiry', (Date.now() + 24 * 60 * 60 * 1000).toString());
+            localStorage.setItem('espl_admin_auth_expiry', (Date.now() + ADMIN_SESSION_DURATION_MS).toString());
             overlay.classList.add('hidden');
             overlay.classList.remove('flex');
             
