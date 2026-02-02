@@ -152,6 +152,8 @@ describe('Registration Endpoint Tests', () => {
   });
 
   describe('POST /api/registration/register - Authentication', () => {
+    // Note: Success case (201) requires a PostgreSQL database connection
+    // These tests verify the endpoint is accessible without authentication
     it('should not require authentication (no 401 error)', async () => {
       const res = await request(app)
         .post('/api/registration/register')
