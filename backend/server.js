@@ -34,7 +34,7 @@ const registrationRoutes = require('./routes/registration');
 
 // Initialize Express app
 const app = express();
-
+app.set('trust proxy', 1);
 // Initialize PostgreSQL schema (skip during tests)
 if (process.env.NODE_ENV !== 'test') {
     ensureSchema().catch((e) => console.error('DB schema init failed', e));
