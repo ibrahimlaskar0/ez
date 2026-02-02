@@ -45,6 +45,20 @@ app.use(helmet({
     crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 
+const corsOptions = {
+    origin: (origin, callback) => {
+        // Allow all origins in dev; restrict in production
+        if (process.env.NODE_ENV !== 'production') {
+            callback(null, true);
+        } else if (prodOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('CORS not allowed'), false);
+        }
+    },
+    // ...rest of config...
+}
+
 // CORS configuration
 const prodOrigins = [];
 if (process.env.FRONTEND_URL) {
@@ -54,6 +68,8 @@ if (process.env.FRONTEND_URL) {
         if (v) prodOrigins.push(v);
     });
 }
+
+app.use(cors(corsOptions));
 // Production domains
 prodOrigins.push('https://esplendidez.tech');
 prodOrigins.push('https://www.esplendidez.tech');
@@ -100,7 +116,7 @@ const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: process.env.NODE_ENV === 'production' ? 100 : 1000, // Higher limit for dev
     message: 'Too many requests from this IP, please try again later.',
-    standardHeaders: true,
+    standardHeaders: true,fprod
     legacyHeaders: false,
 });
 
