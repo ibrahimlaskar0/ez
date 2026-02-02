@@ -1,25 +1,31 @@
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    res.status(405).json({ success: false, message: 'Method Not Allowed' });
-    return;
-  }
-  // Example validation
-  const { participantEmail, participantPhone, participantName } = req.body || {};
+import { applyCors } from "../_cors";
 
-  // Basic validation as per your backend requirements
-  if (!participantEmail || !participantPhone || !participantName) {
-    res.status(400).json({
-      success: false,
-      message: 'All fields are required (email, phone, name)',
-    });
-    return;
+export default async function handler(req, res) {
+  if (!applyCors(req, res)) return;
+
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: "Method not allowed" });
   }
-  // Simulate registration ID
-  const registrationId = 'REG_' + Date.now();
+
+  let data;
+
+  try {
+    data = typeof req.body === "string"
+      ? JSON.parse(req.body)
+      : req.body;
+  } catch {
+    return res.status(400).json({ message: "Invalid JSON" });
+  }
+
+  if (!data || !data.name || !data.event) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+
+  const registrationId = `ESP${Date.now()}`;
 
   res.status(201).json({
     success: true,
     registrationId,
-    message: 'Registration successful',
+    data
   });
 }
