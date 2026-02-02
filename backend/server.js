@@ -30,11 +30,10 @@ const authRoutes = require('./routes/auth');
 const paymentRoutes = require('./routes/payment');
 const registrationRoutes = require('./routes/registration');
 
-// Import middleware
-
 // Initialize Express app
 const app = express();
 app.set('trust proxy', 1);
+
 // Initialize PostgreSQL schema (skip during tests)
 if (process.env.NODE_ENV !== 'test') {
     ensureSchema().catch((e) => console.error('DB schema init failed', e));
@@ -45,25 +44,9 @@ app.use(helmet({
     crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 
-const corsOptions = {
-    origin: (origin, callback) => {
-        // Allow all origins in dev; restrict in production
-        if (process.env.NODE_ENV !== 'production') {
-            callback(null, true);
-        } else if (prodOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('CORS not allowed'), false);
-        }
-    },
-    // ...rest of config...
-}
-
-// CORS configuration
-// Production domains
+// ---- CORS Configuration ----
 const prodOrigins = [];
 if (process.env.FRONTEND_URL) {
-    // Allow comma-separated list of origins in FRONTEND_URL
     process.env.FRONTEND_URL.split(',').forEach((o) => {
         const v = String(o).trim();
         if (v) prodOrigins.push(v);
@@ -75,15 +58,13 @@ prodOrigins.push('https://esplendidez.online');
 prodOrigins.push('https://www.esplendidez.online');
 prodOrigins.push('https://ibrahimlaskar0.github.io');
 prodOrigins.push('https://esplendidez-2026-frontend.netlify.app');
-prodOrigins.push('https://ez-6jm2ucdgz-ibees-projects.vercel.app'); // <--- ADD THIS LINE
+prodOrigins.push('https://ez-6jm2ucdgz-ibees-projects.vercel.app'); // backend
 
-// CORS configuration
 const corsOptions = {
-    origin: (origin, callback) => {
-        // Allow all origins in dev; restrict in production
+    origin: function (origin, callback) {
         if (process.env.NODE_ENV !== 'production') {
             callback(null, true);
-        } else if (prodOrigins.includes(origin)) {
+        } else if (!origin || prodOrigins.includes(origin)) {
             callback(null, true);
         } else {
             callback(new Error('CORS not allowed'), false);
@@ -95,6 +76,8 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+// ----------------------------
+
 // Compression middleware
 app.use(compression());
 
@@ -106,10 +89,9 @@ const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: process.env.NODE_ENV === 'production' ? 100 : 1000, // Higher limit for dev
     message: 'Too many requests from this IP, please try again later.',
-    standardHeaders: true,fprod
+    standardHeaders: true,
     legacyHeaders: false,
 });
-
 app.use('/api/', limiter);
 
 // Stricter rate limiting for auth routes
@@ -119,20 +101,19 @@ const authLimiter = rateLimit({
     message: 'Too many authentication attempts, please try again later.',
     skipSuccessfulRequests: true,
 });
-
 app.use('/api/auth', authLimiter);
 
 // Body parsing middleware
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Static files for uploaded documents (support serverless /tmp on Vercel)
+// Static files for uploaded documents (supports /tmp on Vercel)
 const isVercel = !!process.env.VERCEL;
 const UPLOAD_DIR = process.env.UPLOAD_DIR || (isVercel ? '/tmp/uploads' : path.join(__dirname, 'uploads'));
-try { fs.mkdirSync(UPLOAD_DIR, { recursive: true }); } catch (e) { /* directory may already exist */ }
+try { fs.mkdirSync(UPLOAD_DIR, { recursive: true }); } catch (e) { /* may already exist */ }
 app.use('/uploads', express.static(UPLOAD_DIR));
 
-// Root endpoint (useful on platforms hitting "/")
+// Root endpoint
 app.get('/', (req, res) => {
     res.status(200).json({
         success: true,
@@ -175,9 +156,9 @@ let server;
 
 if (require.main === module) {
     server = app.listen(PORT, () => {
-        console.log(`🚀 Esplendidez 2026 Backend Server running on port ${PORT}`);
+        console.log(`🚀 Backend Server running on port ${PORT}`);
         console.log(`📝 Environment: ${process.env.NODE_ENV || 'development'}`);
-        console.log(`🌐 CORS enabled for: ${corsOptions.origin}`);
+        console.log(`🌐 Allowed CORS origins: ${prodOrigins.join(', ')}`);
     });
 
     // Graceful shutdown
