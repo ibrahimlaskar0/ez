@@ -9,8 +9,9 @@ const DEFAULT_API_PORT = 5001;
 
 function resolveApiBase() {
     try {
-        // Allow explicit overrides first
-        const explicit = (window.ESPL_API_BASE || sessionStorage.getItem('API_BASE') || '').trim();
+        // DEVELOPER NOTE: API base can be overridden via window.ESPL_API_BASE or localStorage
+        // Using localStorage instead of sessionStorage for consistent storage across the app
+        const explicit = (window.ESPL_API_BASE || localStorage.getItem('ESPL_API_BASE') || '').trim();
         if (explicit) {
             return explicit.replace(/\/+$/, '') + '/api';
         }
@@ -21,7 +22,7 @@ function resolveApiBase() {
             host = '127.0.0.1';
         }
 
-        const port = Number(sessionStorage.getItem('API_PORT')) || DEFAULT_API_PORT;
+        const port = Number(localStorage.getItem('ESPL_API_PORT')) || DEFAULT_API_PORT;
         return `https://${host}:${port}/api`;
     } catch (_) {
         // Safe fallback

@@ -787,7 +787,9 @@ function ensureAdminAuth() {
     const overlay = document.getElementById('admin-login');
     if (!overlay) return true;
     
-    if (sessionStorage.getItem('adminAuthed') === '1') {
+    // DEVELOPER NOTE: Use localStorage instead of sessionStorage for admin authentication
+    // This ensures the session persists across tabs and page refreshes
+    if (localStorage.getItem('espl_admin_authenticated') === '1') {
         overlay.classList.add('hidden');
         return true;
     }
@@ -805,7 +807,8 @@ function ensureAdminAuth() {
         const saved = localStorage.getItem('admin_password') || '(mX5>G>e)(d$c7Gq';
         
         if (pass === saved) {
-            sessionStorage.setItem('adminAuthed', '1');
+            // DEVELOPER NOTE: Store admin auth status in localStorage with standardized key
+            localStorage.setItem('espl_admin_authenticated', '1');
             overlay.classList.add('hidden');
             overlay.classList.remove('flex');
             
