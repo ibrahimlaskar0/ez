@@ -194,8 +194,9 @@ router.post(
           } else {
             // For local disk, recompress to jpeg and replace file
             if (/^image\//i.test(file.mimetype)) {
-              const oldPath = path.join(UPLOAD_DIR, file.filename);
-              const newFilename = `${path.parse(file.filename).name}.jpg`;
+              const safeFilename = path.basename(file.filename || '');
+              const oldPath = path.join(UPLOAD_DIR, safeFilename);
+              const newFilename = `${path.parse(safeFilename).name}.jpg`;
               const newPath = path.join(UPLOAD_DIR, newFilename);
               try {
                 await sharp(oldPath).rotate().resize({ width: 1600, height: 1600, fit: 'inside', withoutEnlargement: true })
