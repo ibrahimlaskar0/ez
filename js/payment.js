@@ -85,41 +85,41 @@
     if(!regId){
       console.error('❌ No pending registration ID found in localStorage key "espl_registration_id"');
       
-      // Display user-friendly error with recovery UI
-      const errorHtml = `
-        <div style="position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 20px;">
-          <div style="background: white; padding: 30px; border-radius: 16px; max-width: 500px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
-            <div style="text-align: center; margin-bottom: 20px;">
-              <div style="width: 64px; height: 64px; margin: 0 auto 20px; background: #fee; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
-                <svg width="32" height="32" fill="red" viewBox="0 0 16 16">
-                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                  <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
-                </svg>
-              </div>
-              <h2 style="font-size: 24px; font-weight: bold; color: #dc2626; margin-bottom: 16px;">Registration Not Found</h2>
-              <p style="color: #666; margin-bottom: 20px; line-height: 1.6;">
-                No registration data found. This can happen if:
-              </p>
-              <ul style="text-align: left; color: #666; margin: 20px 0; padding-left: 24px; line-height: 1.8;">
-                <li>You're using private/incognito browsing mode</li>
-                <li>Browser storage is disabled or full</li>
-                <li>You're using a different browser or device</li>
-                <li>You cleared browser data</li>
-                <li>You came directly to this page without registering</li>
-              </ul>
+      // Display user-friendly error with recovery UI using existing Tailwind classes
+      const errorOverlay = document.createElement('div');
+      errorOverlay.className = 'fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-5';
+      errorOverlay.innerHTML = `
+        <div class="bg-white p-8 rounded-2xl max-w-lg shadow-2xl">
+          <div class="text-center mb-5">
+            <div class="w-16 h-16 mx-auto mb-5 bg-red-50 rounded-full flex items-center justify-center">
+              <svg width="32" height="32" fill="red" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+              </svg>
             </div>
-            <div style="display: flex; gap: 12px; margin-top: 24px;">
-              <a href="register.html" style="flex: 1; background: #4f46e5; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; text-align: center; font-weight: 600; transition: all 0.2s;" onmouseover="this.style.background='#4338ca'" onmouseout="this.style.background='#4f46e5'">
-                Register Now
-              </a>
-              <button onclick="window.location.href='index.html'" style="flex: 1; background: #e5e7eb; color: #374151; padding: 12px 24px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; transition: all 0.2s;" onmouseover="this.style.background='#d1d5db'" onmouseout="this.style.background='#e5e7eb'">
-                Go Home
-              </button>
-            </div>
+            <h2 class="text-2xl font-bold text-red-600 mb-4">Registration Not Found</h2>
+            <p class="text-gray-600 mb-5 leading-relaxed">
+              No registration data found. This can happen if:
+            </p>
+            <ul class="text-left text-gray-600 my-5 pl-6 leading-loose list-disc">
+              <li>You're using private/incognito browsing mode</li>
+              <li>Browser storage is disabled or full</li>
+              <li>You're using a different browser or device</li>
+              <li>You cleared browser data</li>
+              <li>You came directly to this page without registering</li>
+            </ul>
+          </div>
+          <div class="flex gap-3 mt-6">
+            <a href="register.html" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg text-center font-semibold transition-colors">
+              Register Now
+            </a>
+            <a href="index.html" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-3 rounded-lg text-center font-semibold transition-colors">
+              Go Home
+            </a>
           </div>
         </div>
       `;
-      document.body.insertAdjacentHTML('beforeend', errorHtml);
+      document.body.appendChild(errorOverlay);
       return;
     } else {
       console.log('✓ Registration ID found:', regId);

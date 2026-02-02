@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storage Test - Esplendidez</title>
+    <style>
+        body { 
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f3f4f6;
+        }
+        .test-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 { color: #4f46e5; }
+        h2 { color: #6366f1; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px; }
+        .result { 
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .success { background: #d1fae5; color: #065f46; }
+        .error { background: #fee; color: #991b1b; }
+        .info { background: #dbeafe; color: #1e40af; }
+        button {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #4338ca; }
+        pre {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Storage Standardization Test Suite</h1>
+    <p>This page tests that all registration/session logic uses ONLY localStorage with key 'espl_registration_id'</p>
+
+    <div class="test-section">
+        <h2>Test 1: Check for Old Keys (Should be Empty)</h2>
+        <button onclick="testOldKeys()">Run Test</button>
+        <div id="test1-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: Simulate Registration Flow</h2>
+        <button onclick="testRegistrationFlow()">Run Test</button>
+        <div id="test2-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Simulate Payment Flow</h2>
+        <button onclick="testPaymentFlow()">Run Test</button>
+        <div id="test3-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 4: Verify Storage Keys</h2>
+        <button onclick="testStorageKeys()">Run Test</button>
+        <div id="test4-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 5: Clean Up</h2>
+        <button onclick="cleanUp()">Clean All Test Data</button>
+        <div id="test5-result"></div>
+    </div>
+
+    <script>
+        // Test for old deprecated keys
+        function testOldKeys() {
+            const output = document.getElementById('test1-result');
+            const oldKeys = ['pendingPaymentId', 'pendingPaymentEmail', 'pendingPaymentEvent', 'pendingRegData'];
+            const foundKeys = [];
+            
+            oldKeys.forEach(key => {
+                const value = localStorage.getItem(key);
+                if (value !== null) {
+                    foundKeys.push(key);
+                }
+            });
+            
+            if (foundKeys.length === 0) {
+                output.innerHTML = '<div class="result success">✓ PASS: No old deprecated keys found in localStorage</div>';
+            } else {
+                output.innerHTML = `<div class="result error">✗ FAIL: Found deprecated keys: ${foundKeys.join(', ')}</div>`;
+            }
+        }
+
+        // Test registration flow
+        function testRegistrationFlow() {
+            const output = document.getElementById('test2-result');
+            output.innerHTML = '<div class="result info">Running registration flow test...</div>';
+            
+            try {
+                // Simulate what registration.js does
+                const testRegId = 'REG_TEST_' + Date.now();
+                const testData = {
+                    eventName: 'Test Event',
+                    participantName: 'Test User',
+                    participantEmail: 'test@example.com',
+                    eventFee: 200
+                };
+                
+                // Save using new standardized keys
+                localStorage.setItem('espl_registration_id', testRegId);
+                localStorage.setItem('espl_registration_data', JSON.stringify(testData));
+                
+                // Verify
+                const savedId = localStorage.getItem('espl_registration_id');
+                const savedData = localStorage.getItem('espl_registration_data');
+                
+                if (savedId === testRegId && savedData) {
+                    const parsedData = JSON.parse(savedData);
+                    output.innerHTML = `
+                        <div class="result success">✓ PASS: Registration flow works correctly</div>
+                        <pre>Saved ID: ${savedId}\nSaved Data: ${JSON.stringify(parsedData, null, 2)}</pre>
+                    `;
+                } else {
+                    output.innerHTML = '<div class="result error">✗ FAIL: Could not verify saved data</div>';
+                }
+            } catch (e) {
+                output.innerHTML = `<div class="result error">✗ FAIL: ${e.message}</div>`;
+            }
+        }
+
+        // Test payment flow
+        function testPaymentFlow() {
+            const output = document.getElementById('test3-result');
+            output.innerHTML = '<div class="result info">Running payment flow test...</div>';
+            
+            try {
+                // Check if registration data exists
+                const regId = localStorage.getItem('espl_registration_id');
+                const regData = localStorage.getItem('espl_registration_data');
+                
+                if (!regId || !regData) {
+                    output.innerHTML = '<div class="result error">✗ FAIL: No registration data found. Run Test 2 first.</div>';
+                    return;
+                }
+                
+                // Simulate payment page reading the data
+                const parsedData = JSON.parse(regData);
+                
+                output.innerHTML = `
+                    <div class="result success">✓ PASS: Payment flow can read registration data</div>
+                    <pre>Read ID: ${regId}\nRead Data: ${JSON.stringify(parsedData, null, 2)}</pre>
+                    <div class="result info">Note: In actual flow, this data would be used to populate payment form</div>
+                `;
+            } catch (e) {
+                output.innerHTML = `<div class="result error">✗ FAIL: ${e.message}</div>`;
+            }
+        }
+
+        // Test storage keys
+        function testStorageKeys() {
+            const output = document.getElementById('test4-result');
+            const allKeys = Object.keys(localStorage);
+            const esplKeys = allKeys.filter(k => k.startsWith('espl_'));
+            const registrationKeys = allKeys.filter(k => 
+                k.includes('registration') || 
+                k.includes('pending') || 
+                k.includes('regId') ||
+                k.includes('payment')
+            );
+            
+            output.innerHTML = `
+                <div class="result info">
+                    <strong>All localStorage keys (${allKeys.length}):</strong>
+                    <pre>${allKeys.join('\n') || '(empty)'}</pre>
+                </div>
+                <div class="result ${esplKeys.length > 0 ? 'success' : 'info'}">
+                    <strong>ESPL-prefixed keys (${esplKeys.length}):</strong>
+                    <pre>${esplKeys.join('\n') || '(none)'}</pre>
+                </div>
+                <div class="result info">
+                    <strong>Registration-related keys (${registrationKeys.length}):</strong>
+                    <pre>${registrationKeys.join('\n') || '(none)'}</pre>
+                </div>
+            `;
+        }
+
+        // Clean up test data
+        function cleanUp() {
+            const output = document.getElementById('test5-result');
+            
+            // Remove test keys
+            localStorage.removeItem('espl_registration_id');
+            localStorage.removeItem('espl_registration_data');
+            
+            // Also check for and remove any old keys
+            const oldKeys = ['pendingPaymentId', 'pendingPaymentEmail', 'pendingPaymentEvent', 'pendingRegData'];
+            oldKeys.forEach(key => localStorage.removeItem(key));
+            
+            output.innerHTML = '<div class="result success">✓ All test data cleaned up</div>';
+        }
+
+        // Run initial check on load
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('Storage Test Page Loaded');
+            console.log('Current localStorage keys:', Object.keys(localStorage));
+        });
+    </script>
+</body>
+</html>

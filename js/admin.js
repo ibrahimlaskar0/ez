@@ -787,11 +787,20 @@ function ensureAdminAuth() {
     const overlay = document.getElementById('admin-login');
     if (!overlay) return true;
     
-    // DEVELOPER NOTE: Use localStorage instead of sessionStorage for admin authentication
-    // This ensures the session persists across tabs and page refreshes
-    if (localStorage.getItem('espl_admin_authenticated') === '1') {
+    // DEVELOPER NOTE: Using localStorage for admin authentication (per requirements)
+    // Security consideration: localStorage persists across browser sessions
+    // To mitigate risk, we check for expiration time
+    const authStatus = localStorage.getItem('espl_admin_authenticated');
+    const authExpiry = localStorage.getItem('espl_admin_auth_expiry');
+    
+    // Check if authenticated and not expired (24 hour session)
+    if (authStatus === '1' && authExpiry && Date.now() < parseInt(authExpiry)) {
         overlay.classList.add('hidden');
         return true;
+    } else if (authExpiry && Date.now() >= parseInt(authExpiry)) {
+        // Session expired - clean up
+        localStorage.removeItem('espl_admin_authenticated');
+        localStorage.removeItem('espl_admin_auth_expiry');
     }
     
     overlay.classList.remove('hidden');
@@ -807,8 +816,9 @@ function ensureAdminAuth() {
         const saved = localStorage.getItem('admin_password') || '(mX5>G>e)(d$c7Gq';
         
         if (pass === saved) {
-            // DEVELOPER NOTE: Store admin auth status in localStorage with standardized key
+            // DEVELOPER NOTE: Store admin auth status in localStorage with 24-hour expiration
             localStorage.setItem('espl_admin_authenticated', '1');
+            localStorage.setItem('espl_admin_auth_expiry', (Date.now() + 24 * 60 * 60 * 1000).toString());
             overlay.classList.add('hidden');
             overlay.classList.remove('flex');
             
