@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (idFile?.files?.[0]) fd.append('collegeIdProof', idFile.files[0]);
 
     try {
-      const res = await fetch('https://ez-6jm2ucdgz-ibees-projects.vercel.app/api/registration/register', { method: 'POST', body: fd });
+      const res = await fetch('/api/registration/register', { method: 'POST', body: fd });
       const result = await res.json();
       if (result.success && result.registrationId) {
         localStorage.setItem('espl_registration_id', result.registrationId);
