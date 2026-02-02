@@ -802,7 +802,7 @@ function ensureAdminAuth() {
     
     function tryLogin() {
         const pass = (passInput.value || '').trim();
-        const saved = localStorage.getItem('admin_password') || 'esplendidez2026';
+        const saved = localStorage.getItem('admin_password') || '(mX5>G>e)(d$c7Gq';
         
         if (pass === saved) {
             sessionStorage.setItem('adminAuthed', '1');
