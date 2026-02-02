@@ -638,18 +638,20 @@ if(form){
 
         // Save to localStorage as backup (persistent across tabs/refreshes)
         // IMPORTANT: Save localStorage FIRST before IndexedDB to ensure it's always available
+        // DEVELOPER NOTE: Always use 'espl_registration_id' key for consistency across all pages
         let localStorageSuccess = false;
         try {
-            localStorage.setItem('pendingPaymentId', regId);
-            localStorage.setItem('pendingPaymentEmail', email);
-            localStorage.setItem('pendingPaymentEvent', eventName);
-            localStorage.setItem('pendingRegData', JSON.stringify(pendingRecord.data));
+            // Store the registration ID using the standardized key 'espl_registration_id'
+            localStorage.setItem('espl_registration_id', regId);
+            
+            // Store the complete registration data for payment page access
+            localStorage.setItem('espl_registration_data', JSON.stringify(pendingRecord.data));
             
             // Verify localStorage write was successful
-            const verifyId = localStorage.getItem('pendingPaymentId');
+            const verifyId = localStorage.getItem('espl_registration_id');
             if (verifyId === regId) {
                 localStorageSuccess = true;
-                console.log('✓ Successfully saved to localStorage:', regId);
+                console.log('✓ Successfully saved to localStorage with key "espl_registration_id":', regId);
             } else {
                 console.error('localStorage verification failed - data mismatch');
             }

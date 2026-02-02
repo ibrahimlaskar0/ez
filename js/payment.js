@@ -71,19 +71,55 @@
       });
     }
 
-    // Determine pending reg id - support both 'regId' and 'registration' parameters
-    let regId = getParam('regId') || getParam('registration') || localStorage.getItem('pendingPaymentId');
+    // DEVELOPER NOTE: Always read registration ID from the standardized key 'espl_registration_id'
+    // Support legacy URL parameters for backward compatibility
+    let regId = getParam('regId') || getParam('registration') || localStorage.getItem('espl_registration_id');
     
     console.log('=== Payment Page Debug Info ===');
     console.log('Payment Debug - RegId from URL or storage:', regId);
     console.log('Payment Debug - URL params:', window.location.search);
-    console.log('Payment Debug - localStorage pendingPaymentId:', localStorage.getItem('pendingPaymentId'));
-    console.log('Payment Debug - localStorage keys:', Object.keys(localStorage).filter(k => k.includes('pending')));
+    console.log('Payment Debug - localStorage espl_registration_id:', localStorage.getItem('espl_registration_id'));
+    console.log('Payment Debug - localStorage keys:', Object.keys(localStorage).filter(k => k.includes('espl')));
     
+    // DEVELOPER NOTE: Show clear error with recovery options when registration ID is missing
     if(!regId){
-      console.error('❌ No pending registration ID found anywhere');
-      alert('No registration ID found. Please complete the registration form first.\n\nMake sure you:\n1. Are not in private/incognito mode\n2. Have not cleared browser data\n3. Came from the registration page\n\nClick OK to go to registration.');
-      window.location.href = 'register.html';
+      console.error('❌ No pending registration ID found in localStorage key "espl_registration_id"');
+      
+      // Display user-friendly error with recovery UI using existing Tailwind classes
+      const errorOverlay = document.createElement('div');
+      errorOverlay.className = 'fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-5';
+      errorOverlay.innerHTML = `
+        <div class="bg-white p-8 rounded-2xl max-w-lg shadow-2xl">
+          <div class="text-center mb-5">
+            <div class="w-16 h-16 mx-auto mb-5 bg-red-50 rounded-full flex items-center justify-center">
+              <svg width="32" height="32" fill="red" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+              </svg>
+            </div>
+            <h2 class="text-2xl font-bold text-red-600 mb-4">Registration Not Found</h2>
+            <p class="text-gray-600 mb-5 leading-relaxed">
+              No registration data found. This can happen if:
+            </p>
+            <ul class="text-left text-gray-600 my-5 pl-6 leading-loose list-disc">
+              <li>You're using private/incognito browsing mode</li>
+              <li>Browser storage is disabled or full</li>
+              <li>You're using a different browser or device</li>
+              <li>You cleared browser data</li>
+              <li>You came directly to this page without registering</li>
+            </ul>
+          </div>
+          <div class="flex gap-3 mt-6">
+            <a href="register.html" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg text-center font-semibold transition-colors">
+              Register Now
+            </a>
+            <a href="index.html" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 px-6 py-3 rounded-lg text-center font-semibold transition-colors">
+              Go Home
+            </a>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(errorOverlay);
       return;
     } else {
       console.log('✓ Registration ID found:', regId);
@@ -114,11 +150,12 @@
     }
     
     // Fallback to localStorage if IndexedDB didn't have the data
+    // DEVELOPER NOTE: Always use standardized key 'espl_registration_id' and 'espl_registration_data'
     if (!pending) {
       console.log('⚠ No data in IndexedDB, trying localStorage fallback...');
       try {
-        const storedRegId = localStorage.getItem('pendingPaymentId');
-        const storedData = localStorage.getItem('pendingRegData');
+        const storedRegId = localStorage.getItem('espl_registration_id');
+        const storedData = localStorage.getItem('espl_registration_data');
         
         console.log('localStorage check - storedRegId:', storedRegId);
         console.log('localStorage check - has storedData:', !!storedData);
@@ -142,7 +179,7 @@
           }
         } else {
           console.error('❌ localStorage data not found or ID mismatch');
-          if (!storedData) console.error('  - No pendingRegData in localStorage');
+          if (!storedData) console.error('  - No espl_registration_data in localStorage');
           if (storedRegId !== regId) console.error('  - ID mismatch: stored=' + storedRegId + ' vs expected=' + regId);
         }
       } catch (e) {
@@ -324,11 +361,10 @@ Click OK to go to the registration page.`);
           const res = await window.ApiService.registerForEventMultipart(fd);
 
           // Cleanup local pending record
+          // DEVELOPER NOTE: Clean up all localStorage keys after successful payment submission
           try { const db = await idbOpen(); await idbDelete(db, regId); } catch {}
-          localStorage.removeItem('pendingPaymentId');
-          localStorage.removeItem('pendingPaymentEmail');
-          localStorage.removeItem('pendingPaymentEvent');
-          localStorage.removeItem('pendingRegData');
+          localStorage.removeItem('espl_registration_id');
+          localStorage.removeItem('espl_registration_data');
 
           // Navigate to success page
           const rid = res?.data?.registrationId || regId;
