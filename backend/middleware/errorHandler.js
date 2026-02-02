@@ -78,7 +78,7 @@ const errorHandler = (err, req, res, next) => {
     // Don't expose sensitive error details in production
     const response = {
         success: false,
-        error: message
+        message: message
     };
 
     // Add additional error details in development

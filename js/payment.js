@@ -367,7 +367,7 @@ Click OK to go to the registration page.`);
           localStorage.removeItem('espl_registration_data');
 
           // Navigate to success page
-          const rid = res?.data?.registrationId || regId;
+          const rid = res?.registrationId || res?.data?.registrationId || regId;
           window.location.href = `success.html?registrationId=${encodeURIComponent(rid)}`;
         } catch (err) {
           console.error('Payment submit failed:', err);
