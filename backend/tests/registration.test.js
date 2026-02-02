@@ -1,5 +1,5 @@
 const request = require('supertest');
-const path = require('path');
+
 process.env.NODE_ENV = 'test';
 const app = require('../server');
 
