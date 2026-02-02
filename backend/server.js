@@ -60,6 +60,7 @@ const corsOptions = {
 }
 
 // CORS configuration
+// Production domains
 const prodOrigins = [];
 if (process.env.FRONTEND_URL) {
     // Allow comma-separated list of origins in FRONTEND_URL
@@ -68,43 +69,32 @@ if (process.env.FRONTEND_URL) {
         if (v) prodOrigins.push(v);
     });
 }
-
-app.use(cors(corsOptions));
-// Production domains
 prodOrigins.push('https://esplendidez.tech');
 prodOrigins.push('https://www.esplendidez.tech');
 prodOrigins.push('https://esplendidez.online');
 prodOrigins.push('https://www.esplendidez.online');
 prodOrigins.push('https://ibrahimlaskar0.github.io');
-// Netlify site (fallback if env not set)
 prodOrigins.push('https://esplendidez-2026-frontend.netlify.app');
+prodOrigins.push('https://ez-6jm2ucdgz-ibees-projects.vercel.app'); // <--- ADD THIS LINE
 
+// CORS configuration
 const corsOptions = {
-    origin: process.env.NODE_ENV === 'production'
-        ? prodOrigins
-        : [
-            'http://localhost:3000',
-            'http://127.0.0.1:3000',
-            'http://127.0.0.1:5500',
-            'http://localhost:5500',
-            'http://localhost:3001',
-            'http://localhost:5002',
-            'http://127.0.0.1:5002',
-            'http://192.168.1.5:3000',   // Current network IP
-            'http://192.168.1.8:3000',
-            'http://192.168.4.48:3000',
-            'http://192.168.4.48:3001',
-            'http://192.168.4.48:5500',
-            /^http:\/\/192\.168\.1\.\d+:3000$/,  // Allow any IP in 192.168.1.x range
-            /^http:\/\/192\.168\.4\.\d+:3000$/   // Allow any IP in 192.168.4.x range
-          ],
+    origin: (origin, callback) => {
+        // Allow all origins in dev; restrict in production
+        if (process.env.NODE_ENV !== 'production') {
+            callback(null, true);
+        } else if (prodOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('CORS not allowed'), false);
+        }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'x-admin-token']
 };
 
 app.use(cors(corsOptions));
-
 // Compression middleware
 app.use(compression());
 
