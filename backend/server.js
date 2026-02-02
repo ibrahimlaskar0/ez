@@ -45,20 +45,37 @@ app.use(helmet({
 }));
 
 // ---- CORS Configuration ----
+// Build allowed origins list BEFORE defining corsOptions
 const prodOrigins = [];
+
+// Add from environment variable (supports comma-separated list)
 if (process.env.FRONTEND_URL) {
     process.env.FRONTEND_URL.split(',').forEach((o) => {
         const v = String(o).trim();
         if (v) prodOrigins.push(v);
     });
 }
+
+// Primary domains
 prodOrigins.push('https://esplendidez.tech');
 prodOrigins.push('https://www.esplendidez.tech');
 prodOrigins.push('https://esplendidez.online');
 prodOrigins.push('https://www.esplendidez.online');
+
+// GitHub Pages
 prodOrigins.push('https://ibrahimlaskar0.github.io');
+
+// Netlify deployments (add all variants)
 prodOrigins.push('https://esplendidez-2026-frontend.netlify.app');
-prodOrigins.push('https://ez-6jm2ucdgz-ibees-projects.vercel.app'); // backend
+prodOrigins.push('https://esplendidez-2026.netlify.app');
+prodOrigins.push('https://esplendidez.netlify.app');
+
+// Vercel deployments (add all variants)
+prodOrigins.push('https://ez.vercel.app');
+prodOrigins.push('https://ez-ibrahimlaskar0.vercel.app');
+prodOrigins.push('https://ez-6jm2ucdgz-ibees-projects.vercel.app');
+prodOrigins.push('https://esplendidez.vercel.app');
+prodOrigins.push('https://esplendidez-ibrahimlaskar0.vercel.app');
 
 const corsOptions = {
     origin: function (origin, callback) {
