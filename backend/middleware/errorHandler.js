@@ -3,7 +3,7 @@
  * Centralized error handling for the Express application
  */
 
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res, _next) => {
     let error = { ...err };
     error.message = err.message;
 
@@ -78,7 +78,7 @@ const errorHandler = (err, req, res, next) => {
     // Don't expose sensitive error details in production
     const response = {
         success: false,
-        error: message
+        message: message
     };
 
     // Add additional error details in development

@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (result.success) {
                 // Redirect to payment page immediately (no popup)
-                const registrationId = result.data.id || result.data._id || Date.now();
+                const registrationId = result.registrationId || result.data?.registrationId || result.data?.id || result.data?._id || Date.now();
                 window.location.href = `payment.html?registration=${registrationId}&event=${encodeURIComponent(formData.eventName)}`;
             } else {
                 throw new Error(result.message || 'Registration failed');

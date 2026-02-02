@@ -10,27 +10,27 @@
  * - Email notifications
  */
 
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
 const compression = require('compression');
-const morgan = require('morgan');
+const cors = require('cors');
+const express = require('express');
 const rateLimit = require('express-rate-limit');
-const path = require('path');
 const fs = require('fs');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const path = require('path');
 require('dotenv').config();
 
 // Import PostgreSQL schema initializer
 const { ensureSchema } = require('./db/pg');
 
 // Import routes
-const authRoutes = require('./routes/auth');
-const registrationRoutes = require('./routes/registration');
+const errorHandler = require('./middleware/errorHandler');
 const adminRoutes = require('./routes/admin');
+const authRoutes = require('./routes/auth');
 const paymentRoutes = require('./routes/payment');
+const registrationRoutes = require('./routes/registration');
 
 // Import middleware
-const errorHandler = require('./middleware/errorHandler');
 
 // Initialize Express app
 const app = express();
