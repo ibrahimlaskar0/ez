@@ -150,4 +150,48 @@ describe('Registration Endpoint Tests', () => {
       expect(res.body).toHaveProperty('message');
     });
   });
+
+  describe('POST /api/registration/register - Authentication', () => {
+    // Note: Success case (201) requires a PostgreSQL database connection
+    // These tests verify the endpoint is accessible without authentication
+    it('should not require authentication (no 401 error)', async () => {
+      const res = await request(app)
+        .post('/api/registration/register')
+        .field('eventName', 'Tech Quiz')
+        .field('eventCategory', 'Technical')
+        .field('eventFee', '100')
+        .field('participantName', 'John Doe')
+        .field('participantEmail', 'john@example.com')
+        .field('participantPhone', '9876543210')
+        .field('participantCollege', 'Test College')
+        .field('participantRoll', 'TC001')
+        .attach('collegeIdProof', Buffer.from('fake-image'), 'test.jpg');
+
+      // Should not return 401 (Unauthorized)
+      expect(res.status).not.toBe(401);
+      // Should return 400 (validation) or 500 (DB error), not 401
+      expect([400, 500]).toContain(res.status);
+    });
+
+    it('should not require Authorization header', async () => {
+      const res = await request(app)
+        .post('/api/registration/register')
+        .field('participantName', 'Test User');
+
+      // Should not return 401 even without Authorization header
+      expect(res.status).not.toBe(401);
+    });
+  });
+
+  describe('CORS Configuration', () => {
+    it('should have proper CORS headers in development mode', async () => {
+      const res = await request(app)
+        .get('/api/registration/test')
+        .set('Origin', 'http://localhost:3000')
+        .expect(200);
+
+      // CORS headers should be present
+      expect(res.headers).toHaveProperty('access-control-allow-origin');
+    });
+  });
 });

@@ -1,4 +1,3 @@
-const cors = require('cors');
 const express = require('express');
 const { body, validationResult } = require('express-validator');
 const fs = require('fs');
@@ -10,9 +9,6 @@ const { v4: uuidv4 } = require('uuid');
 const { query } = require('../db/pg');
 
 const router = express.Router();
-
-// Local CORS (inherits global but ensures route-level if needed)
-router.use(cors());
 
 // Detect deployment/storage
 const hasCloudinary = !!process.env.CLOUDINARY_URL;  // Check if URL exists
