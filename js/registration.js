@@ -693,7 +693,7 @@ if(form){
 
         // Add a small delay before redirect to ensure localStorage write completes on iOS Safari
         // iOS Safari has a known issue where localStorage may not persist if navigation is too fast
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve => setTimeout(resolve, 1500));
 
         // Redirect to payment with unique registration ID
         const paymentUrl = `payment.html?regId=${regId}&email=${encodeURIComponent(email)}&event=${encodeURIComponent(eventName)}`;
