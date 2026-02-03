@@ -84,8 +84,26 @@ class ApiService {
             }
 
             if (!response.ok) {
-                const msg = (data && data.message) ? data.message : (response.status === 404 ? 'API endpoint not found' : `HTTP error! status: ${response.status}`);
-                throw new Error(msg);
+                // Enhanced error handling for validation errors
+                let errorMsg;
+                
+                if (data && data.errors && Array.isArray(data.errors)) {
+                    // Express-validator format: { errors: [{msg, param, value}] }
+                    const errorDetails = data.errors.map(e => `${e.param}: ${e.msg}`).join('; ');
+                    errorMsg = `Validation failed (${response.status} at ${endpoint}): ${errorDetails}`;
+                } else if (data && data.message) {
+                    errorMsg = `${data.message} (${response.status} at ${endpoint})`;
+                } else if (response.status === 404) {
+                    errorMsg = `API endpoint not found: ${endpoint}`;
+                } else {
+                    errorMsg = `HTTP error ${response.status} at ${endpoint}`;
+                }
+                
+                const error = new Error(errorMsg);
+                error.status = response.status;
+                error.endpoint = endpoint;
+                error.validationErrors = data && data.errors;
+                throw error;
             }
 
             return data;

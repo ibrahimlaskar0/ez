@@ -292,15 +292,6 @@ Click OK to go to the registration page.`);
             window.location.href = 'register.html';
             return;
           }
-          if(!pending){
-            const db = await idbOpen();
-            pending = await idbGet(db, regId);
-            if(!pending){
-              alert('No saved registration found. Please register again.\n\nYour registration data could not be retrieved from local storage.\n\nClick OK to return to the registration page.');
-              window.location.href = 'register.html';
-              return;
-            }
-          }
 
           const utr = (utrInput?.value || '').trim();
           if(!utr){
@@ -308,57 +299,12 @@ Click OK to go to the registration page.`);
             return;
           }
 
-          // Build FormData
-          const fd = new FormData();
-          const d = pending.data;
-          fd.append('eventName', d.eventName);
-          fd.append('eventCategory', d.eventCategory);
-          fd.append('eventFee', String(d.eventFee || 0));
-          fd.append('participantName', d.participantName);
-          fd.append('participantEmail', d.participantEmail);
-          fd.append('participantPhone', d.participantPhone);
-          fd.append('participantCollege', d.participantCollege);
-          fd.append('participantRoll', d.participantRoll);
-          fd.append('teamSize', String(d.teamSize || 1));
-          if (d.teamName) fd.append('teamName', d.teamName);
-          if (d.teamCaptain) fd.append('teamCaptain', d.teamCaptain);
-          if (Array.isArray(d.teamMembers)) {
-            fd.append('teamMembers', JSON.stringify(d.teamMembers));
-          }
-          fd.append('utrNumber', utr);
-
-          // Attach college ID proof file (from IndexedDB or re-upload)
-          let collegeIdFile = pending.collegeIdFile;
-          
-          // Check if re-upload input has a file
-          const reuploadInput = document.getElementById('college-id-reupload-input');
-          if (reuploadInput && reuploadInput.files && reuploadInput.files[0]) {
-            collegeIdFile = reuploadInput.files[0];
-          }
-          
-          if(collegeIdFile){
-            const filename = collegeIdFile.name || 'college-id-proof';
-            const attach = (collegeIdFile instanceof File) ? collegeIdFile : new File([collegeIdFile], filename, { type: collegeIdFile.type || 'application/octet-stream' });
-            fd.append('collegeIdProof', attach);
-          } else {
-            alert('College ID file is required. Please upload your college ID proof.');
-            return;
-          }
-
-          // Attach payment screenshot if provided
-          const ssInput = document.getElementById('payment-screenshot');
-          const ssFile = ssInput && ssInput.files && ssInput.files[0];
-
-          // console.log(ssFile)
-          if (ssFile) {
-            fd.append('paymentScreenshot', ssFile);
-          }
-
-          // Submit to backend
+          // Submit payment verification to backend using dedicated payment endpoint
           const btn = form.querySelector('button[type="submit"]');
           const original = btn?.innerHTML;
-          if(btn){ btn.disabled = true; btn.innerHTML = '<span class="animate-pulse">Submitting...</span>'; }
-          const res = await window.ApiService.registerForEventMultipart(fd);
+          if(btn){ btn.disabled = true; btn.innerHTML = '<span class="animate-pulse">Verifying Payment...</span>'; }
+          
+          const res = await window.ApiService.verifyPayment(utr, regId);
 
           // Cleanup local pending record
           // DEVELOPER NOTE: Clean up all localStorage keys after successful payment submission
@@ -370,8 +316,8 @@ Click OK to go to the registration page.`);
           const rid = res?.data?.registrationId || regId;
           window.location.href = `success.html?registrationId=${encodeURIComponent(rid)}`;
         } catch (err) {
-          console.error('Payment submit failed:', err);
-          alert(err.message || 'Submission failed. Please try again.');
+          console.error('Payment verification failed:', err);
+          alert(err.message || 'Payment verification failed. Please try again.');
         } finally {
           const btn = form.querySelector('button[type="submit"]');
           if(btn){ btn.disabled = false; btn.innerHTML = '<i data-feather="check-circle" class="w-5 h-5"></i> Confirm Payment'; }
