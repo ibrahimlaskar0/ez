@@ -3,7 +3,12 @@ process.env.NODE_ENV = 'test';
 const app = require('../server');
 const path = require('path');
 const fs = require('fs');
-const { pool } = require('../db/pg');
+const { pool, ensureSchema } = require('../db/pg');
+
+// Ensure database schema is initialized before running tests
+beforeAll(async () => {
+    await ensureSchema();
+});
 
 // Close database connection after all tests
 afterAll(async () => {

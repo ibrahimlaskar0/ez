@@ -6,7 +6,7 @@
 const request = require('supertest');
 const fs = require('fs');
 const path = require('path');
-const app = require('./app');
+const app = require('./server');
 
 async function testJSONRegistration() {
     console.log('\n🧪 Testing JSON Registration (from registration-form.js)...');

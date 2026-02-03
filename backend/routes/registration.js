@@ -109,9 +109,10 @@ function normalizeRegistrationBody(req, res, next) {
     // JSON path: mark that we don't require collegeIdProof file
     req._isJSONRegistration = true;
     
-    // Allow participantRoll to be optional for JSON; default to 'NA' if missing
-    if (!req.body.participantRoll) {
-      req.body.participantRoll = 'NA';
+    // Allow participantRoll to be optional for JSON; default to 'N/A' if missing
+    // Note: 'N/A' is used as a sentinel value to indicate no roll number provided
+    if (!req.body.participantRoll || String(req.body.participantRoll).trim() === '') {
+      req.body.participantRoll = 'N/A';
     }
     
     // Normalize eventCategory: trim, map common variants, fallback if unknown
@@ -139,7 +140,12 @@ function normalizeRegistrationBody(req, res, next) {
     // Normalize eventFee: accept numbers or strings with currency symbols
     if (req.body.eventFee !== undefined) {
       let fee = String(req.body.eventFee).replace(/[^\d.]/g, ''); // strip non-numeric except decimal
-      req.body.eventFee = parseFloat(fee) || 0;
+      // Validate format: must be a valid number with at most one decimal point
+      if (/^\d+(\.\d+)?$/.test(fee)) {
+        req.body.eventFee = parseFloat(fee);
+      } else {
+        req.body.eventFee = 0; // Invalid format, default to 0
+      }
     }
   } else {
     // Multipart: existing behavior, no key mapping
@@ -179,8 +185,8 @@ router.post(
       .matches(/^[6-9]\d{9}$/)
       .withMessage('Participant phone must be a valid 10-digit Indian number'),
     body('participantCollege').trim().notEmpty().withMessage('Participant college is required'),
-    // participantRoll: required for multipart, optional for JSON (normalized in middleware)
-    body('participantRoll').optional().trim().notEmpty().withMessage('Participant roll must not be empty if provided'),
+    // participantRoll: For JSON, normalized to 'N/A' by middleware if not provided; for multipart, must be non-empty
+    body('participantRoll').trim().notEmpty().withMessage('Participant roll is required'),
 
     body('teamSize').optional().isInt({ min: 1, max: 20 }).toInt(),
     // UTR: accept alphanumeric, will be uppercased and spaces removed server-side
