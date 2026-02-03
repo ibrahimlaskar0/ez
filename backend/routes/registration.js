@@ -87,10 +87,83 @@ router.get('/test', (req, res) => {
   res.json({ success: true, message: 'Registration routes working!' });
 });
 
+// Helper middleware: Detect JSON vs multipart and normalize body
+// JSON registrations (from registration-form.js) use keys email/phone/college without participantRoll or collegeIdProof file.
+// Multipart registrations (from registration.js) use keys participantEmail/Phone/College/Roll with collegeIdProof file required.
+function normalizeRegistrationBody(req, res, next) {
+  const contentType = (req.get('content-type') || '').toLowerCase();
+  const isJSON = contentType.includes('application/json');
+  
+  if (isJSON) {
+    // JSON submission from registration-form.js: map keys email/phone/college -> participantEmail/Phone/College
+    if (req.body.email && !req.body.participantEmail) {
+      req.body.participantEmail = req.body.email;
+    }
+    if (req.body.phone && !req.body.participantPhone) {
+      req.body.participantPhone = req.body.phone;
+    }
+    if (req.body.college && !req.body.participantCollege) {
+      req.body.participantCollege = req.body.college;
+    }
+    
+    // JSON path: mark that we don't require collegeIdProof file
+    req._isJSONRegistration = true;
+    
+    // Allow participantRoll to be optional for JSON; default to 'NA' if missing
+    if (!req.body.participantRoll) {
+      req.body.participantRoll = 'NA';
+    }
+    
+    // Normalize eventCategory: trim, map common variants, fallback if unknown
+    if (req.body.eventCategory) {
+      let cat = String(req.body.eventCategory).trim();
+      // Map common variants
+      const categoryMap = {
+        'technical': 'Technical',
+        'cultural': 'Cultural',
+        'sports': 'Sports',
+        'e-sports': 'E-Sports',
+        'esports': 'E-Sports',
+        'competitions': 'Competitions',
+        'competition': 'Competitions',
+      };
+      const normalized = categoryMap[cat.toLowerCase()];
+      if (normalized) {
+        req.body.eventCategory = normalized;
+      } else if (!CATEGORIES.includes(cat)) {
+        // Unknown category: fallback to 'Competitions'
+        req.body.eventCategory = 'Competitions';
+      }
+    }
+    
+    // Normalize eventFee: accept numbers or strings with currency symbols
+    if (req.body.eventFee !== undefined) {
+      let fee = String(req.body.eventFee).replace(/[^\d.]/g, ''); // strip non-numeric except decimal
+      req.body.eventFee = parseFloat(fee) || 0;
+    }
+  } else {
+    // Multipart: existing behavior, no key mapping
+    req._isJSONRegistration = false;
+  }
+  
+  next();
+}
+
 // POST /api/registration/register
+// Supports both application/json (from registration-form.js) and multipart/form-data (from registration.js)
 router.post(
   '/register',
-  uploadFields,
+  // Conditionally apply multer: skip for JSON requests to avoid parsing errors
+  (req, res, next) => {
+    const contentType = (req.get('content-type') || '').toLowerCase();
+    if (contentType.includes('application/json')) {
+      // JSON request: skip multer, use express.json() (already applied globally)
+      return next();
+    }
+    // Multipart: apply multer
+    uploadFields(req, res, next);
+  },
+  normalizeRegistrationBody,
   [
     body('eventName').trim().notEmpty().withMessage('Event name is required'),
     body('eventCategory')
@@ -106,7 +179,8 @@ router.post(
       .matches(/^[6-9]\d{9}$/)
       .withMessage('Participant phone must be a valid 10-digit Indian number'),
     body('participantCollege').trim().notEmpty().withMessage('Participant college is required'),
-    body('participantRoll').trim().notEmpty().withMessage('Participant roll is required'),
+    // participantRoll: required for multipart, optional for JSON (normalized in middleware)
+    body('participantRoll').optional().trim().notEmpty().withMessage('Participant roll must not be empty if provided'),
 
     body('teamSize').optional().isInt({ min: 1, max: 20 }).toInt(),
     // UTR: accept alphanumeric, will be uppercased and spaces removed server-side
@@ -122,9 +196,11 @@ router.post(
         return res.status(400).json({ success: false, errors: errors.array() });
       }
 
-      // Ensure file uploaded
-      if (!(req.files && req.files.collegeIdProof && req.files.collegeIdProof[0])) {
-        return res.status(400).json({ success: false, message: 'College ID proof file is required' });
+      // For multipart registrations: ensure collegeIdProof file is uploaded
+      if (!req._isJSONRegistration) {
+        if (!(req.files && req.files.collegeIdProof && req.files.collegeIdProof[0])) {
+          return res.status(400).json({ success: false, message: 'College ID proof file is required' });
+        }
       }
 
       // Parse teamMembers (may come as JSON string)
@@ -311,7 +387,11 @@ router.post(
         [
           registrationId, payload.eventName, payload.eventCategory, payload.eventFee,
           payload.participantName, payload.participantEmail, payload.participantPhone, payload.participantCollege, payload.participantRoll,
-          collegeIdProof.filename, collegeIdProof.originalName, collegeIdProof.path, collegeIdProof.size, collegeIdProof.mimetype,
+          collegeIdProof ? collegeIdProof.filename : null,
+          collegeIdProof ? collegeIdProof.originalName : null,
+          collegeIdProof ? collegeIdProof.path : null,
+          collegeIdProof ? collegeIdProof.size : null,
+          collegeIdProof ? collegeIdProof.mimetype : null,
           payload.teamSize, payload.teamName || null, payload.teamCaptain || null, JSON.stringify(teamMembers),
           payload.paymentStatus, payload.utrNumber || null, payload.paymentDate || null,
           payload.ipAddress, payload.userAgent, payload.paymentProof ? JSON.stringify(payload.paymentProof) : null

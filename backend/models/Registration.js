@@ -77,7 +77,11 @@ Registration.create = async (data) => {
         [
             registrationId, eventName, eventCategory, eventFee,
             participantName, participantEmail, participantPhone, participantCollege, participantRoll,
-            collegeIdProof.filename, collegeIdProof.originalName, collegeIdProof.path, collegeIdProof.size, collegeIdProof.mimetype,
+            collegeIdProof ? collegeIdProof.filename : null,
+            collegeIdProof ? collegeIdProof.originalName : null,
+            collegeIdProof ? collegeIdProof.path : null,
+            collegeIdProof ? collegeIdProof.size : null,
+            collegeIdProof ? collegeIdProof.mimetype : null,
             teamSize, teamName, teamCaptain, JSON.stringify(teamMembers),
             paymentStatus, normalizedUtr, paymentDate, paymentProof ? JSON.stringify(paymentProof) : null,
             registrationStatus, ipAddress, userAgent, adminNotes
