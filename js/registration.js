@@ -33,7 +33,7 @@ const eventsList = [
     {category:"Technical", name:"Model Making", fee:200, teamType:"individual"},
 
     // E-Sports Events - Gaming competitions
-    {category:"E-Sports", name:"BGMI", fee:10, teamType:"team"},
+    {category:"E-Sports", name:"BGMI", fee:'Free', teamType:"team"},
     {category:"E-Sports", name:"ML", fee:500, teamType:"team"},
     {category:"E-Sports", name:"FIFA", fee:200, teamType:"individual"},
     
