@@ -114,11 +114,15 @@ router.post('/verify', handleMulterError, async (req, res) => {
             return res.status(400).json({ success: false, message: 'Invalid UTR format' });
         }
 
-        // Handle optional payment screenshot
-        let paymentProof = null;
+        // Payment screenshot is required
         const payFile = (req.files && req.files.paymentScreenshot && req.files.paymentScreenshot[0]) || null;
-        if (payFile) {
-            try {
+        if (!payFile) {
+            return res.status(400).json({ success: false, message: 'Payment screenshot is required' });
+        }
+
+        // Process payment screenshot
+        let paymentProof = null;
+        try {
                 if (hasCloudinary) {
                     if (/^image\//i.test(payFile.mimetype)) {
                         try {
@@ -130,8 +134,10 @@ router.post('/verify', handleMulterError, async (req, res) => {
                         } catch (e) { /* compression failed; send original */ }
                     }
                     const up = await uploadToCloud(payFile, 'payment-proof');
+                    // Use original filename with extension, or derive from format
+                    const defaultFilename = payFile.originalname || `payment.${up.format || 'jpg'}`;
                     paymentProof = {
-                        filename: (up.public_id && up.format) ? `${up.public_id.split('/').pop()}.${up.format}` : (payFile.originalname || 'payment'),
+                        filename: (up.public_id && up.format) ? `${up.public_id.split('/').pop()}.${up.format}` : defaultFilename,
                         originalName: payFile.originalname,
                         path: up.secure_url,
                         size: (up.bytes || payFile.size),
@@ -160,20 +166,14 @@ router.post('/verify', handleMulterError, async (req, res) => {
                         mimetype: payFile.mimetype,
                     };
                 }
-            } catch (err) {
-                return res.status(400).json({ success: false, message: 'Failed to process payment screenshot file' });
-            }
+        } catch (err) {
+            return res.status(400).json({ success: false, message: 'Failed to process payment screenshot file' });
         }
 
         try {
-            // Update registration with UTR, payment status, and optional payment proof
-            const updateQuery = paymentProof
-                ? `UPDATE registrations SET utr_number = $1, payment_status = 'confirmed', payment_date = now(), payment_proof = $3 WHERE registration_id = $2`
-                : `UPDATE registrations SET utr_number = $1, payment_status = 'confirmed', payment_date = now() WHERE registration_id = $2`;
-            
-            const params = paymentProof
-                ? [normalized, registrationId, JSON.stringify(paymentProof)]
-                : [normalized, registrationId];
+            // Update registration with UTR, payment status, and payment proof
+            const updateQuery = `UPDATE registrations SET utr_number = $1, payment_status = 'confirmed', payment_date = now(), payment_proof = $3 WHERE registration_id = $2`;
+            const params = [normalized, registrationId, JSON.stringify(paymentProof)];
             
             const { rowCount } = await query(updateQuery, params);
             

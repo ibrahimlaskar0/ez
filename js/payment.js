@@ -88,7 +88,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const screenshotFile = screenshotInput.files[0];
             
             // Get API base URL
-            const apiBase = window.ESPL_API_BASE || 'https://ez-two-amber.vercel.app';
+            const apiBase = window.ESPL_API_BASE || (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+                ? 'http://localhost:5000' 
+                : 'https://ez-two-amber.vercel.app');
             
             // Create FormData to send file + data
             const formData = new FormData();
