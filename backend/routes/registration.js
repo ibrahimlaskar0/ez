@@ -94,6 +94,7 @@ router.post(
   [
     body('eventName').trim().notEmpty().withMessage('Event name is required'),
     body('eventCategory')
+      .trim()
       .isIn(CATEGORIES)
       .withMessage(`Event category must be one of: ${CATEGORIES.join(', ')}`),
     body('eventFee').isFloat({ min: 0 }).withMessage('Event fee must be a number >= 0'),

@@ -2,12 +2,12 @@
   "name": "my-website",
   "version": "1.0.0",
   "description": "A simple website",
-  "main": "server.js",
+  "main": "backend/server.js",
   "scripts": {
     "frontend": "http-server -p 3000 -c-1",
     "backend": "npm --prefix backend run dev",
     "dev": "concurrently -n frontend,backend -c blue,magenta \"npm run frontend\" \"npm run backend\"",
-    "start": "node server.js",
+    "start": "node backend/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
