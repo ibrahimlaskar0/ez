@@ -3,8 +3,8 @@
  * Exports all models for use in routes
  */
 
-const AdminModelFactory = require('./Admin');
 const Registration = require('./Registration');
+const AdminModelFactory = require('./Admin');
 
 // Note: Admin model requires Sequelize instance
 // For now, export Registration (raw PostgreSQL) 

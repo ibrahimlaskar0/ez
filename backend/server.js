@@ -57,12 +57,9 @@ if (process.env.FRONTEND_URL) {
 // Production domains
 prodOrigins.push('https://esplendidez.tech');
 prodOrigins.push('https://www.esplendidez.tech');
-prodOrigins.push('https://esplendidez.online'); //current domain
+prodOrigins.push('https://esplendidez.online');
 prodOrigins.push('https://www.esplendidez.online');
 prodOrigins.push('https://ibrahimlaskar0.github.io');
-// Vercel frontend deployments
-prodOrigins.push('https://ez-two-amber.vercel.app');
-prodOrigins.push('https://es-two-amber.vercel.app');
 // Netlify site (fallback if env not set)
 prodOrigins.push('https://esplendidez-2026-frontend.netlify.app');
 
