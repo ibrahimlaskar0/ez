@@ -148,7 +148,7 @@ function createEventCard(ev) {
             
             <!-- Register Button -->
             <div class="relative z-10">
-                <a href="register.html?event=${encodeURIComponent(ev.name)}" 
+            <a href="https://forms.gle/U4WNWQUFq9xa9Uj1A"  
                    class="w-full bg-gradient-to-r ${gradient} text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 hover:translate-y-[-2px] flex items-center justify-center space-x-3 group-hover:bg-opacity-90">
                     <i class="bi bi-person-plus text-xl"></i>
                     <span>Register Now</span>
