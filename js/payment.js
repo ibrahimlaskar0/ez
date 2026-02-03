@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Redirect to success page
                 setTimeout(() => {
-                    window.location.href = `success.html?registration=${registrationId}`;
+                    window.location.href = `success.html?registrationId=${registrationId}`;
                 }, 1500);
             } else {
                 // Payment verification failed
