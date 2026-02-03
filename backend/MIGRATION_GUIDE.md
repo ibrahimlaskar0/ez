@@ -148,3 +148,53 @@ For issues, check:
 1. PostgreSQL logs
 2. Server console output
 3. `.env` configuration
+
+## Deployment Troubleshooting
+
+### CORS Issues
+If you encounter CORS errors when deploying to a new domain:
+
+1. **Add your domain to prodOrigins** in `backend/server.js`:
+   ```javascript
+   prodOrigins.push('https://your-new-domain.com');
+   ```
+
+2. **Environment variable method**: Add domains to `FRONTEND_URL` in `.env` (comma-separated):
+   ```env
+   FRONTEND_URL=https://domain1.com,https://domain2.com
+   ```
+
+3. **Supported domains** (already configured):
+   - esplendidez.tech and www.esplendidez.tech
+   - esplendidez.online and www.esplendidez.online
+   - GitHub Pages: ibrahimlaskar0.github.io
+   - Netlify: *.netlify.app variants
+   - Vercel: *.vercel.app variants
+
+### 401 Unauthorized on Registration
+The `/api/registration/register` endpoint does NOT require authentication. If you get 401 errors:
+
+1. Check that you're calling the correct endpoint: `/api/registration/register`
+2. Ensure no authentication middleware is accidentally applied
+3. Verify CORS is properly configured (see above)
+
+### Vercel Serverless Deployment
+When deploying to Vercel:
+
+1. **Use Express API only**: The main Express app (`backend/server.js`) handles all routes
+2. **API routing**: Vercel routes defined in `backend/vercel.json`:
+   ```json
+   {
+     "routes": [
+       { "src": "/api/(.*)", "dest": "/api/index.js" }
+     ]
+   }
+   ```
+3. **Avoid shadowing**: Don't create duplicate serverless functions for routes already in Express
+4. **File uploads**: Vercel uses `/tmp` directory (already configured in code)
+
+### Other Environments (Railway, Render, etc.)
+1. Set environment variables according to platform requirements
+2. Ensure PostgreSQL connection string is correct
+3. Add deployment domain to CORS whitelist (see CORS Issues above)
+4. Check platform-specific file upload limitations

@@ -350,13 +350,23 @@ function initMobileMenu() {
     window.toggleMobileMenu = toggleMenu;
     
     // Close menu when clicking outside
-    document.addEventListener('click', function(e) {
+    /*document.addEventListener('click', function(e) {
         if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
             if (!mobileMenu.classList.contains('hidden')) {
                 toggleMenu();
             }
         }
     });
+    */
+
+    // Close menu when clicking outside - use mousedown for correct event ordering
+document.addEventListener('mousedown', function(e) {
+    if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+        if (!mobileMenu.classList.contains('hidden')) {
+            toggleMenu();
+        }
+    }
+});
     
     // Close menu on Escape key
     document.addEventListener('keydown', function(e) {
@@ -604,3 +614,4 @@ window.addEventListener('beforeunload', function() {
         window.vantaEffect.destroy();
     }
 });
+

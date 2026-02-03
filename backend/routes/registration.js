@@ -1,18 +1,14 @@
 const express = require('express');
-const cors = require('cors');
+const { body, validationResult } = require('express-validator');
+const fs = require('fs');
 const multer = require('multer');
 const path = require('path');
-const fs = require('fs');
-const { v4: uuidv4 } = require('uuid');
-const { body, validationResult } = require('express-validator');
 const sharp = require('sharp');
+const { v4: uuidv4 } = require('uuid');
 
 const { query } = require('../db/pg');
 
 const router = express.Router();
-
-// Local CORS (inherits global but ensures route-level if needed)
-router.use(cors());
 
 // Detect deployment/storage
 const hasCloudinary = !!process.env.CLOUDINARY_URL;  // Check if URL exists
@@ -80,6 +76,29 @@ const uploadFields = upload.fields([
   { name: 'paymentScreenshot', maxCount: 1 },
 ]);
 
+// Multer error handler wrapper
+const handleMulterError = (req, res, next) => {
+  uploadFields(req, res, (err) => {
+    if (err) {
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({ success: false, message: 'File size too large. Maximum allowed size is 4.5MB' });
+      }
+      if (err.code === 'LIMIT_FILE_COUNT') {
+        return res.status(400).json({ success: false, message: 'Too many files uploaded' });
+      }
+      if (err.code === 'LIMIT_UNEXPECTED_FILE') {
+        return res.status(400).json({ success: false, message: 'Unexpected file field in upload' });
+      }
+      if (err.message === 'Only images (png, jpg, jpeg, webp) or PDF files are allowed') {
+        return res.status(400).json({ success: false, message: err.message });
+      }
+      // Other multer errors
+      return res.status(400).json({ success: false, message: 'File upload error: ' + (err.message || 'Unknown error') });
+    }
+    next();
+  });
+};
+
 const CATEGORIES = ['Technical', 'Cultural', 'Sports', 'E-Sports', 'Competitions'];
 
 // Test route
@@ -90,7 +109,7 @@ router.get('/test', (req, res) => {
 // POST /api/registration/register
 router.post(
   '/register',
-  uploadFields,
+  handleMulterError,
   [
     body('eventName').trim().notEmpty().withMessage('Event name is required'),
     body('eventCategory')
@@ -118,7 +137,8 @@ router.post(
       // Validate request
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return res.status(400).json({ success: false, errors: errors.array() });
+        const errorMessages = errors.array().map(err => err.msg).join('; ');
+        return res.status(400).json({ success: false, message: `Validation failed: ${errorMessages}` });
       }
 
       // Ensure file uploaded
@@ -147,49 +167,54 @@ router.post(
       const file = (req.files && req.files.collegeIdProof && req.files.collegeIdProof[0]) || null;
       let collegeIdProof = null;
       if (file) {
-        if (hasCloudinary) {
-          // If image, recompress buffer before uploading to reduce payload stored upstream
-          if (/^image\//i.test(file.mimetype)) {
-            try {
-              const buf = await compressImageBuffer(file.buffer);
-              if (buf.length < file.size) {
-                file.buffer = buf;
+        try {
+          if (hasCloudinary) {
+            // If image, recompress buffer before uploading to reduce payload stored upstream
+            if (/^image\//i.test(file.mimetype)) {
+              try {
+                const buf = await compressImageBuffer(file.buffer);
+                if (buf.length < file.size) {
+                  file.buffer = buf;
+                  file.mimetype = 'image/jpeg';
+                }
+              } catch (e) { /* compression failed; send original */ }
+            }
+            const up = await uploadToCloud(file, 'id-proof');
+            collegeIdProof = {
+              filename: (up.public_id && up.format) ? `${up.public_id.split('/').pop()}.${up.format}` : (file.originalname || 'upload'),
+              originalName: file.originalname,
+              path: up.secure_url,
+              size: (up.bytes || file.size),
+              mimetype: file.mimetype,
+            };
+          } else {
+            // For local disk, recompress to jpeg and replace file
+            if (/^image\//i.test(file.mimetype)) {
+              const safeFilename = path.basename(file.filename || '');
+              const oldPath = path.join(UPLOAD_DIR, safeFilename);
+              const newFilename = `${path.parse(safeFilename).name}.jpg`;
+              const newPath = path.join(UPLOAD_DIR, newFilename);
+              try {
+                await sharp(oldPath).rotate().resize({ width: 1600, height: 1600, fit: 'inside', withoutEnlargement: true })
+                  .jpeg({ quality: 72 }).toFile(newPath);
+                try { fs.unlinkSync(oldPath); } catch (e) { /* ignore cleanup error */ }
+                const { size } = fs.statSync(newPath);
+                file.filename = newFilename;
                 file.mimetype = 'image/jpeg';
-              }
-            } catch (e) { /* compression failed; send original */ }
+                file.size = size;
+              } catch (e) { /* compression failed; keep original */ }
+            }
+            const storedRelativePath = `/uploads/${file.filename}`; // served by server.js static route (maps to UPLOAD_DIR)
+            collegeIdProof = {
+              filename: file.filename,
+              originalName: file.originalname,
+              path: storedRelativePath,
+              size: file.size,
+              mimetype: file.mimetype,
+            };
           }
-          const up = await uploadToCloud(file, 'id-proof');
-          collegeIdProof = {
-            filename: (up.public_id && up.format) ? `${up.public_id.split('/').pop()}.${up.format}` : (file.originalname || 'upload'),
-            originalName: file.originalname,
-            path: up.secure_url,
-            size: (up.bytes || file.size),
-            mimetype: file.mimetype,
-          };
-        } else {
-          // For local disk, recompress to jpeg and replace file
-          if (/^image\//i.test(file.mimetype)) {
-            const oldPath = path.join(UPLOAD_DIR, file.filename);
-            const newFilename = `${path.parse(file.filename).name}.jpg`;
-            const newPath = path.join(UPLOAD_DIR, newFilename);
-            try {
-              await sharp(oldPath).rotate().resize({ width: 1600, height: 1600, fit: 'inside', withoutEnlargement: true })
-                .jpeg({ quality: 72 }).toFile(newPath);
-              try { fs.unlinkSync(oldPath); } catch (e) { /* ignore cleanup error */ }
-              const { size } = fs.statSync(newPath);
-              file.filename = newFilename;
-              file.mimetype = 'image/jpeg';
-              file.size = size;
-            } catch (e) { /* compression failed; keep original */ }
-          }
-          const storedRelativePath = `/uploads/${file.filename}`; // served by server.js static route (maps to UPLOAD_DIR)
-          collegeIdProof = {
-            filename: file.filename,
-            originalName: file.originalname,
-            path: storedRelativePath,
-            size: file.size,
-            mimetype: file.mimetype,
-          };
+        } catch (err) {
+          return res.status(400).json({ success: false, message: 'Failed to process college ID proof file' });
         }
       }
 
@@ -244,46 +269,50 @@ router.post(
       // Optional payment screenshot
       const payFile = (req.files && req.files.paymentScreenshot && req.files.paymentScreenshot[0]) || null;
       if (payFile) {
-        if (hasCloudinary) {
-          if (/^image\//i.test(payFile.mimetype)) {
-            try {
-              const buf2 = await compressImageBuffer(payFile.buffer);
-              if (buf2.length < payFile.size) {
-                payFile.buffer = buf2;
+        try {
+          if (hasCloudinary) {
+            if (/^image\//i.test(payFile.mimetype)) {
+              try {
+                const buf2 = await compressImageBuffer(payFile.buffer);
+                if (buf2.length < payFile.size) {
+                  payFile.buffer = buf2;
+                  payFile.mimetype = 'image/jpeg';
+                }
+              } catch (e) { /* compression failed; send original */ }
+            }
+            const up2 = await uploadToCloud(payFile, 'payment-proof');
+            payload.paymentProof = {
+              filename: (up2.public_id && up2.format) ? `${up2.public_id.split('/').pop()}.${up2.format}` : (payFile.originalname || 'payment'),
+              originalName: payFile.originalname,
+              path: up2.secure_url,
+              size: (up2.bytes || payFile.size),
+              mimetype: payFile.mimetype,
+            };
+          } else {
+            if (/^image\//i.test(payFile.mimetype)) {
+              const oldPath = path.join(UPLOAD_DIR, payFile.filename);
+              const newFilename = `${path.parse(payFile.filename).name}.jpg`;
+              const newPath = path.join(UPLOAD_DIR, newFilename);
+              try {
+                await sharp(oldPath).rotate().resize({ width: 1600, height: 1600, fit: 'inside', withoutEnlargement: true })
+                  .jpeg({ quality: 72 }).toFile(newPath);
+                try { fs.unlinkSync(oldPath); } catch (e) { /* ignore cleanup error */ }
+                const { size } = fs.statSync(newPath);
+                payFile.filename = newFilename;
                 payFile.mimetype = 'image/jpeg';
-              }
-            } catch (e) { /* compression failed; send original */ }
+                payFile.size = size;
+              } catch (e) { /* compression failed; keep original */ }
+            }
+            payload.paymentProof = {
+              filename: payFile.filename,
+              originalName: payFile.originalname,
+              path: `/uploads/${payFile.filename}`,
+              size: payFile.size,
+              mimetype: payFile.mimetype,
+            };
           }
-          const up2 = await uploadToCloud(payFile, 'payment-proof');
-          payload.paymentProof = {
-            filename: (up2.public_id && up2.format) ? `${up2.public_id.split('/').pop()}.${up2.format}` : (payFile.originalname || 'payment'),
-            originalName: payFile.originalname,
-            path: up2.secure_url,
-            size: (up2.bytes || payFile.size),
-            mimetype: payFile.mimetype,
-          };
-        } else {
-          if (/^image\//i.test(payFile.mimetype)) {
-            const oldPath = path.join(UPLOAD_DIR, payFile.filename);
-            const newFilename = `${path.parse(payFile.filename).name}.jpg`;
-            const newPath = path.join(UPLOAD_DIR, newFilename);
-            try {
-              await sharp(oldPath).rotate().resize({ width: 1600, height: 1600, fit: 'inside', withoutEnlargement: true })
-                .jpeg({ quality: 72 }).toFile(newPath);
-              try { fs.unlinkSync(oldPath); } catch (e) { /* ignore cleanup error */ }
-              const { size } = fs.statSync(newPath);
-              payFile.filename = newFilename;
-              payFile.mimetype = 'image/jpeg';
-              payFile.size = size;
-            } catch (e) { /* compression failed; keep original */ }
-          }
-          payload.paymentProof = {
-            filename: payFile.filename,
-            originalName: payFile.originalname,
-            path: `/uploads/${payFile.filename}`,
-            size: payFile.size,
-            mimetype: payFile.mimetype,
-          };
+        } catch (err) {
+          return res.status(400).json({ success: false, message: 'Failed to process payment screenshot file' });
         }
       }
 
@@ -321,30 +350,30 @@ router.post(
 
       return res.status(201).json({
         success: true,
+        registrationId: doc.registration_id,
         message: 'Registration submitted successfully',
-        data: {
-          registrationId: doc.registration_id,
-          eventName: doc.event_name,
-          participantName: doc.participant_name,
-          participantEmail: doc.participant_email,
-          paymentStatus: doc.payment_status,
-          submittedAt: doc.submitted_at,
-        },
+        eventName: doc.event_name,
+        participantName: doc.participant_name,
+        participantEmail: doc.participant_email,
+        paymentStatus: doc.payment_status,
+        submittedAt: doc.submitted_at,
       });
     } catch (err) {
       // Handle duplicate (unique indexes) and validation errors
       if (err && (err.code === '23505' || /duplicate key/i.test(err.message))) {
         const constraint = (err.constraint || '').toLowerCase();
         if (constraint.includes('ux_utr')) {
-          return res.status(409).json({ success: false, message: 'UTR already used' });
+          return res.status(409).json({ success: false, message: 'UTR number has already been used for another registration' });
         }
         if (constraint.includes('ux_email_event')) {
-          return res.status(409).json({ success: false, message: 'Duplicate registration detected for this email and event' });
+          return res.status(409).json({ success: false, message: 'You have already registered for this event with this email address' });
         }
-        return res.status(409).json({ success: false, message: 'Duplicate value violates a unique constraint' });
+        return res.status(409).json({ success: false, message: 'This registration conflicts with an existing entry' });
       }
 
-      return res.status(500).json({ success: false, message: 'Registration failed', error: err.message });
+      // Log the error for debugging but return user-friendly message
+      console.error('Registration error:', err);
+      return res.status(500).json({ success: false, message: 'Registration failed due to a server error. Please try again later.' });
     }
   }
 );
