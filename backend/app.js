@@ -29,7 +29,7 @@ const errorHandler = require('./middleware/errorHandler');
 // Initialize Express app
 const app = express();
 
-// Initialize PostgreSQL schema (skip during tests)
+// Initialize PostgreSQL schema (skip during tests, handled in test setup)
 if (process.env.NODE_ENV !== 'test') {
     ensureSchema().catch((e) => console.error('DB schema init failed', e));
 }
