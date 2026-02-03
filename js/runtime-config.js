@@ -32,11 +32,17 @@ if (window.location.hostname === 'localhost' || window.location.hostname === '12
   // Local development - point to local backend
   window.ESPL_API_BASE = 'http://localhost:5001';
   console.log('🔧 Development Mode: Using local backend');
-} else if (window.location.hostname.includes('github.io') || 
-           window.location.hostname.includes('esplendidez.tech') ||
-           window.location.hostname.includes('esplendidez.online') ||
-           window.location.hostname.includes('netlify.app') ||
-           window.location.hostname.includes('vercel.app')) {
+} else if (window.location.hostname === 'ibrahimlaskar0.github.io' ||
+           window.location.hostname === 'esplendidez.tech' ||
+           window.location.hostname === 'www.esplendidez.tech' ||
+           window.location.hostname === 'esplendidez.online' ||
+           window.location.hostname === 'www.esplendidez.online' ||
+           window.location.hostname === 'esplendidez-2026-frontend.netlify.app' ||
+           window.location.hostname === 'es-two-amber.vercel.app' ||
+           window.location.hostname === 'ez-two-amber.vercel.app' ||
+           window.location.hostname.endsWith('.github.io') ||
+           window.location.hostname.endsWith('.netlify.app') ||
+           window.location.hostname.endsWith('.vercel.app')) {
   // Production - point to Vercel backend
   window.ESPL_API_BASE = 'https://ez-two-amber.vercel.app';
   console.log('🌐 Production Mode: Using Vercel backend');
