@@ -104,7 +104,7 @@ describe('Registration API Tests', () => {
             expect(res.body.data.participantEmail).toBeDefined();
         });
 
-        it('should set participantRoll to NA when not provided in JSON', async () => {
+        it('should set participantRoll to N/A when not provided in JSON', async () => {
             const res = await request(app)
                 .post('/api/registration/register')
                 .set('Content-Type', 'application/json')

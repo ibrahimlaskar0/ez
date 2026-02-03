@@ -22,7 +22,7 @@ The registration endpoint was returning 400 errors when the registration form su
   - Maps `email` → `participantEmail`
   - Maps `phone` → `participantPhone`
   - Maps `college` → `participantCollege`
-  - Sets `participantRoll` to `'NA'` if missing
+  - Sets `participantRoll` to `'N/A'` if missing
   - Normalizes `eventCategory` (lowercase → TitleCase, fallback to 'Competitions')
   - Parses `eventFee` from strings with currency symbols (e.g., '₹200' → 200)
   - Marks request as JSON with `req._isJSONRegistration = true`
@@ -41,7 +41,7 @@ The registration endpoint was returning 400 errors when the registration form su
 Added 15 automated tests covering:
 - ✅ JSON registration without file (201 success)
 - ✅ Key mapping (email/phone/college → participantEmail/Phone/College)
-- ✅ participantRoll defaults to 'NA'
+- ✅ participantRoll defaults to 'N/A'
 - ✅ eventCategory normalization
 - ✅ eventFee currency parsing
 - ✅ Validation errors for missing fields
@@ -73,7 +73,7 @@ Tests:       15 passed, 15 total
 
 ### Database Verification
 ```
-JSON registrations:  participant_roll='NA', college_id_path=NULL
+JSON registrations:  participant_roll='N/A', college_id_path=NULL
 Multipart registrations: participant_roll=actual, college_id_path=/uploads/...
 ```
 
@@ -86,7 +86,7 @@ Multipart registrations: participant_roll=actual, college_id_path=/uploads/...
 | Existing multipart flow unchanged | ✅ | All existing validations preserved |
 | Database supports NULL collegeIdProof | ✅ | Schema updated, insertions succeed |
 | Key mapping works | ✅ | email/phone/college mapped correctly |
-| participantRoll optional for JSON | ✅ | Defaults to 'NA' |
+| participantRoll optional for JSON | ✅ | Defaults to 'N/A' |
 | eventCategory normalization | ✅ | Handles lowercase, fallback to 'Competitions' |
 | eventFee parsing | ✅ | Handles currency symbols |
 | Tests added | ✅ | 15 comprehensive tests |
