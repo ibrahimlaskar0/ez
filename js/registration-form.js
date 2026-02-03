@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // CRITICAL: Use full API base URL from window.ESPL_API_BASE
       // DO NOT use relative URLs like '/api/registration/register'
       const apiBase = window.ESPL_API_BASE || 'https://ez-two-amber.vercel.app';
-      const apiUrl = `${apiBase}/api/registration/register`;
+      const apiUrl = `/api/registration/register`;
       
       console.log('🚀 Submitting registration to:', apiUrl);
       
