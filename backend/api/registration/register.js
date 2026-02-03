@@ -1,15 +1,12 @@
 import { applyCors } from "../_cors";
 
+/**
+ * Registration endpoint for Vercel serverless deployment
+ * Handles event registration with proper CORS configuration
+ */
 export default async function handler(req, res) {
-  // Allow CORS from your frontend domain
-  res.setHeader("Access-Control-Allow-Origin", "https://esplendidez.online");
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
-  // Handle CORS preflight request
-  if (req.method === "OPTIONS") {
-    return res.status(204).end();
-  }
+  // Apply CORS headers for all allowed origins
+  if (!applyCors(req, res)) return;
 
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method not allowed" });

@@ -2,31 +2,42 @@
  * Esplendidez 2026 - API Configuration
  * Handles all backend API communications
  * Version: 2.0
+ * 
+ * API BASE URL STRATEGY:
+ * - ALWAYS use full API base URL from window.ESPL_API_BASE (set in runtime-config.js)
+ * - Fallback to https://ez-two-amber.vercel.app if not set
+ * - DO NOT use relative URLs unless both frontend and backend run together
+ * 
+ * For development:
+ * - Set window.ESPL_API_BASE = 'http://localhost:5001' (or your local backend port)
+ * 
+ * For production:
+ * - window.ESPL_API_BASE = 'https://ez-two-amber.vercel.app' (Vercel backend)
  */
 
 // API Configuration
-const DEFAULT_API_PORT = 5001;
+const DEFAULT_API_BASE = 'https://ez-two-amber.vercel.app';
 
 function resolveApiBase() {
     try {
-        // DEVELOPER NOTE: API base can be overridden via window.ESPL_API_BASE or localStorage
-        // Using localStorage instead of sessionStorage for consistent storage across the app
-        const explicit = (window.ESPL_API_BASE || localStorage.getItem('ESPL_API_BASE') || '').trim();
-        if (explicit) {
-            return explicit.replace(/\/+$/, '') + '/api';
+        // PRIORITY 1: Use window.ESPL_API_BASE set by runtime-config.js
+        if (window.ESPL_API_BASE) {
+            const base = String(window.ESPL_API_BASE).trim().replace(/\/+$/, '');
+            return base + '/api';
         }
 
-        // Derive from current location, handle file:// and empty host cases
-        let host = window.location && window.location.hostname ? window.location.hostname : '';
-        if (!host || (window.location && window.location.protocol === 'file:')) {
-            host = '127.0.0.1';
+        // PRIORITY 2: Check localStorage override (for manual testing)
+        const stored = localStorage.getItem('ESPL_API_BASE');
+        if (stored) {
+            const base = String(stored).trim().replace(/\/+$/, '');
+            return base + '/api';
         }
 
-        const port = Number(localStorage.getItem('ESPL_API_PORT')) || DEFAULT_API_PORT;
-        return `https://${host}:${port}/api`;
+        // FALLBACK: Use default Vercel backend
+        return DEFAULT_API_BASE + '/api';
     } catch (_) {
         // Safe fallback
-        return `https://127.0.0.1:${DEFAULT_API_PORT}/api`;
+        return DEFAULT_API_BASE + '/api';
     }
 }
 
@@ -228,7 +239,17 @@ class FallbackStorage {
             try {
                 return await ApiService.registerForEvent(registrationData);
             } catch (error) {
-                console.warn('Backend failed, saving to localStorage');
+                console.error('Backend registration failed:', error);
+                
+                // Show meaningful error to user before fallback
+                const errorMsg = `Unable to reach registration server. ${error.message || 'Please check your internet connection and try again.'}`;
+                if (window.showNotification) {
+                    window.showNotification(errorMsg, 'error');
+                } else {
+                    alert(errorMsg);
+                }
+                
+                console.warn('Backend failed, saving to localStorage as offline fallback');
                 this.isBackendAvailable = false;
             }
         }
