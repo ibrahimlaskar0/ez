@@ -95,18 +95,25 @@ export default async function handler(req, res) {
     });
   }
 
-  // Basic email validation
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(data.participantEmail.trim())) {
+  // Email validation with more robust pattern
+  // Handles common email formats while preventing obvious invalid patterns
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const email = data.participantEmail.trim();
+  
+  // Additional checks for edge cases
+  if (!emailRegex.test(email) || email.includes('..') || email.startsWith('.') || email.endsWith('.')) {
     return res.status(400).json({ 
       success: false,
       message: "Invalid email format. Please provide a valid email address." 
     });
   }
 
-  // Generate registration ID (timestamp-based for demo purposes)
-  // In production, this should come from database auto-increment or UUID
-  const registrationId = `ESP${Date.now()}`;
+  // Generate registration ID with timestamp and random component
+  // This reduces collision risk until database-backed ID generation is implemented
+  // In production, this should come from database auto-increment with proper locking
+  const timestamp = Date.now();
+  const randomSuffix = Math.random().toString(36).substring(2, 7).toUpperCase();
+  const registrationId = `ESP${timestamp}${randomSuffix}`;
 
   // Return success response with clear message
   return res.status(201).json({
