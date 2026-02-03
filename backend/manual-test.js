@@ -1,14 +1,12 @@
-#!/usr/bin/env node
-
 /**
  * Manual test script to verify JSON and Multipart registration flows
  * Run with: node manual-test.js
  */
 
 const request = require('supertest');
-const app = require('./app');
 const fs = require('fs');
 const path = require('path');
+const app = require('./app');
 
 async function testJSONRegistration() {
     console.log('\n🧪 Testing JSON Registration (from registration-form.js)...');
