@@ -1,12 +1,13 @@
-import { applyCors } from "./_cors";
-
-/**
- * Health check endpoint for Vercel serverless deployment
- * Used to verify backend API availability
- */
 export default function handler(req, res) {
-  // Apply CORS headers for all allowed origins
-  if (!applyCors(req, res)) return;
+  // CORS
+  res.setHeader("Access-Control-Allow-Origin", "https://esplendidez.online");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  // Preflight
+  if (req.method === "OPTIONS") {
+    return res.status(204).end();
+  }
 
   // Example response
   return res.status(200).json({ ok: true });
