@@ -1,9 +1,9 @@
 const express = require('express');
+const fs = require('fs');
 const multer = require('multer');
 const path = require('path');
 const sharp = require('sharp');
 const { v4: uuidv4 } = require('uuid');
-const fs = require('fs');
 
 const router = express.Router();
 
