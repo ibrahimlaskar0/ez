@@ -12,13 +12,13 @@
  */
 const eventsList = [
     // Cultural Events - Creative and artistic competitions
-    {category:"Cultural", name:"Prom Night", fee:"600/300(Solo)", teamType:"Team"},
+    {category:"Cultural", name:"Prom Night", fee:"300/150(Solo)", teamType:"Team"},
     {category:"Cultural", name:"Cos Play", fee:300, teamType:"individual"},
     {category:"Cultural", name:"Dance Competition", fee:"200 (solo)/500 (group)", teamType:"team"},
     {category:"Cultural", name:"Song Competition", fee:200, teamType:"individual"},
-    {category:"Cultural", name:"Fashion Show", fee:500, teamType:"individual"},    
+    {category:"Cultural", name:"Fashion Show", fee:100, teamType:"individual"},    
     // Sports Events - Physical competitions and athletics
-    {category:"Sports", name:"Kabaddi (Girls)", fee:900, teamType:"team"},
+    {category:"Sports", name:"Kabaddi (Girls)", fee:700, teamType:"team"},
     {category:"Sports", name:"Tug of War", fee:800, teamType:"team"},
     {category:"Sports", name:"Badminton", fee:400, teamType:"team"},
     {category:"Sports", name:"Futsal", fee:1000, teamType:"team"},
@@ -34,7 +34,7 @@ const eventsList = [
 
     // E-Sports Events - Gaming competitions
     {category:"E-Sports", name:"BGMI", fee:'Free', teamType:"team"},
-    {category:"E-Sports", name:"ML", fee:500, teamType:"team"},
+    {category:"E-Sports", name:"ML", fee:400, teamType:"team"},
     {category:"E-Sports", name:"FIFA", fee:200, teamType:"individual"},
     
     // Competition Events - Academic and skill-based contests
